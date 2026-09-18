@@ -556,6 +556,9 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V21.8: Size sliders are now display-only indicators. Font Size and Display Size can be changed only with their +/− buttons; existing saved size preferences and all other data/behavior remain unchanged. -->
 <!-- V21.9: Daily Timetable cards now use a 355px minimum height and synchronize to the tallest rendered day when content requires more space. All Daily Timetable height layers remain equal. -->
 <!-- V21.10: Font Size range changed to 70%–100% and Display Size range changed to 70%–100%. Existing saved values above the new maximum are clamped to 100%; defaults and all other behavior remain unchanged. -->
+<!-- V21.11: Submitted result entry cards now show the weekday of the submitted date instead of the hardcoded "CA" label. Result data, storage, editing, deletion, and all other behavior remain unchanged. -->
+<!-- V21.12: Lecture analytics and automatic-Absent calculation now run only for Present + Regular College Day. Exam Day and Other/Custom Present dates are excluded, matching Check Unmarked Lectures and the existing timetable behavior. No other attendance/result behavior changed. -->
+<!-- V21.23: User Guide close controls are separated by flow: forced first-time login uses only the bottom Close button after reaching the guide bottom; normal User Guide access uses only the top-right X. No attendance, result, storage, or data-contract behavior changed. -->
 <!-- V20.22: Fixed nested Lecture Attendance dialogue cancellation. Cancelling Attended or No Classes now returns to the preceding Attendance dialogue instead of the main Semester directory; successful submissions and deeper Adjustment Period stacking remain unchanged. -->
 <!-- V20.19: Slightly reduced the four Attendance action buttons in the single lecture dialogue for a more compact fit. Existing attendance flows, Adjustment Period behavior, calculations, storage, and all other functionality remain unchanged. -->
 <!-- V20.18: Reduced the fixed Daily Timetable card height to remove the unused blank space below the final lecture. This is a UI-only sizing adjustment; timetable content, attendance actions, swiping, calendar navigation, calculations, storage, notifications, history, and result functionality remain unchanged. -->
@@ -583,7 +586,7 @@ so future college boundary changes require editing one configuration only. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V21.10</title>
+<title>Invictus V21.13</title>
 
 <style>
 /* #region CSS — FEATURE OVERRIDES / SEMESTER / RESULTS */
@@ -2642,6 +2645,8 @@ html[data-theme="dark"] .subject-percentage-modal{
   .user-guide-modal{width:min(760px,100%);height:88vh;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;padding:0;}
   /* V20.21 — First successful-login User Guide remains locked until the guide reaches its bottom. */
   .user-guide-modal.user-guide-first-login-locked .user-guide-close{display:none !important;}
+  .user-guide-bottom-close{display:none;width:100%;margin-top:18px;}
+  .user-guide-bottom-close.visible{display:block;}
   html.user-guide-first-login-locked,
   body.user-guide-first-login-locked{overflow:hidden !important;overscroll-behavior:none !important;}
   body.user-guide-first-login-locked .app{pointer-events:none !important;user-select:none !important;}
@@ -4944,6 +4949,7 @@ function getHardcodedSpecialDay(dateKey){
         <p><strong>Dashboard</strong> = view timetables and reports.</p>
         <p><strong>Settings</strong> = manage your account, app, appearance, size, security, help, and data.</p>
       </section>
+      <button class="primary user-guide-bottom-close" id="closeUserGuideBottom" type="button">Close</button>
     </div>
   </div>
 </div>
@@ -6484,7 +6490,7 @@ installInvictusDisplayScaleLayoutCompensation();
 installSettingsMistouchGuard();
 
 function openUpdateSource(){
-  const updateUrl = "https://drive.google.com/drive/folders/13EEXu1AU4mT4erjQAqAZU3QWYhi3F6do";
+  const updateUrl = "https://drive.google.com/file/d/1Pen9AsVxuCgLrJzcXKYqmJ_K1_fBtMH5/view?usp=drive_link";
 
   try{
     if(
@@ -7207,8 +7213,14 @@ function attachScheduleSemesterLecturesStatusSwipe(){
 function getDailyTimetableLectureStatuses(dateKey){
   const joining=getCollegeJoiningDate();
   if(joining && dateKey<joining)return [];
-  // Hard day-level gate: only a Present day can feed lecture analytics.
-  if(state.records?.[dateKey] !== "present") return [];
+  // Hard day-level gate: only Present + Regular College Day can feed
+  // lecture analytics or the automatic-Absent calculation. Exam Day and
+  // Other/Custom Present are day-level attendance records, but they do not
+  // represent regular lecture participation. This matches Check Unmarked
+  // Lectures and the Daily Timetable's existing special-day behavior.
+  const isRegularPresent=state.records?.[dateKey]==="present"
+    && !state.presentComments?.[dateKey]?.trim();
+  if(!isRegularPresent) return [];
 
   const classes=semClassesForDate(dateKey);
   const rows=[];
@@ -8360,17 +8372,27 @@ function renderTimetable(){
 // #endregion JS — DASHBOARD / REPORTS / TIMETABLE HELPERS
 // #region JS — SETTINGS / HELP / ACCESSIBILITY
 let invictusUserGuideFirstLoginLocked=false;
+let invictusUserGuideBottomCloseAvailable=false;
 
 function syncFirstLoginUserGuideLock(){
   const back=document.getElementById("userGuideBackdrop");
   const modal=back?.querySelector(".user-guide-modal");
   const close=document.getElementById("closeUserGuide");
+  const bottomClose=document.getElementById("closeUserGuideBottom");
   const content=back?.querySelector(".user-guide-content");
-  if(!back||!modal||!close||!content)return;
+  if(!back||!modal||!close||!bottomClose||!content)return;
 
   modal.classList.toggle("user-guide-first-login-locked",invictusUserGuideFirstLoginLocked);
+
+  // V21.23: Forced first-login = bottom Close only after reaching bottom.
+  // Normal User Guide = top-right X only.
   close.hidden=invictusUserGuideFirstLoginLocked;
   close.setAttribute("aria-hidden",String(invictusUserGuideFirstLoginLocked));
+
+  const showBottomClose=invictusUserGuideBottomCloseAvailable && !invictusUserGuideFirstLoginLocked;
+  bottomClose.classList.toggle("visible",showBottomClose);
+  bottomClose.hidden=!showBottomClose;
+  bottomClose.setAttribute("aria-hidden",String(!showBottomClose));
 
   if(invictusUserGuideFirstLoginLocked){
     document.documentElement.classList.add("user-guide-first-login-locked");
@@ -8404,6 +8426,7 @@ function unlockFirstLoginUserGuide(){
   if(!invictusUserGuideFirstLoginLocked)return;
   if(!userGuideReachedBottom())return;
   invictusUserGuideFirstLoginLocked=false;
+  invictusUserGuideBottomCloseAvailable=true;
   syncFirstLoginUserGuideLock();
 }
 
@@ -8420,6 +8443,7 @@ function openUserGuide(){
   const content=back?.querySelector(".user-guide-content");
   if(!back)return;
   invictusUserGuideFirstLoginLocked=false;
+  invictusUserGuideBottomCloseAvailable=false;
   back.classList.add("open");
   back.setAttribute("aria-hidden","false");
   content?.scrollTo({top:0,left:0,behavior:"auto"});
@@ -8431,6 +8455,7 @@ function openUserGuideAfterSuccessfulLogin(){
   const content=back?.querySelector(".user-guide-content");
   if(!back)return;
   invictusUserGuideFirstLoginLocked=true;
+  invictusUserGuideBottomCloseAvailable=false;
   back.classList.add("open");
   back.setAttribute("aria-hidden","false");
   if(content)content.scrollTop=0;
@@ -8445,12 +8470,14 @@ function closeUserGuide(){
   if(invictusUserGuideFirstLoginLocked)return;
   back.classList.remove("open");
   back.setAttribute("aria-hidden","true");
+  invictusUserGuideBottomCloseAvailable=false;
   syncFirstLoginUserGuideLock();
 }
 
 function bindUserGuide(){
   document.getElementById("userGuideBtn")?.addEventListener("click",openUserGuide);
   document.getElementById("closeUserGuide")?.addEventListener("click",closeUserGuide);
+  document.getElementById("closeUserGuideBottom")?.addEventListener("click",closeUserGuide);
   document.getElementById("userGuideBackdrop")?.addEventListener("click",e=>{
     if(e.target===e.currentTarget){
       if(invictusUserGuideFirstLoginLocked)return;
@@ -10999,6 +11026,9 @@ if(assessmentAttendanceMigrationChanged) saveSem();
 function semDateLabel(key){
   return new Date(key+"T00:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"2-digit",year:"numeric"});
 }
+function semWeekdayLabel(key){
+  return new Date(key+"T00:00:00").toLocaleDateString("en-IN",{weekday:"long"});
+}
 function semSpecialDay(key){
   const status=state.records?.[key];
 
@@ -12239,7 +12269,7 @@ function openSubmittedResultsDirectory(kind,subjectId=null){
     }
 
     list.innerHTML=currentItems.map(x=>{
-      const itemTitle=ctx.kind==="subject" ? "CA" : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
+      const itemTitle=ctx.kind==="subject" ? semWeekdayLabel(x.date) : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
       return `<button type="button" class="submitted-results-directory-item"
         data-submitted-result-kind="${escapeHtml(ctx.kind)}"
         data-submitted-result-id="${escapeHtml(x.id)}">
@@ -12444,7 +12474,7 @@ function confirmClassTestDelete(){
             return;
           }
           list.innerHTML=currentItems.map(x=>{
-            const itemTitle=ctx.kind==="subject" ? "CA" : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
+            const itemTitle=ctx.kind==="subject" ? semWeekdayLabel(x.date) : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
             return `<button type="button" class="submitted-results-directory-item" data-submitted-result-kind="${escapeHtml(ctx.kind)}" data-submitted-result-id="${escapeHtml(x.id)}"><span class="submitted-results-directory-item-main"><strong class="submitted-results-directory-item-date">${escapeHtml(semDateLabel(x.date))}</strong><small class="submitted-results-directory-item-title">${escapeHtml(itemTitle)}</small></span><span class="submitted-results-directory-item-chevron" aria-hidden="true">›</span></button>`;
           }).join("");
           list.querySelectorAll("[data-submitted-result-kind]").forEach(btn=>btn.addEventListener("click",e=>{
