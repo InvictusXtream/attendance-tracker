@@ -559,6 +559,7 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V21.11: Submitted result entry cards now show the weekday of the submitted date instead of the hardcoded "CA" label. Result data, storage, editing, deletion, and all other behavior remain unchanged. -->
 <!-- V21.12: Lecture analytics and automatic-Absent calculation now run only for Present + Regular College Day. Exam Day and Other/Custom Present dates are excluded, matching Check Unmarked Lectures and the existing timetable behavior. No other attendance/result behavior changed. -->
 <!-- V21.23: User Guide close controls are separated by flow: forced first-time login uses only the bottom Close button after reaching the guide bottom; normal User Guide access uses only the top-right X. No attendance, result, storage, or data-contract behavior changed. -->
+<!-- V21.14: Added browser text-selection/copy protection for the app UI, including touch long-press selection, mouse selection, context-menu copy, and common keyboard copy shortcuts. No attendance, result, storage, login, or data-contract behavior changed. -->
 <!-- V20.22: Fixed nested Lecture Attendance dialogue cancellation. Cancelling Attended or No Classes now returns to the preceding Attendance dialogue instead of the main Semester directory; successful submissions and deeper Adjustment Period stacking remain unchanged. -->
 <!-- V20.19: Slightly reduced the four Attendance action buttons in the single lecture dialogue for a more compact fit. Existing attendance flows, Adjustment Period behavior, calculations, storage, and all other functionality remain unchanged. -->
 <!-- V20.18: Reduced the fixed Daily Timetable card height to remove the unused blank space below the final lecture. This is a UI-only sizing adjustment; timetable content, attendance actions, swiping, calendar navigation, calculations, storage, notifications, history, and result functionality remain unchanged. -->
@@ -586,7 +587,7 @@ so future college boundary changes require editing one configuration only. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V21.13</title>
+<title>Invictus V21.14</title>
 
 <style>
 /* #region CSS — FEATURE OVERRIDES / SEMESTER / RESULTS */
@@ -3311,6 +3312,23 @@ html[data-theme="dark"] .invictus-about-content blockquote{
   html[data-theme="dark"] .notification-entry-message{color:#aaa}
   html[data-theme="dark"] .notification-entry-time{color:#888}
   html[data-theme="dark"] .notification-setting-row{border-color:#333}
+
+/* V21.14 — UI text-selection/copy protection */
+html, body, #app, .app{
+  -webkit-user-select:none !important;
+  -moz-user-select:none !important;
+  -ms-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+input, textarea, [contenteditable="true"]{
+  -webkit-user-select:text !important;
+  -moz-user-select:text !important;
+  -ms-user-select:text !important;
+  user-select:text !important;
+  -webkit-touch-callout:default !important;
+}
+
 </style>
 <!-- Settings tab replaces the old floating hamburger navigation. -->
 
@@ -14974,6 +14992,45 @@ window.invictusV11Storage = {
     if(!window.INVICTUS_V1931_TESTS.allPassed)console.warn("INVICTUS V19.31 regression tests:",results);
   })();
   // #endregion JS — V19.31 REGRESSION TESTS
+
+// V21.14 — prevent common browser UI copy/selection actions while preserving form-field editing.
+(function(){
+  function isEditable(target){
+    return !!(target && (
+      target.closest("input, textarea, select, [contenteditable='true']") ||
+      target.isContentEditable
+    ));
+  }
+
+  document.addEventListener("contextmenu", function(e){
+    if (!isEditable(e.target)) e.preventDefault();
+  }, true);
+
+  document.addEventListener("selectstart", function(e){
+    if (!isEditable(e.target)) e.preventDefault();
+  }, true);
+
+  document.addEventListener("dragstart", function(e){
+    if (!isEditable(e.target)) e.preventDefault();
+  }, true);
+
+  document.addEventListener("copy", function(e){
+    if (!isEditable(e.target)) e.preventDefault();
+  }, true);
+
+  document.addEventListener("cut", function(e){
+    if (!isEditable(e.target)) e.preventDefault();
+  }, true);
+
+  document.addEventListener("keydown", function(e){
+    if (isEditable(e.target)) return;
+    const key = String(e.key || "").toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && ["c","x","a"].includes(key)) {
+      e.preventDefault();
+    }
+  }, true);
+})();
+
 </script>
 
 </body>
