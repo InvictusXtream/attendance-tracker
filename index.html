@@ -610,7 +610,8 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V22.13: Schedule Exception clock visibility is now limited to dates whose attendance is Present + Regular College Day. The clock remains hidden for Absent, Holiday, Blank, unmarked, and other Present reasons, while the existing 24/09/2026 start-date gate remains unchanged. -->
 <!-- V22.18: Profile photo Delete now requires an explicit custom Yes/No confirmation before removal. -->
 <!-- V22.19: Renamed the Account profile-photo action from "Change profile photo" to "Upload profile photo". No profile-photo behavior or other application functionality changed. -->
-<!-- V22.20: Final V22 release. Rewrote the complete in-app User Guide to match the V22.19 product state, including attendance rules, Schedule Exception, protected holidays, profile-photo upload/view/delete flow, notifications, results, dashboard, settings, data safety, and current navigation behavior. No runtime/data behavior changed. V22.20 closes the V22 development cycle. -->
+<!-- V22.20: Completed the V22.19-to-V22.20 User Guide rewrite to match the current V22 product state, including attendance rules, Schedule Exception, protected holidays, profile-photo upload/view/delete flow, notifications, results, dashboard, settings, data safety, and current navigation behavior. No runtime/data behavior changed. -->
+<!-- V22.21: Permanently places the forced first-login User Guide Close button at the end of the guide. It is shown throughout the forced guide, so users simply scroll to the end and tap Close. Removed viewport/scroll-position detection, bottom-reach detection, and timing-based unlock logic. -->
 
 <!-- V22.15: Added 23/09/2026 as the protected hardcoded Holiday "Shaheed-Diwas". It uses the existing automatic protected-Holiday mechanism: the date is seeded automatically as Holiday, cannot be altered, and displays "Automatic" in Attendance History. Existing hardcoded holidays and all other functionality remain unchanged. -->
 <!-- V22.17: Replaced the profile-photo viewer title with a Delete button. Deleting removes the uploaded photo from existing storage and restores the default avatar; upload, viewing, and all other functionality remain unchanged. -->
@@ -707,7 +708,7 @@ so future college boundary changes require editing one configuration only. -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invictus V22.20</title>
+    <title>Invictus V22.21</title>
 
     <style>
         /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -5320,7 +5321,7 @@ so future college boundary changes require editing one configuration only. -->
 
 <!-- #endregion HTML — MODALS / DIALOGS -->
 
-<!-- [V22.20 SETTINGS + USER GUIDE — settings/help/about hosts] -->
+<!-- [V22.21 SETTINGS + USER GUIDE — settings/help/about hosts] -->
 <!-- #region HTML — SETTINGS / HELP / ABOUT -->
 <div class="modal-backdrop" id="settingsAboutBackdrop">
     <div class="modal">
@@ -8835,8 +8836,6 @@ so future college boundary changes require editing one configuration only. -->
     // #region JS — SETTINGS / HELP / ACCESSIBILITY
     let invictusUserGuideFirstLoginLocked=false;
     let invictusUserGuideForcedFirstLoginFlow=false;
-    let invictusUserGuideBottomCloseAvailable=false;
-    let invictusUserGuideUserScrollInteracted=false;
     const INVICTUS_FORCED_GUIDE_KEY="invictus_forced_first_login_guide_v218";
 
     // [V22.15 USER GUIDE / ONBOARDING — forced first-login state]
@@ -8855,17 +8854,18 @@ so future college boundary changes require editing one configuration only. -->
       const modal=back?.querySelector(".user-guide-modal");
       const close=document.getElementById("closeUserGuide");
       const bottomClose=document.getElementById("closeUserGuideBottom");
-      const content=back?.querySelector(".user-guide-content");
-      if(!back||!modal||!close||!bottomClose||!content)return;
+      if(!back||!modal||!close||!bottomClose)return;
 
       modal.classList.toggle("user-guide-first-login-locked",invictusUserGuideFirstLoginLocked);
 
-      // V21.23: Forced first-login = bottom Close only after reaching bottom.
+      // V22.21: Forced first-login keeps the top-right X hidden and places a
+      // permanent Close button at the actual end of the guide content.
+      // There is no scroll-position, viewport, timing, or bottom-reach detection.
       // Normal User Guide = top-right X only.
       close.hidden=invictusUserGuideForcedFirstLoginFlow;
       close.setAttribute("aria-hidden",String(invictusUserGuideFirstLoginLocked));
 
-      const showBottomClose=invictusUserGuideForcedFirstLoginFlow && invictusUserGuideBottomCloseAvailable && !invictusUserGuideFirstLoginLocked;
+      const showBottomClose=invictusUserGuideForcedFirstLoginFlow;
       bottomClose.classList.toggle("visible",showBottomClose);
       bottomClose.hidden=!showBottomClose;
       bottomClose.setAttribute("aria-hidden",String(!showBottomClose));
@@ -8889,34 +8889,6 @@ so future college boundary changes require editing one configuration only. -->
       }
     }
 
-    function userGuideReachedBottom(){
-      const content=document.querySelector("#userGuideBackdrop .user-guide-content");
-      if(!content)return false;
-      // V21.6: Chrome/WebView can report fractional layout values while the
-      // modal is settling. Use a small tolerance and clamp the measured range.
-      const remaining=content.scrollHeight - content.clientHeight - content.scrollTop;
-      return remaining <= 8;
-    }
-
-    function unlockFirstLoginUserGuide(){
-      if(!invictusUserGuideFirstLoginLocked)return;
-      // V21.16: Never unlock from layout/resize settling alone. The user must
-      // actually interact with the guide before a bottom check can unlock it.
-      if(!invictusUserGuideUserScrollInteracted)return;
-      if(!userGuideReachedBottom())return;
-      invictusUserGuideFirstLoginLocked=false;
-      invictusUserGuideBottomCloseAvailable=true;
-      syncFirstLoginUserGuideLock();
-    }
-
-    function scheduleUserGuideBottomCheck(){
-      if(!invictusUserGuideFirstLoginLocked || !invictusUserGuideUserScrollInteracted)return;
-      const run=()=>unlockFirstLoginUserGuide();
-      requestAnimationFrame(run);
-      setTimeout(run,80);
-      setTimeout(run,220);
-    }
-
     function openUserGuide(){
       const back=document.getElementById("userGuideBackdrop");
       const content=back?.querySelector(".user-guide-content");
@@ -8924,13 +8896,9 @@ so future college boundary changes require editing one configuration only. -->
       if(invictusForcedGuidePersisted()){
         invictusUserGuideForcedFirstLoginFlow=true;
         invictusUserGuideFirstLoginLocked=false;
-        invictusUserGuideBottomCloseAvailable=true;
-        invictusUserGuideUserScrollInteracted=false;
       }else{
         invictusUserGuideFirstLoginLocked=false;
         invictusUserGuideForcedFirstLoginFlow=false;
-        invictusUserGuideBottomCloseAvailable=false;
-        invictusUserGuideUserScrollInteracted=false;
       }
       back.classList.add("open");
       back.setAttribute("aria-hidden","false");
@@ -8945,24 +8913,26 @@ so future college boundary changes require editing one configuration only. -->
       invictusPersistForcedGuide();
       invictusUserGuideFirstLoginLocked=true;
       invictusUserGuideForcedFirstLoginFlow=true;
-      invictusUserGuideBottomCloseAvailable=false;
-      invictusUserGuideUserScrollInteracted=false;
       back.classList.add("open");
       back.setAttribute("aria-hidden","false");
       if(content)content.scrollTop=0;
       syncFirstLoginUserGuideLock();
-      // V21.16: Do not perform an automatic bottom check here.
-      // Layout/viewport settling must never unlock the forced guide.
+      // V22.21: No automatic bottom check is used. The forced guide remains locked
+      // until the user explicitly taps the Close button at the end of the guide.
     }
 
     function closeUserGuide(allowForcedClose=false){
       const back=document.getElementById("userGuideBackdrop");
       if(!back)return;
-      if(invictusUserGuideFirstLoginLocked)return;
 
-      // V22.1: The forced first-login guide remains modal even after the user
-      // reaches the bottom. Only the dedicated bottom Close button may dismiss it.
-      if(invictusUserGuideForcedFirstLoginFlow && !allowForcedClose)return;
+      // V22.21: The dedicated bottom Close button is the explicit completion
+      // control for the forced first-login guide. It may always close the guide
+      // when tapped; no bottom-reach state is required.
+      if(invictusUserGuideForcedFirstLoginFlow){
+        if(!allowForcedClose)return;
+      }else if(invictusUserGuideFirstLoginLocked){
+        return;
+      }
 
       back.classList.remove("open");
       back.setAttribute("aria-hidden","true");
@@ -8971,8 +8941,6 @@ so future college boundary changes require editing one configuration only. -->
       }
       invictusUserGuideFirstLoginLocked=false;
       invictusUserGuideForcedFirstLoginFlow=false;
-      invictusUserGuideBottomCloseAvailable=false;
-      invictusUserGuideUserScrollInteracted=false;
       syncFirstLoginUserGuideLock();
     }
 
@@ -8987,34 +8955,9 @@ so future college boundary changes require editing one configuration only. -->
           closeUserGuide();
         }
       });
-      const guideContent=document.getElementById("userGuideBackdrop")?.querySelector(".user-guide-content");
-      if(guideContent && !guideContent.dataset.v2021Bound){
-        // V21.16: Only genuine user interaction can arm the bottom check.
-        // This prevents Chrome/WebView layout settling from falsely unlocking
-        // the forced first-login guide and exposing the top-right X.
-        const armUserGuideBottomCheck=()=>{
-          if(invictusUserGuideFirstLoginLocked){
-            invictusUserGuideUserScrollInteracted=true;
-            scheduleUserGuideBottomCheck();
-          }
-        };
-        guideContent.addEventListener("scroll",scheduleUserGuideBottomCheck,{passive:true});
-        guideContent.addEventListener("touchstart",armUserGuideBottomCheck,{passive:true});
-        guideContent.addEventListener("touchend",armUserGuideBottomCheck,{passive:true});
-        guideContent.addEventListener("pointerdown",armUserGuideBottomCheck,{passive:true});
-        guideContent.addEventListener("pointerup",armUserGuideBottomCheck,{passive:true});
-        guideContent.addEventListener("wheel",armUserGuideBottomCheck,{passive:true});
-        guideContent.dataset.v2021Bound="true";
-      }
-      if(!window.__invictusV21_6GuideViewportBound){
-        window.__invictusV21_6GuideViewportBound=true;
-        // V21.16: viewport resizing alone is never sufficient to unlock the guide.
-        window.visualViewport?.addEventListener("resize",()=>{
-          if(invictusUserGuideUserScrollInteracted){
-            scheduleUserGuideBottomCheck();
-          }
-        },{passive:true});
-      }
+      // V22.21: No scroll, touch, pointer, wheel, viewport, or timing listeners
+      // are needed for the forced guide. The Close button is simply part of the
+      // guide content and is visible at its end from the moment the guide opens.
       if(!window.__invictusV20_21UserGuideKeyLockBound){
         window.__invictusV20_21UserGuideKeyLockBound=true;
         document.addEventListener("keydown",e=>{
@@ -16162,8 +16105,6 @@ so future college boundary changes require editing one configuration only. -->
       // the bottom merely because the forced-guide requirement is still persisted.
       invictusUserGuideForcedFirstLoginFlow=true;
       invictusUserGuideFirstLoginLocked=true;
-      invictusUserGuideBottomCloseAvailable=false;
-      invictusUserGuideUserScrollInteracted=false;
       back.classList.add("open");
       back.setAttribute("aria-hidden","false");
       if(content)content.scrollTop=0;
