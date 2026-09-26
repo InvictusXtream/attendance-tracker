@@ -623,6 +623,7 @@
 <!-- V23.18: Rewritten the in-app User Guide for new users. The guide now focuses on essential onboarding, daily attendance, lecture marking, Adjustment Period vs Schedule Exception, Set to Default, results, dashboard, profile, settings, notifications, and backup/reset guidance. Help content only; no application/data behavior changed. -->
 <!-- V23.19: Fixed the Daily Timetable swipe flash by reusing and rotating the existing three slide DOM nodes instead of rebuilding the timetable after every swipe. Swipe animation, date navigation, attendance actions, and timetable data behavior remain unchanged. -->
 <!-- V23.20: Corrected the reverse-swipe recycling order. Previous-day navigation now animates the existing previous slide first, then recycles the off-screen nodes only after the transition, eliminating the visible flash caused by inserting a new slide before the current track position was adjusted. Forward and backward swipe geometry are kept symmetric. -->
+<!-- V23.21: Fixed User Guide Close controls being visible but unbound during the forced first-login flow. The static top-right and bottom Close controls are now bound once during app initialization, before a first successful login can open the guide. Normal Help → User Guide behavior and all other modal close controls remain unchanged. -->
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -705,7 +706,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V23.20</title>
+<title>Invictus V23.21</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -9145,8 +9146,14 @@ function closeUserGuide(allowForcedClose=false){
   syncFirstLoginUserGuideLock();
 }
 
-function bindUserGuide(){
-  document.getElementById("userGuideBtn")?.addEventListener("click",openUserGuide);
+function bindUserGuideCloseControls(){
+  if(window.__invictusUserGuideCloseControlsBound)return;
+  window.__invictusUserGuideCloseControlsBound=true;
+
+  // The User Guide modal exists in the static DOM, while the Help trigger
+  // lives inside the dynamically-rendered Settings page. Bind these static
+  // Close controls once at app startup so the forced first-login guide can be
+  // dismissed immediately, even before Settings has ever been opened.
   document.getElementById("closeUserGuide")?.addEventListener("click",()=>closeUserGuide());
   document.getElementById("closeUserGuideBottom")?.addEventListener("click",()=>closeUserGuide(true));
   document.getElementById("userGuideBackdrop")?.addEventListener("click",e=>{
@@ -9156,9 +9163,8 @@ function bindUserGuide(){
       closeUserGuide();
     }
   });
-  // V22.21: No scroll, touch, pointer, wheel, viewport, or timing listeners
-  // are needed for the forced guide. The Close button is simply part of the
-  // guide content and is visible at its end from the moment the guide opens.
+
+  // V22.21: Forced first-login guide cannot be dismissed with Escape.
   if(!window.__invictusV20_21UserGuideKeyLockBound){
     window.__invictusV20_21UserGuideKeyLockBound=true;
     document.addEventListener("keydown",e=>{
@@ -9170,6 +9176,12 @@ function bindUserGuide(){
       }
     });
   }
+}
+
+function bindUserGuide(){
+  document.getElementById("userGuideBtn")?.addEventListener("click",openUserGuide);
+  // V23.21: Static Close controls are initialized globally; this function
+  // only binds the dynamically-created Help → User Guide trigger.
 }
 /* ============================================================
    INVICTUS — V20.1 NOTIFICATIONS
@@ -15751,6 +15763,10 @@ function resetMainTabUI(pageId){
 }
 
 bindNoClassModals();
+
+// V23.21: User Guide Close controls must be live before the first successful
+// login can open the forced first-login guide.
+bindUserGuideCloseControls();
 
 document.getElementById("attendanceNav").onclick=()=>{
   const previous=document.querySelector("nav button.active");
