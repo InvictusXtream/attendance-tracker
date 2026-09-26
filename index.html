@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <!-- V6 Patch 7: collapsible Attendance History to prevent an ever-growing visible list. -->
 <!-- V6 Patch 8: Semester Show More button changes to Hide while expanded. -->
@@ -43,25 +41,8 @@
   Browser mode does nothing because the native bridge is unavailable.
 -->
 <!-- V13.1: Attendance starts 08/08/2026; Present comments; commented attendance replaces Daily Timetable with status-colored reason. -->
-<!-- V13.1 FIX: Restored Semester 1 subject/timetable/semState declarations accidentally omitted from the browser-test build. No attendance data contract changed. -->
 <!-- V13.3: 12/08/2026 dated timetable exception updated from the one-off MFCS-I record to the official Wednesday timetable; 11:30 AM-12:00 PM break omitted. -->
-<!-- V13.3 Endgame UI: Daily Timetable has an optional focused-scroll lock (OFF by default).
-     V13.4.1: Attendance menus allow up to two open three-dot menus independently; active menu buttons use the accent color.
-     V14.1.8: Focused timetable switch uses light-red/red OFF and light-green/green ON; three-dot menus use grey/green active color. -->
 <!-- V13.4: Android launch performs one automatic native refresh behind a Loading INVICTUS screen; manual refresh remains unlimited. -->
-<!-- V14 Final FIX: Monthly Report zero-value legend categories are omitted
-     completely, and the legend grid collapses to the remaining rows so
-     Present/Absent/Holiday entries never leave an empty reserved slot.
-     Monthly Report calculations, graph colors, total classes, swipe state,
-     attendance, storage, and data contract remain unchanged. -->
-<!-- V14 Final: Final Schedule graph/report correction.
-     Card 1.2 legend categories now collapse dynamically: zero-count statuses
-     disappear and the next available status takes their place, with no blank
-     legend rows. Card 1.3 now exposes a valid monthly attendance denominator
-     (Present+Absent+Holiday) and a separate Total Classes value
-     (Present+Absent), restoring its graph. Pinned report sections, independent
-     swipe states, current/previous/upcoming month behavior, attendance,
-     storage, and data contract are otherwise preserved. -->
 <!-- V14.2.2: Added the monthly Schedule attendance percentage graph.
      Current/past months are swipeable; one future position shows a no-data message.
      Future classes are excluded, reached unmarked classes count as Absent,
@@ -188,28 +169,6 @@
      presentation of the collapsed cards is adjusted; expanded timetable,
      monthly graphs, swipe states, attendance, storage, and data contract
      remain unchanged. -->
-<!-- V15.1 Testing Light:
-     If no saved Appearance preference exists, this test build starts in
-     light Appearance. Any existing saved preference remains authoritative. -->
-<!-- V15.1 Testing: Added persistent in-app Font Size and Display Size
-     controls. Preferences are stored locally and restored after refresh/relaunch.
-     No attendance, backup/import/export, or stored data contract is changed. -->
-<!-- V15.1.2 Testing: Fixed page-level horizontal overflow caused by
-     Display Size below 100%. Display Size now uses width-compensated CSS
-     scaling so INVICTUS remains fitted to the phone viewport and the webpage
-     itself scrolls vertically only. Existing inner horizontal scrollers,
-     Font Size persistence, Appearance, attendance, and data contracts remain
-     unchanged. -->
-<!-- V15.1.3 Testing: Added Settings mistouch prevention. Vertical page
-     scrolling cannot accidentally change Appearance or Size controls.
-     Size sliders require intentional horizontal interaction; deliberate taps
-     remain functional. Existing saved preferences and application data
-     contract remain unchanged. -->
-<!-- V15.1.4 Testing: Size controls are now collapsed behind separate
-     Font Size and Display Size card buttons. Tapping each card reveals only
-     its corresponding controls; default state is collapsed. Existing size
-     values, persistence, scaling behavior, and mistouch prevention remain
-     unchanged. -->
 <!-- V15.1.5: Terminology correction in Schedule Card 1.2 only — the
      lecture-level graph now displays "lectures reached" instead of
      "classes reached". Monthly Report "total classes" terminology is
@@ -262,15 +221,6 @@
 <!-- V15.2.6: Redesigned the Attendance month picker into four year pages (2026–2029). < and > switch years; tapping an available month jumps directly to that month. Edge-year months outside August 2026–July 2029 are disabled. -->
 <!-- V15.2.7: Attendance month picker now highlights only the exact selected YYYY-MM month. All January–December entries have individual equal-width borders; only the selected month receives the accent border. -->
 <!-- V15.2.8: The Attendance month picker purple highlight now represents the actual current/ongoing month only, not the month selected for navigation. -->
-<!-- V16 FINAL: Implemented all three foundation improvements:
-     1) centralized editable Semester 1–6 date configuration,
-     2) separate semester-specific Weekly Timetable configuration with the
-        existing Semester 1 embedded timetable preserved,
-     3) backup/export/import support for semester configuration and timetable
-        configuration while retaining V1/V2 backup compatibility. -->
-<!-- V16 FINAL: centralized editable Semester 1–6 date configuration.
-Default dates are unchanged. Semester-level features can use SEMESTER_CONFIG
-so future college boundary changes require editing one configuration only. -->
 <!-- V16.2: Schedule child cards now reset their navigation state when
      collapsed. Monthly cards return to the current month, while the two
      semester cards return to the semester containing today's date. This
@@ -390,17 +340,11 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V16.9.9: Attendance validation messages are cleared immediately when the user changes the date or attendance status selection, while validation remains triggered only by Submit. -->
 <!-- V16.9.10: Added the Semester-tab Check Unmarked Lectures flow for direct date navigation. V17.2.3 updates its participation scope to Present + Regular College Day and scans all unmarked trackable lectures. -->
 <!-- V16.9.11: Daily Timetable lecture content is shown only for dates with an existing day-level attendance record. Unmarked dates retain the Daily Timetable date view but do not expose scheduled lectures or lecture marking. Existing lecture marking, storage, navigation, and attendance behavior remain unchanged. -->
-<!-- V17: Added complete No Class exception flow with Free Period and stacked Class Test dialogs; Class Test records are isolated in Semester data with Pending/Completed management and a Semester Class Test card. -->
 <!-- V17.1: Class Test now records a separate No Class exception so the timetable status displays "No Classes" without mutating regular lecture attendance/graph data. Class Test Semester card is now a collapsible button card. -->
 <!-- V17.2.2: Final validation-text refinement —  Attendance reason-selection UX for Submit/Edit Attendance. X1 Present Optional; X2 Absent Required; X3 Holiday unchanged; X4 Blank Required. Existing attendance rules and Daily Timetable lecture-marking behavior are preserved. V17.2.1 UX tweak: Present/Absent/Blank reasons are grouped behind a Select Reason card. -->
 <!-- V17.2.4: Removed the attendance date-picker X close button and returned the month arrows to the far left/right positions while preserving the fixed-size layered picker. V17.2.3 FINAL7: Submit Attendance and Edit Attendance date picker now open on the current date/month by default. The existing fixed-size layered picker, disabled-date rules, and attendance behavior remain unchanged. V17.2.3 FINAL6: Attendance date picker remains a fixed-size dialog layered over the existing attendance dialog; panel height reduced to remove excess space, an X close button added, and the attendance picker/range extended through July 2029. V17.2.3 FINAL4: Attendance date picker is a fixed-size dialog layered over the existing attendance dialog, with disabled weekend/unavailable dates and Cancel/OK confirmation. V17.2.3: Attendance Present submission window changed to 08:30 AM–09:30 AM. Check Unmarked Lectures now scans all unmarked trackable lectures only on Present + Regular College Day dates; Progressive Unlocking remains authoritative after date navigation. Future dates in Submit Your Attendance are allowed only for Holiday/Blank; Present/Absent remain current-date only. All Saturday/Sunday dates are blocked from Submit/Edit Attendance and cannot be selected; explicitly configured attendance-eligible special days retain authority (e.g. 08 August 2026 Orientation Day). -->
 <!-- V17.2.5: Submit Attendance date card is inaccessible unless Holiday or Blank is selected. With no status selected, Present, or Absent, the date picker remains disabled and the default current date remains displayed. Edit Attendance date-picker behavior and all existing attendance rules remain unchanged. -->
 <!-- V17.2.5: Added optional bulk missed-attendance backfill from the Attendance Not Marked dialog. Users can select an inclusive date range and apply Present or Absent to only the currently missing eligible dates in that range. Absent keeps the existing required-reason rule; Present keeps its existing optional-reason behavior. Normal Edit Attendance and existing storage contracts remain unchanged. -->
-<!-- V17.2.6 — Minor Focused Scroll accessibility patch.
-     Lecture Wise Percentage and Check Unmarked Lectures remain clickable in
-     both Focused Scroll ON and OFF states. Their modal backdrops are also
-     explicitly interactive while Focused Scroll is ON. No data/storage or
-     existing timetable behavior is changed. -->
 <!-- V17.2.11: Present attendance may be submitted after the 08:30–09:30 AM
      normal submission window. A Present submission after 09:30 AM is accepted
      as a Late Submission and receives the existing late-submission watermark.
@@ -451,9 +395,6 @@ so future college boundary changes require editing one configuration only. -->
      preserved; the app's document-flow height is now compensated dynamically
      so the page ends at the visually scaled content height. No other Display
      Size behavior, UI, storage, or data contract changed. -->
-<!-- V17.4.16 — Attendance History Show now opens a dedicated scrollable modal; the Show label remains unchanged and closing the modal restores the prior page state. -->
-<!-- V17.4.17 — Attendance History modal entries receive stable spacing/height so date, time, status, and reason content is not compressed. Show/close behavior and data contract remain unchanged. -->
-<!-- V17.4.19 — Renamed the Exam Result End Time validation message. No validation logic, UI behavior, or data contract changed. -->
 <!-- V17.5: Check Unmarked Lectures dialog locks the underlying page scroll while preserving independent scrolling inside the dialog. -->
 <!-- V17.10: All Sumbitted Results subjects moved into collapsible Subject card. -->
 <!-- V17.15: Added the requested Surprise Tests card button below Subject. No functionality added. -->
@@ -485,13 +426,9 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V18.19: Reduced Pending Results card height and vertical spacing for a more compact pending list. -->
 <!-- V18.20: Fixed Unmarked Lectures dialog header and close button while making only the lecture list independently scrollable. -->
 <!-- V18.21: Hardcoded protected Holiday records now display "Automatic" instead of a submission timestamp in Attendance History. User-entered Holiday records remain unchanged. -->
-<!-- V19.1 Testing: Settings category-card refinement — Security, Help, and About open directly without expanding; all secondary Settings hint text is removed. -->
 <!-- V19.1: Added the in-app User Guide and reorganized Settings into collapsible category cards. Account combines Profile + Account actions; category order is Account, App, Data, Size, Security, Appearance, Help, About. -->
-<!-- V19.2 Testing: Settings category order updated; only one expandable category may be open at a time, with the open category border highlighted in the existing INVICTUS purple. Security, Help, and About remain direct-action cards without arrows. -->
-<!-- V19.2 Testing Patch: Keep the active Settings category border in the INVICTUS purple accent in dark Appearance; no other Settings or application behavior changed. -->
 <!-- V19.2: Refined Settings category ordering, single-card expansion, active-border highlighting, and direct Security/Help/About actions. -->
 <!-- V19.3: Added the existing INVICTUS purple active border to expanded Dashboard cards in both Light and Dark Appearance. No data or behavior changes. -->
-<!-- V19.4 Testing: Added INVICTUS purple active-border highlighting to Semester cards. Lectures breakdown and All Sumbitted Results highlight independently; Focused Scroll highlights Daily Timetable and disables the other two card highlights. UI-only; no functionality or data changes. -->
 <!-- V19.5: Focused Scroll now snapshots the pre-toggle UI state before collapsing cards and restores that state when toggled OFF. UI-only; no attendance/results/storage data changes. -->
 <!-- V19.6: Focused Scroll only moves the Semester page to the bottom when no collapsible Semester card was expanded before ON. If a card was expanded, ON collapses it but preserves the resulting page position; OFF restores the pre-toggle UI state and location. UI-only; no data/storage changes. -->
 <!-- V19.7: Focused Scroll preserves the established behavior of moving to the page bottom after ON, including when cards were expanded and collapsed first. The pre-toggle UI snapshot remains the source for OFF restoration. UI-only; no attendance/results/storage data changes. -->
@@ -499,7 +436,6 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V19.9: Removed the Focused Scroll ON behavior that automatically scrolls the Semester page to the bottom. All other Focused Scroll and app behavior remains unchanged. UI-only; no data/storage changes. -->
 <!-- V19.10: Removed obsolete Focused Scroll main-page scroll-position save/restore code. Reordered Semester cards so Daily Timetable is Card 1, Lectures breakdown is Card 2, and All Sumbitted Results is Card 3. Existing card behavior and data/storage contracts remain unchanged. -->
 <!-- V19.12: Expanded Semester cards now auto-scroll only enough to keep the respective expanded card visible on screen, while preserving existing expansion behavior. No data/storage behavior changed. -->
-<!-- V19.13 — Semester auto-scroll now keeps the next card header visible when space allows, so switching cards requires no manual scrolling. -->
 <!-- V19.14: Extended the same expanded-card auto-scroll behavior to all Dashboard cards, keeping the full expanded card visible and the next card header visible when space allows. No data/storage behavior changed. -->
 <!-- V19.15: Extended Dashboard auto-scroll to Weekly Timetable's expanded semester child content, keeping the full Weekly Timetable card visible and the next Dashboard card header visible when space allows. No data/storage behavior changed. -->
 <!-- V19.16: Removed the Semester 1 Lectures breakdown Show/Hide control so its summary content is displayed directly whenever Semester 1 is expanded. No data/storage behavior changed. -->
@@ -536,11 +472,13 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V20.14: Adjustment Period target selection now opens in a separate fixed-height dialogue. The main Attended choice dialogue stays compact, while Subjects, Lab, and Others are selected in the dedicated Adjustment Period dialogue. Existing adjustment logic, calculations, storage, and behavior remain unchanged. -->
 <!-- V20.15: Removed the selected-lecture line from the dedicated Adjustment Period dialogue and reduced its fixed card height by 35%. The main Attended choice dialogue and all adjustment behavior remain unchanged. -->
 <!-- V20.17: Removed the Focused Scroll toggle and all toggle-specific state, locking, restore, and UI code. Daily Timetable day swiping and calendar navigation remain directly available. Replaced independent inline three-dot attendance menus with a single four-option attendance dialogue (Attended, Absent, Teacher Absent, No Classes), ensuring only one lecture action dialogue is active at a time. Existing attendance, Adjustment Period, calculations, storage, notifications, history, and result functionality remain unchanged. -->
+<!-- V20.18: Reduced the fixed Daily Timetable card height to remove the unused blank space below the final lecture. This is a UI-only sizing adjustment; timetable content, attendance actions, swiping, calendar navigation, calculations, storage, notifications, history, and result functionality remain unchanged. -->
+<!-- V20.19: Slightly reduced the four Attendance action buttons in the single lecture dialogue for a more compact fit. Existing attendance flows, Adjustment Period behavior, calculations, storage, and all other functionality remain unchanged. -->
 <!-- V20.20: Updated the in-app User Guide to match the current user-facing flows, including the single lecture attendance dialogue, Adjustment Period, current Semester filters, current Attendance reason rules, notifications, and Results confirmation flow. Help content only; no application or data behavior changed. -->
 <!-- V20.21: After a successful fresh login, opens the User Guide in a locked first-login flow until the guide is scrolled to the bottom; the close button then appears and the app unlocks. Persistent-login launches and existing Refresh Applied Changes launch behavior remain unchanged. Logout still removes the persistent-login key. -->
+<!-- V20.22: Fixed nested Lecture Attendance dialogue cancellation. Cancelling Attended or No Classes now returns to the preceding Attendance dialogue instead of the main Semester directory; successful submissions and deeper Adjustment Period stacking remain unchanged. -->
 <!-- V20.23: Attended lecture attendance now defaults to Current — Selected Lecture when the choice dialogue opens. Adjustment Period is no longer auto-opened from an existing adjustment record; users can explicitly select it when needed. Existing attendance data and save behavior remain unchanged. -->
 <!-- V20.24: Added per-user college joining-date onboarding and enforcement. The first attendance action asks when the user joined the college; missed attendance checks then begin from that date, and all attendance/lecture mutation paths reject dates before it. -->
-<!-- V20.24 FIX: Corrected the date-format validation regex so valid 08 Aug 2026–today dates can be saved. -->
 <!-- V20.25: Attendance Not Marked dialog now has a fixed 600px height; missed-date entries remain scrollable within the dialog. -->
 <!-- V20.26: Attendance Not Marked entries use fixed compact heights; Reset App Data clears the per-user college joining date; Import/Export require a selected joining date; attendance analytics exclude records before the selected joining date. -->
 <!-- V20.27: Reduced Attendance Not Marked date-entry cards from 72px to a fixed 60px height. -->
@@ -550,21 +488,21 @@ so future college boundary changes require editing one configuration only. -->
 <!-- V21.2: Updated only the existing Dashboard Semester 1 Weekly Timetable content to exactly match the new Weekly Timetable formatting and schedule provided for 17/09/2026 onward. Existing Weekly Timetable design, layout, behavior, and all other application/data contracts remain unchanged. -->
 <!-- V21.3: Added the selected per-user college joining date as a read-only "Joined on : DD/MM/YYYY" line below the profile email. It updates after login and joining-date selection and disappears when joining date data is reset; no other profile, attendance, or data behavior changed. -->
 <!-- V21.4: Added a date-specific Daily Timetable exception for 17/09/2026 only. All other dates continue using the existing V21.3 timetable schedule. -->
-<!-- V21.6: Small UI polish and responsive refinements, plus a robust first-login User Guide bottom-detection flow for Chrome and Android WebView. No attendance, profile, result, or storage behavior changed. -->
 <!-- V21.5: Clarified Semester 1 Total Lectures Attended by showing normal Attended and Adjustment Period credit separately as an in-card equation. Calculations and stored data remain unchanged. -->
+<!-- V21.6: Small UI polish and responsive refinements, plus a robust first-login User Guide bottom-detection flow for Chrome and Android WebView. No attendance, profile, result, or storage behavior changed. -->
 <!-- V21.7: Updated Font Size range to 70%–140% and Display Size range to 60%–100%, with 90% defaults when no saved preference exists. Existing saved size preferences and all other data/behavior remain unchanged. -->
 <!-- V21.8: Size sliders are now display-only indicators. Font Size and Display Size can be changed only with their +/− buttons; existing saved size preferences and all other data/behavior remain unchanged. -->
 <!-- V21.9: Daily Timetable cards now use a 355px minimum height and synchronize to the tallest rendered day when content requires more space. All Daily Timetable height layers remain equal. -->
 <!-- V21.10: Font Size range changed to 70%–100% and Display Size range changed to 70%–100%. Existing saved values above the new maximum are clamped to 100%; defaults and all other behavior remain unchanged. -->
 <!-- V21.11: Submitted result entry cards now show the weekday of the submitted date instead of the hardcoded "CA" label. Result data, storage, editing, deletion, and all other behavior remain unchanged. -->
 <!-- V21.12: Lecture analytics and automatic-Absent calculation now run only for Present + Regular College Day. Exam Day and Other/Custom Present dates are excluded, matching Check Unmarked Lectures and the existing timetable behavior. No other attendance/result behavior changed. -->
-<!-- V21.23: User Guide close controls are separated by flow: forced first-time login uses only the bottom Close button after reaching the guide bottom; normal User Guide access uses only the top-right X. No attendance, result, storage, or data-contract behavior changed. -->
 <!-- V21.14: Added browser text-selection/copy protection for the app UI, including touch long-press selection, mouse selection, context-menu copy, and common keyboard copy shortcuts. No attendance, result, storage, login, or data-contract behavior changed. -->
 <!-- V21.15: Fixed the attendance reminder and Submit Your Attendance UI to respect the existing attendance-eligibility rule. Weekend/unavailable dates no longer generate the reminder or present an active Submit action; configured special eligible days retain authority. No attendance, result, storage, login, or data-contract behavior changed. -->
 <!-- V21.16: Fixed the forced first-login User Guide unlock race. The guide cannot unlock from layout/viewport/resize checks alone; the user must interact with the guide and actually reach the bottom before the bottom Close becomes available. The top-right X remains hidden throughout the forced flow. Normal User Guide access remains unchanged. -->
 <!-- V21.17: Fixed the forced first-login User Guide close-control state. After the user reaches the bottom, the app unlocks but the top-right X remains hidden; only the bottom Close button is available for that first-login guide session. Normal User Guide access continues to use the top-right X only. -->
 <!-- V21.18: Made the forced first-login User Guide persistent until the user taps the bottom Close button. The forced-guide state survives page visibility/backgrounding and reloads, and a new login starts a fresh forced-guide requirement. Normal User Guide behavior remains unchanged. -->
 <!-- V21.19: Added browser-only keyboard/visual-viewport safety for text and number inputs. Mobile browsers now keep focused fields visible, constrain/reposition open dialogs around the visual viewport, and restore the pre-keyboard page position after the keyboard closes. Existing Android WebView keyboard behavior and all data/storage contracts remain unchanged. -->
+<!-- V21.23: User Guide close controls are separated by flow: forced first-time login uses only the bottom Close button after reaching the guide bottom; normal User Guide access uses only the top-right X. No attendance, result, storage, or data-contract behavior changed. -->
 <!-- V22.0: Architecture foundation release. V21.19 behavior, UI, data/storage contracts,
      login/session behavior, attendance/results logic, offline mode, and Android WebView
      compatibility are preserved. This release introduces the V22 Master Source Map and
@@ -606,27 +544,85 @@ so future college boundary changes require editing one configuration only. -->
      The new user-controlled Schedule Exception UI is available only from 24/09/2026
      onward. The existing 17/09/2026 full-day Section A historical exception remains
      date-specific and unchanged. -->
+<!-- V22.9: Removed the Schedule Exception explanatory note beneath the action controls.
+     The Schedule Exception interface, confirmation flow, date-specific behavior, and
+     all existing attendance/timetable functionality remain unchanged. -->
 <!-- V22.10: After Reset App Data clears the per-user college joining date, Submit Your Attendance remains actionable so the user can open the College Joining Date dialog and set the date again. Once a joining date is saved, the existing attendance eligibility rules resume unchanged. -->
+<!-- V22.11: Replaced the browser-native Schedule Exception confirmation with a custom INVICTUS confirmation layer rendered inside the already-open Schedule Exception dialog. The confirmation stays visually on top of that dialog; No closes only the confirmation, while Yes applies and reopens the updated Schedule Exception interface. -->
+<!-- V22.12: Removed the additional warning text from the Schedule Exception
+     Change to Default confirmation. The custom confirmation dialog, its placement,
+     Yes/No behavior, and all other Schedule Exception functionality remain unchanged. -->
 <!-- V22.13: Schedule Exception clock visibility is now limited to dates whose attendance is Present + Regular College Day. The clock remains hidden for Absent, Holiday, Blank, unmarked, and other Present reasons, while the existing 24/09/2026 start-date gate remains unchanged. -->
+<!-- V22.15: Added 23/09/2026 as the protected hardcoded Holiday "Shaheed-Diwas". It uses the existing automatic protected-Holiday mechanism: the date is seeded automatically as Holiday, cannot be altered, and displays "Automatic" in Attendance History. Existing hardcoded holidays and all other functionality remain unchanged. -->
+<!-- V22.16: Tapping the uploaded profile photo in the header now opens that same photo inside the app in a dedicated viewer. Existing profile-photo upload, storage, fallback, and display behavior remain unchanged. -->
+<!-- V22.17: Replaced the profile-photo viewer title with a Delete button. Deleting removes the uploaded photo from existing storage and restores the default avatar; upload, viewing, and all other functionality remain unchanged. -->
 <!-- V22.18: Profile photo Delete now requires an explicit custom Yes/No confirmation before removal. -->
 <!-- V22.19: Renamed the Account profile-photo action from "Change profile photo" to "Upload profile photo". No profile-photo behavior or other application functionality changed. -->
 <!-- V22.20: Completed the V22.19-to-V22.20 User Guide rewrite to match the current V22 product state, including attendance rules, Schedule Exception, protected holidays, profile-photo upload/view/delete flow, notifications, results, dashboard, settings, data safety, and current navigation behavior. No runtime/data behavior changed. -->
 <!-- V22.21: Permanently places the forced first-login User Guide Close button at the end of the guide. It is shown throughout the forced guide, so users simply scroll to the end and tap Close. Removed viewport/scroll-position detection, bottom-reach detection, and timing-based unlock logic. -->
 <!-- V22.22: Schedule Exception lecture option cards now use the currently effective timetable for the selected date, so the modal stays synchronized with an already-applied Section A exception. Default Section B remains the source when no exception exists. No Schedule Exception persistence or application behavior changed. -->
-
-<!-- V22.15: Added 23/09/2026 as the protected hardcoded Holiday "Shaheed-Diwas". It uses the existing automatic protected-Holiday mechanism: the date is seeded automatically as Holiday, cannot be altered, and displays "Automatic" in Attendance History. Existing hardcoded holidays and all other functionality remain unchanged. -->
-<!-- V22.17: Replaced the profile-photo viewer title with a Delete button. Deleting removes the uploaded photo from existing storage and restores the default avatar; upload, viewing, and all other functionality remain unchanged. -->
-<!-- V22.16: Tapping the uploaded profile photo in the header now opens that same photo inside the app in a dedicated viewer. Existing profile-photo upload, storage, fallback, and display behavior remain unchanged. -->
-<!-- V22.12: Removed the additional warning text from the Schedule Exception
-     Change to Default confirmation. The custom confirmation dialog, its placement,
-     Yes/No behavior, and all other Schedule Exception functionality remain unchanged. -->
-<!-- V22.11: Replaced the browser-native Schedule Exception confirmation with a custom INVICTUS confirmation layer rendered inside the already-open Schedule Exception dialog. The confirmation stays visually on top of that dialog; No closes only the confirmation, while Yes applies and reopens the updated Schedule Exception interface. -->
-<!-- V22.9: Removed the Schedule Exception explanatory note beneath the action controls.
-     The Schedule Exception interface, confirmation flow, date-specific behavior, and
-     all existing attendance/timetable functionality remain unchanged. -->
-<!-- V20.22: Fixed nested Lecture Attendance dialogue cancellation. Cancelling Attended or No Classes now returns to the preceding Attendance dialogue instead of the main Semester directory; successful submissions and deeper Adjustment Period stacking remain unchanged. -->
-<!-- V20.19: Slightly reduced the four Attendance action buttons in the single lecture dialogue for a more compact fit. Existing attendance flows, Adjustment Period behavior, calculations, storage, and all other functionality remain unchanged. -->
-<!-- V20.18: Reduced the fixed Daily Timetable card height to remove the unused blank space below the final lecture. This is a UI-only sizing adjustment; timetable content, attendance actions, swiping, calendar navigation, calculations, storage, notifications, history, and result functionality remain unchanged. -->
+<!-- V22.23_Testing_1: Replaced the Section A-based Schedule Exception system with lecture-level timetable adjustments. The clock now opens the scheduled lectures for the selected date; tapping a lecture opens Subjects/Lab/Others replacement choices, and selecting one immediately replaces that lecture's subject while preserving its scheduled time. Removed Section A exception logic/data and legacy Section A schedule-exception modes. -->
+<!-- V22.23_Testing_1.1: Added explicit confirmation before a selected lecture replacement is applied. No timetable replacement is saved until Yes is confirmed. -->
+<!-- V22.23_Testing_1.2: Made the replacement dialog exclusive while open and restored vertical touch scrolling inside its Subjects/Lab/Others list. -->
+<!-- V22.23_Testing_1.3: Made the Schedule Exception Current card permanent and date-aware, kept its displayed status as "Default Timetable", and added a Yes/No Set to Default confirmation. -->
+<!-- V22.23_Testing_1.4: Fixed Android touch scrolling inside the Replace Lecture dialog by temporarily relaxing the global semester modal touch lock while Dialogue 2 is active, then restoring it on close. No UI/workflow changes. -->
+<!-- V22.23_Testing_1.5: Changed the Schedule Exception replacement flow so Dialogue 1 closes before Dialogue 2 opens. Dialogue 2 is independently scrollable; X returns to Dialogue 1, No keeps Dialogue 2 open, and Yes applies the replacement then reopens Dialogue 1 with the updated timetable. -->
+<!-- V22.23_Testing_1.6: Marks Gained/Obtained is free-entry while creating or editing Class Tests and Surprise Tests. Greater-than-total validation occurs only on Submit and displays one dialog-level error. -->
+<!-- V22.23_Testing_1.7: Regression checkpoint for the V22 attendance, timetable, and results contracts. No runtime behavior change. -->
+<!-- V22.23_Testing_1.8: Regression checkpoint for lecture-slot identity and stale tracking cleanup across timetable mutations. No runtime behavior change. -->
+<!-- V22.23_Testing_1.9: Kept Adjustment Period independent from Schedule Replacement while preserving the original lecture identity for analytics. -->
+<!-- V22.23_Testing_1.10: All Submitted Results now shows the completed/submitted Surprise Tests count on the Surprise Tests card; the count is hidden at zero and refreshes with the live result data. -->
+<!-- V22.23_Testing_1.11: Regression checkpoint for Schedule Replacement/Adjustment persistence and timetable rendering. No runtime behavior change. -->
+<!-- V22.23_Testing_1.12: Finalized lecture-slot tracking cleanup for Schedule Replacement and Adjustment flows. Replaced/adjusted lecture slots clear stale marked tracking and begin untracked where applicable; resetting a day to the Default Timetable also clears affected replacement/adjustment tracking so restored default lectures are untracked. Adjustment Period attendance remains a deliberate Attended → Adjustment → Subject → Marked flow. -->
+<!-- V23.1: Daily Timetable lecture cards now use real-time left-to-right
+     progress filling. Each lecture card starts light grey before its start time,
+     then the white fill advances continuously from 0% to 100% across the exact
+     lecture duration using hours, minutes, and seconds. The currently running
+     lecture receives the INVICTUS purple boundary, and a subtle moving shimmer
+     travels only across the already-filled progress area. Text remains visible
+     throughout, and the fill reaches 100% exactly at the scheduled end time. -->
+<!-- V23.2: Fixed the current-lecture purple boundary so it renders outside the
+     progress layers instead of covering/consuming part of the white progress fill.
+     The real-time grey-to-white progress, seconds-level timing, shimmer scope,
+     and text visibility remain unchanged. -->
+<!-- V23.3: Corrected the current-lecture boundary so it stays fully outside the
+     lecture progress fill without consuming or masking any progress area. The
+     running shimmer is now rendered in the INVICTUS purple accent so it remains
+     visible against the white progress fill. Grey unprogressed area remains static;
+     existing timing, progress calculation, and text visibility are unchanged. -->
+<!-- V23.4: Refined the live-lecture visual treatment. The current lecture now
+     has a complete four-sided INVICTUS-purple boundary with visible left and right
+     edges, while the progress fill remains visually continuous underneath it.
+     The purple shimmer now uses a smooth transform sweep with an off-screen loop
+     reset and remains clipped strictly to the already-filled white progress area. -->
+<!-- V23.5: Reworked the live-lecture shimmer to use a visible repeating INVICTUS-purple
+     sweep confined directly to the white progress width. The repeating pattern loops
+     seamlessly with no end-of-cycle jump or clipping artifact; the lecture boundary,
+     timing, fill progression, and text visibility remain unchanged. -->
+<!-- V23.6: Increased the spacing between repeated live-lecture shimmer sweeps so
+     each purple shimmer is clearly separated by a larger gap. The shimmer remains
+     confined to the white progress width; timing, boundary, fill progression, and
+     text visibility remain unchanged. -->
+<!-- V23.7: Corrected the live-lecture shimmer direction so the shimmer consistently travels from left to right across the already-progressed white area. Progress calculation, boundary, spacing, timing, and text visibility remain unchanged. -->
+<!-- V23.8: Increased the live-lecture shimmer cycle duration by 0.30 seconds,
+     from 1.05s to 1.35s. Shimmer direction, spacing, visibility, progress clipping,
+     boundary, and real-time lecture timing remain unchanged. -->
+<!-- V23.9: Optimized Daily Timetable live-lecture visuals for Dark Appearance.
+     Lecture rows, progressed layers, dividers, time/subject/status text, current-lecture
+     border, and shimmer contrast now use dedicated dark-theme treatment while preserving
+     the existing light-theme appearance, real-time progress timing, shimmer direction,
+     spacing, and attendance behavior. -->
+<!-- V23.10: Increased the Daily Timetable date text contrast in Dark Appearance for clearer readability against the light timetable header. No light-theme or timetable behavior changed. -->
+<!-- V23.11: Added a temporary Sort by control to every All Submitted Results directory. Newest/Oldest use the original submission timestamp (createdAt), while Ascending/Descending use the latest activity timestamp (editedAt when an entry has been edited, otherwise createdAt). Result sorting is view-only and the selected sort mode is discarded when the directory closes. Existing result data remains intact; editedAt is generated only when an existing result entry is edited. -->
+<!-- V23.12: Updated Schedule Exception Set to Default so Adjustment and Replacement can be handled independently. If only one exists, its specific confirmation is shown; if both exist, a selection dialog offers Adjustment, Replacement, or Both, followed by the corresponding confirmation. Existing attendance/timetable data outside the selected scope remains intact. -->
+<!-- V23.13: Refined Schedule Exception Set to Default navigation so the three-option selection remains available after a No response; added a defensive PST subject entry to Adjustment/Replacement selection lists; and normalized the Schedule Exception PST LAB display so it remains exactly "PST LAB" throughout timetable rendering. -->
+<!-- V23.14: Refined the Schedule Exception default-scope selection dialog with an X button that returns directly to the Schedule Exception dialog; constrained the Adjustment, Replacement, and Both option labels to remain fully contained inside their respective cards. -->
+<!-- V23.15: Fixed Adjustment Period editing so the complete Subjects/Lab/Others lists remain available, including the original scheduled subject; selecting the original subject clears the adjustment cleanly. Schedule Exception now reflects an active Adjustment Period subject in its lecture cards without changing the underlying lecture identity used by attendance analytics. PST LAB remains displayed exactly as "PST LAB". -->
+<!-- V23.16: Locked the Adjustment Period dialogue as a true modal surface so the page behind it cannot scroll or be interacted with; only the Adjustment Period option list remains vertically scrollable, with scroll chaining contained at the list boundaries. Existing adjustment selection, attendance, storage, and Schedule Exception behavior remain unchanged. -->
+<!-- V23.17: Removed the Daily Timetable day-position indicator beneath the timetable. Day swiping, date navigation, timetable rendering, and all attendance/data behavior remain unchanged. -->
+<!-- V23.18: Rewritten the in-app User Guide for new users. The guide now focuses on essential onboarding, daily attendance, lecture marking, Adjustment Period vs Schedule Exception, Set to Default, results, dashboard, profile, settings, notifications, and backup/reset guidance. Help content only; no application/data behavior changed. -->
+<!-- V23.19: Fixed the Daily Timetable swipe flash by reusing and rotating the existing three slide DOM nodes instead of rebuilding the timetable after every swipe. Swipe animation, date navigation, attendance actions, and timetable data behavior remain unchanged. -->
+<!-- V23.20: Corrected the reverse-swipe recycling order. Previous-day navigation now animates the existing previous slide first, then recycles the off-screen nodes only after the transition, eliminating the visible flash caused by inserting a new slide before the current track position was adjusted. Forward and backward swipe geometry are kept symmetric. -->
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -709,7 +705,7 @@ so future college boundary changes require editing one configuration only. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V22.22</title>
+<title>Invictus V23.20</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -845,6 +841,16 @@ so future college boundary changes require editing one configuration only. -->
     cursor:pointer;
   }
   .submitted-results-directory-item:active{transform:scale(.99)}
+ .submitted-results-directory-sort{position:relative;flex:0 0 auto;}
+  .submitted-results-directory-sort-button{border:1px solid var(--line);border-radius:10px;background:#f4f4f4;color:#333;padding:9px 12px;font:inherit;font-size:calc(13px * var(--invictus-font-scale));font-weight:700;cursor:pointer;white-space:nowrap;}
+  .submitted-results-directory-sort-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;min-width:210px;padding:6px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.18);display:none;}
+  .submitted-results-directory-sort-menu.open{display:grid;gap:3px;}
+  .submitted-results-directory-sort-option{width:100%;border:0;border-radius:8px;background:transparent;color:inherit;padding:10px 11px;text-align:left;font:inherit;font-size:calc(13px * var(--invictus-font-scale));cursor:pointer;}
+  .submitted-results-directory-sort-option:hover,.submitted-results-directory-sort-option:focus-visible{background:#f1efff;outline:none;}
+  .submitted-results-directory-sort-option.active{font-weight:800;background:#eeeaff;}
+  html[data-theme="dark"] .submitted-results-directory-sort-button{background:#242424;color:#eee;border-color:#444;}
+  html[data-theme="dark"] .submitted-results-directory-sort-menu{background:#1d1d1d;border-color:#3a3a3a;box-shadow:0 12px 30px rgba(0,0,0,.45);}
+  html[data-theme="dark"] .submitted-results-directory-sort-option:hover,html[data-theme="dark"] .submitted-results-directory-sort-option:focus-visible,html[data-theme="dark"] .submitted-results-directory-sort-option.active{background:#302c42;}
   .submitted-results-directory-item-main{
     min-width:0;
     display:flex;
@@ -1809,7 +1815,7 @@ so future college boundary changes require editing one configuration only. -->
     min-width:33.333333%;
     width:33.333333%;
     flex:0 0 33.333333%;
-    contain:layout paint;
+    contain:layout;
     backface-visibility:hidden;
   }
 
@@ -1930,9 +1936,6 @@ so future college boundary changes require editing one configuration only. -->
   html[data-theme="dark"] .profile-photo-viewer-image-wrap{
     background:#242424;
   }
-  .sem-day-dots{display:flex;justify-content:center;gap:6px;margin:10px 0 2px}
-  .sem-day-dot{width:7px;height:7px;border-radius:50%;background:#ddd}
-  .sem-day-dot.active{background:var(--purple);width:18px;border-radius:5px}
   .week-grid{display:block}
   .week-day{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
   .week-day-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fafafa;border-bottom:1px solid var(--line)}
@@ -1950,6 +1953,20 @@ so future college boundary changes require editing one configuration only. -->
     overflow:hidden;background:#fff;color:#222;border:1px solid #e4e4e4;
     border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25);box-sizing:border-box;
   }
+  /* V22.23_Testing_1.5 — Dialogue 2 is a standalone dialog. Dialogue 1 is
+     closed before this layer opens, so its modal/touch layer can never interfere
+     with the replacement list. */
+  .schedule-exception-replacement-layer{
+    position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;
+    padding:14px;box-sizing:border-box;background:rgba(0,0,0,.48);
+    pointer-events:auto;touch-action:auto;overflow:hidden;overscroll-behavior:contain;
+  }
+  /* Dialogue 3 — confirmation stays above the active Replace Lecture dialog. */
+  .schedule-exception-replacement-confirm-layer{
+    position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
+    padding:18px;box-sizing:border-box;background:rgba(0,0,0,.48);border-radius:18px;
+    pointer-events:auto;touch-action:auto;
+  }
   .schedule-exception-confirm-layer{
     position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
     padding:18px;box-sizing:border-box;background:rgba(0,0,0,.48);border-radius:18px;
@@ -1966,6 +1983,29 @@ so future college boundary changes require editing one configuration only. -->
   .schedule-exception-confirm-actions{
     display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;
   }
+  .schedule-exception-default-selection-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  }
+  .schedule-exception-default-selection-head .schedule-exception-confirm-title{
+    padding-right:4px;
+  }
+  .schedule-exception-default-selection-close{
+    flex:0 0 auto;width:44px;height:44px;border:0;border-radius:12px;
+    background:#f3f3f3;color:#666;font-size:27px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .schedule-exception-default-selection-close:hover{background:#ececec}
+  .schedule-exception-default-selection-actions{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px;
+    min-width:0;
+  }
+  .schedule-exception-default-selection-actions button{
+    min-width:0;min-height:48px;padding:10px 4px;border-radius:12px;border:1px solid var(--line);
+    background:#fff;color:#333;font:inherit;font-size:15px;font-weight:800;cursor:pointer;
+    white-space:normal;overflow:hidden;text-overflow:clip;overflow-wrap:anywhere;
+    display:flex;align-items:center;justify-content:center;text-align:center;box-sizing:border-box;
+  }
+  .schedule-exception-default-selection-actions button:hover{background:#f8f6ff;border-color:#cdbdff;}
   .schedule-exception-confirm-actions button{
     min-height:46px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;
   }
@@ -1974,7 +2014,9 @@ so future college boundary changes require editing one configuration only. -->
   .schedule-exception-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .schedule-exception-head h2{margin:0;font-size:21px}
   .schedule-exception-close{border:0;background:#f3f3f3;border-radius:12px;width:44px;height:44px;font-size:27px;color:#666;cursor:pointer}
-  .schedule-exception-current{margin-top:10px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fafafa;font-size:13px;line-height:1.4}
+  .schedule-exception-current{margin-top:10px;padding:11px 12px;border:2px solid #e53935;border-radius:12px;background:#fafafa;font-size:13px;line-height:1.4;width:100%;box-sizing:border-box;color:inherit;font:inherit;text-align:left;cursor:pointer;display:block}
+  .schedule-exception-current:hover{background:#f8f6ff}
+  .schedule-exception-current:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
   .schedule-exception-list{display:grid;gap:9px;overflow-y:auto;min-height:0;margin-top:13px;padding-right:2px}
   .schedule-exception-option{
     width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;
@@ -1992,19 +2034,137 @@ so future college boundary changes require editing one configuration only. -->
   html[data-theme="dark"] .schedule-exception-confirm-modal{background:#1f1f1f;color:#f5f5f5;border-color:#444}
   html[data-theme="dark"] .schedule-exception-confirm-message{color:#bbb}
   html[data-theme="dark"] .schedule-exception-confirm-no{background:#2a2a2a;color:#eee;border-color:#444}
+  html[data-theme="dark"] .schedule-exception-default-selection-close{background:#2a2a2a;color:#ddd}
+  html[data-theme="dark"] .schedule-exception-default-selection-close:hover{background:#333}
+  html[data-theme="dark"] .schedule-exception-default-selection-actions button{background:#2a2a2a;color:#eee;border-color:#444}
+  html[data-theme="dark"] .schedule-exception-default-selection-actions button:hover{background:#2a2148;border-color:#584a85}
   html[data-theme="dark"] .schedule-exception-close{background:#2a2a2a;color:#ddd}
   html[data-theme="dark"] .schedule-exception-current{background:#262626}
+  html[data-theme="dark"] .schedule-exception-current:hover{background:#2a2a2a}
   html[data-theme="dark"] .schedule-exception-option{background:#262626}
   html[data-theme="dark"] .schedule-exception-option:hover{background:#2a2a2a}
   html[data-theme="dark"] .schedule-exception-option.active{background:#2a2148}
   html[data-theme="dark"] .schedule-exception-option-sub{color:#aaa}
   .week-day.today .week-day-head{background:#f0ebff;color:var(--purple)}
-  .week-lecture{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid #f0f0f0}
+  /* V23.1 — Real-time lecture progress fill + live lecture emphasis.
+     The lecture row remains light grey until its scheduled start. From the
+     exact start time, a white layer grows from left to right continuously
+     until the exact scheduled end time. Text/content stays above the layers.
+     The currently running lecture gets the INVICTUS purple boundary, while a
+     subtle shimmer loops only inside the already-filled progress area. */
+  .week-lecture{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border-bottom:1px solid #f0f0f0;
+    background:#eeeeee;
+    overflow:hidden;
+  }
+  .week-lecture::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:var(--lecture-progress,0%);
+    background:#fff;
+    z-index:0;
+    pointer-events:none;
+  }
+  .week-lecture::after{
+    content:"";
+    display:none;
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:var(--lecture-progress,0%);
+    /* V23.5 — Visible, continuous purple shimmer confined to the exact
+       progressed/white portion. A repeating pattern is used so the animation
+       loops seamlessly: the frame at the end is visually identical to the
+       frame at the start, eliminating the end-of-loop glitch. */
+    background:repeating-linear-gradient(105deg,
+      transparent 0,
+      transparent 45px,
+      rgba(118,84,238,.16) 45px,
+      rgba(118,84,238,.82) 50px,
+      rgba(118,84,238,.16) 55px,
+      transparent 55px,
+      transparent 100px);
+    background-size:100px 100%;
+    background-position:0 0;
+    animation:invictusLectureProgressShimmer 1.35s linear infinite;
+    z-index:0;
+    pointer-events:none;
+  }
+  .week-lecture.is-current-lecture{
+    /* V23.4 — Use a real four-sided boundary so the left and right edges
+       remain visible inside the timetable viewport. The progress layer stays
+       underneath the border, so the fill still reaches the card edges. */
+    border:2px solid var(--purple);
+    box-sizing:border-box;
+    position:relative;
+    z-index:2;
+  }
+  .week-lecture.is-current-lecture::after{
+    display:block;
+  }
+  @keyframes invictusLectureProgressShimmer{
+    from{background-position:0 0}
+    to{background-position:100px 0}
+  }
+  .week-lecture > *{
+    position:relative;
+    z-index:1;
+  }
   .week-lecture:last-child{border-bottom:0}
+  /* V23.9 — Dedicated Dark Appearance treatment for the live timetable. */
+  html[data-theme="dark"] .week-lecture{
+    background:#242424;
+    border-bottom-color:#3a3a3a;
+    color:#f2f2f2;
+  }
+  html[data-theme="dark"] .week-lecture::before{
+    background:#303030;
+  }
+  html[data-theme="dark"] .week-lecture-time{
+    color:#bdbdbd;
+  }
+  html[data-theme="dark"] .week-lecture-subject{
+    color:#f5f5f5;
+  }
+  html[data-theme="dark"] .week-lecture.is-current-lecture{
+    border-color:var(--purple);
+  }
+  html[data-theme="dark"] .week-day-date{
+    color:#5a5a5a;
+    font-weight:600;
+  }
+  html[data-theme="dark"] .week-status.pending{
+    color:#bdbdbd;
+  }
+  html[data-theme="dark"] .week-status.att{color:#7ed887}
+  html[data-theme="dark"] .week-status.att.att-class-test{color:#ffb0b0}
+  html[data-theme="dark"] .week-status.att.att-surprise-test{color:#ff8f8f}
+  html[data-theme="dark"] .week-status.abs{color:#ff8f8f}
+  html[data-theme="dark"] .week-status.ta{color:#f0b46b}
   .week-lecture-main{min-width:0}.week-lecture-time{font-size:calc(12px * var(--invictus-font-scale));color:#666}.week-lecture-subject{font-weight:700;margin-top:2px;white-space:pre-line}
   .week-status{font-size:calc(11px * var(--invictus-font-scale));font-weight:800;white-space:nowrap}
   .week-status.att{color:#2e7d32}.week-status.att.att-class-test{color:#ef9a9a}.week-status.att.att-surprise-test{color:#b71c1c}.week-status.abs{color:#c62828}.week-status.ta{color:#b35a00}.week-status.pending{color:#777}
   .week-status.att.att-adjustment{color:#66bb6a}
+  html.lecture-adjustment-target-locked,
+  body.lecture-adjustment-target-locked{
+    overflow:hidden !important;
+    overscroll-behavior:none !important;
+    touch-action:none !important;
+  }
+  body.lecture-adjustment-target-locked .app{
+    pointer-events:none !important;
+    user-select:none !important;
+  }
   .lecture-adjustment-modal{width:min(620px,92vw);height:min(700px,82vh);display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#222;border:1px solid #e4e4e4;border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25);box-sizing:border-box}
   .lecture-attendance-choice-modal{width:min(620px,92vw);height:auto;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#222;border:1px solid #e4e4e4;border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25);box-sizing:border-box}
   .lecture-adjustment-dialog{width:min(620px,92vw);height:min(455px,53.3vh);display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#222;border:1px solid #e4e4e4;border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25);box-sizing:border-box}
@@ -2012,10 +2172,11 @@ so future college boundary changes require editing one configuration only. -->
   .lecture-adjustment-option{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fafafa;color:inherit;font:inherit;text-align:left;cursor:pointer}
   .lecture-adjustment-option.selected{border-color:var(--purple);background:#f0ebff;color:var(--purple);font-weight:800}
   .lecture-adjustment-select-wrap{margin-top:14px;display:flex;flex-direction:column;min-height:0;flex:1}
-  .lecture-adjustment-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;flex:0 0 auto}
+  .schedule-exception-replacement-meta{margin-top:8px;font-size:13px;color:#666;line-height:1.35;flex:0 0 auto}.schedule-exception-replacement-subject{margin-top:2px;font-weight:700;color:inherit}.lecture-adjustment-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px;margin-bottom:12px;flex:0 0 auto}
   .lecture-adjustment-tab{min-height:54px;padding:10px 8px;border:1px solid var(--line);border-radius:12px;background:#fff;color:inherit;font:inherit;font-weight:700;cursor:pointer}
   .lecture-adjustment-tab.selected{border-color:var(--purple);background:#f0ebff;color:var(--purple);font-weight:800}
-  .lecture-adjustment-list{flex:1;min-height:0;overflow-y:auto;display:grid;align-content:start;gap:10px;padding-right:2px}
+  .schedule-exception-replacement-layer .lecture-adjustment-list{touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+  .lecture-adjustment-list{flex:1;min-height:0;overflow-y:auto;display:grid;align-content:start;gap:10px;padding-right:2px;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
   .lecture-adjustment-item{width:100%;min-height:56px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer;box-sizing:border-box}
   .lecture-adjustment-item.selected{border-color:var(--purple);background:#f0ebff;color:var(--purple);font-weight:800}
   .lecture-adjustment-empty{padding:18px 12px;text-align:center;color:#777;border:1px dashed var(--line);border-radius:12px}
@@ -5057,6 +5218,15 @@ function getHardcodedSpecialDay(dateKey){
   <div class="lecture-mismatch-modal submitted-results-directory-modal" role="dialog" aria-modal="true" aria-labelledby="submittedResultsDirectoryTitle">
     <div class="lecture-mismatch-head">
       <h2 id="submittedResultsDirectoryTitle">Submitted Results</h2>
+      <div class="submitted-results-directory-sort">
+        <button type="button" class="submitted-results-directory-sort-button" id="submittedResultsDirectorySortButton" aria-haspopup="menu" aria-expanded="false">Sort by ▾</button>
+        <div class="submitted-results-directory-sort-menu" id="submittedResultsDirectorySortMenu" role="menu" aria-hidden="true">
+          <button type="button" class="submitted-results-directory-sort-option active" data-result-sort="newest" role="menuitem">Newest on Top</button>
+          <button type="button" class="submitted-results-directory-sort-option" data-result-sort="oldest" role="menuitem">Oldest on Top</button>
+          <button type="button" class="submitted-results-directory-sort-option" data-result-sort="ascending" role="menuitem">Arrange in Ascending</button>
+          <button type="button" class="submitted-results-directory-sort-option" data-result-sort="descending" role="menuitem">Arrange in Descending</button>
+        </div>
+      </div>
       <button type="button" class="lecture-mismatch-close" id="submittedResultsDirectoryClose" aria-label="Close">×</button>
     </div>
     <div class="submitted-results-directory-list" id="submittedResultsDirectoryList"></div>
@@ -5175,107 +5345,137 @@ function getHardcodedSpecialDay(dateKey){
 
     <div class="user-guide-content">
       <section class="user-guide-intro">
-        <strong>Welcome to INVICTUS.</strong> This guide shows you how to use the app. Follow the steps in each section whenever you need help.
+        <strong>Welcome to INVICTUS.</strong> This guide explains the current app from a student’s point of view — what you see, what to tap, what to choose, and what INVICTUS does next.
       </section>
 
       <section class="user-guide-section">
-        <h3>🚀 Getting Started</h3>
-        <p>When you start using INVICTUS, set your <strong>College Joining Date</strong> when the app asks for it. After that, you can begin recording your attendance, marking lectures, entering results, and checking your progress.</p>
-        <div class="user-guide-action"><strong>Set your joining date</strong><span>Attendance → Submit Your Attendance → College Joining Date</span></div>
-        <div class="user-guide-action"><strong>Submit today's attendance</strong><span>Attendance → Submit Your Attendance</span></div>
-        <div class="user-guide-action"><strong>See your classes</strong><span>Semester → Daily Timetable</span></div>
-        <div class="user-guide-action"><strong>Mark a lecture</strong><span>Semester → Daily Timetable → tap the 3 dots on a lecture</span></div>
-        <div class="user-guide-action"><strong>Enter a result</strong><span>Semester → All Sumbitted Results</span></div>
-        <div class="user-guide-action"><strong>Check your progress</strong><span>Dashboard</span></div>
+        <h3>🚀 1. Getting Started</h3>
+        <p>On your first use, complete the information INVICTUS asks for, including your <strong>College Joining Date</strong>. After setup, the main areas of the app are <strong>Dashboard</strong>, <strong>Attendance</strong>, <strong>Semester</strong>, and <strong>Settings</strong>.</p>
+        <div class="user-guide-action"><strong>Record your day</strong><span>Attendance → Submit Your Attendance</span></div>
+        <div class="user-guide-action"><strong>See and mark individual lectures</strong><span>Semester → Daily Timetable</span></div>
+        <div class="user-guide-action"><strong>Manage results</strong><span>Semester → All Submitted Results</span></div>
+        <div class="user-guide-action"><strong>Review progress</strong><span>Dashboard</span></div>
+        <p>When the first-login User Guide is shown, scroll through it and use the <strong>Close</strong> button at the end to enter the app.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📊 Submit Your Attendance</h3>
-        <p>Open <strong>Attendance → Submit Your Attendance</strong> to record your attendance for an eligible date.</p>
-        <p>Choose one of the available statuses: <strong>Present</strong>, <strong>Absent</strong>, <strong>Holiday</strong>, or <strong>Blank</strong>.</p>
-        <p><strong>Present</strong> — Choose a reason such as <strong>Regular College Day</strong>, <strong>Exam Day</strong>, or <strong>Other — Custom Reason</strong>.</p>
-        <p><strong>Absent</strong> — Choose the required absent reason.</p>
-        <p><strong>Holiday</strong> — Use this when the day is a holiday.</p>
-        <p><strong>Blank</strong> — Use this when you want to leave the day's attendance uncounted and choose the required blank reason.</p>
-        <p>For a normal college day, Present can be submitted from <strong>08:30 AM to 09:30 AM</strong>. A Present submission after 09:30 AM is recorded as a <strong>Late Submission</strong>. Present cannot be submitted before 08:30 AM.</p>
-        <p>Use <strong>Attendance History</strong> to review the attendance you have already submitted.</p>
-        <div class="user-guide-note">📌 Your College Joining Date determines the earliest date for which you can record your personal attendance.</div>
+        <h3>📊 2. Submit Your Attendance</h3>
+        <p>Use <strong>Attendance → Submit Your Attendance</strong> when you want to record the status of a college day.</p>
+        <p>Choose the status offered for that date, such as <strong>Present</strong>, <strong>Absent</strong>, <strong>Holiday</strong>, or <strong>Blank</strong>, and then complete the reason/details requested by INVICTUS.</p>
+        <p>For a normal college day, <strong>Present</strong> can be submitted during the attendance window. A Present submission after the window is recorded as a <strong>Late Submission</strong>; Present cannot be submitted before the window opens.</p>
+        <p>After submitting, use <strong>Attendance History</strong> to review what you recorded. The daily submission and individual lecture marking are separate parts of the attendance system.</p>
+        <div class="user-guide-note">📌 Your <strong>College Joining Date</strong> controls the earliest date for which you can record your personal attendance.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>📅 College Joining Date</h3>
-        <p>You can select your College Joining Date from <strong>08 August 2026 through today</strong>.</p>
-        <p>If you have not selected a joining date yet, open <strong>Submit Your Attendance</strong> and set it when prompted.</p>
-        <p>If you use <strong>Reset All App Data</strong>, your saved joining date is cleared. You can set it again through Submit Your Attendance.</p>
+        <h3>📅 3. College Joining Date</h3>
+        <p>INVICTUS uses your College Joining Date when deciding which attendance dates are available to you.</p>
+        <p>If INVICTUS asks for it, set it through <strong>Submit Your Attendance</strong>. If you later use <strong>Reset All App Data</strong>, the saved joining date is cleared and must be set again.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📚 Daily Timetable</h3>
-        <p>Open <strong>Semester → Daily Timetable</strong> to see the classes scheduled for a day.</p>
-        <p>Move between dates using the timetable controls or calendar.</p>
-        <p>Tap the <strong>3 dots</strong> on a lecture to choose what happened in that lecture.</p>
-        <p>You can mark a lecture as <strong>Attended</strong>, <strong>Absent</strong>, <strong>Teacher Absent</strong>, or <strong>No Classes</strong>.</p>
-        <p><strong>Attended → Current — Selected Lecture</strong> marks the lecture shown on your timetable as attended.</p>
-        <p><strong>Attended → Adjustment Period</strong> is for situations where you attended a different subject during that timetable period. Select the subject you attended, then confirm your choice.</p>
-        <p>Use <strong>Check Unmarked Lectures</strong> to find eligible lectures from previous dates that still need to be marked.</p>
-        <p>Use <strong>Lecture Wise Percentage</strong> and <strong>Lectures Breakdown</strong> to review your lecture attendance.</p>
+        <h3>📚 4. Daily Timetable</h3>
+        <p>Open <strong>Semester → Daily Timetable</strong> to see the lectures scheduled for a date.</p>
+        <p>Move between dates using the timetable's date controls or calendar. The timetable remains directly swipeable; the old day-position indicator is no longer displayed.</p>
+        <p>Each lecture card shows its scheduled time and subject. Tap the lecture's <strong>3 dots</strong> to open the attendance choices.</p>
+        <p>You can mark the lecture as <strong>Attended</strong>, <strong>Absent</strong>, <strong>Teacher Absent</strong>, or <strong>No Classes</strong>.</p>
+        <p>When you choose <strong>Attended</strong>, INVICTUS lets you choose between <strong>Current — Selected Lecture</strong> and <strong>Adjustment Period</strong>.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>🕐 Schedule Exception</h3>
-        <p>From <strong>24 September 2026</strong> onward, you can use Schedule Exception when your day's timetable needs to follow the alternate Section A timetable.</p>
-        <p>The <strong>🕐 clock</strong> is shown when Schedule Exception is available for that day and your attendance is <strong>Present + Regular College Day</strong>.</p>
-        <p><strong>From Lecture N</strong> — Choose the lecture from which you want the Section A timetable to begin. Lectures before it stay on the normal Section B timetable.</p>
-        <p><strong>Replace Current Timetable with Section A</strong> — Use this when the whole day should follow Section A.</p>
-        <p><strong>Change to Default</strong> — Use this to remove your date-specific change and return to the normal timetable.</p>
-        <p>Whenever you make a Schedule Exception change, INVICTUS asks you to confirm it. Tap <strong>Yes</strong> to apply the change or <strong>No</strong> to cancel it.</p>
-        <div class="user-guide-note">📌 The existing <strong>17 September 2026</strong> full-day Section A timetable is already set for that date. The new clock-based Schedule Exception control is not used for that date.</div>
+        <h3>🔄 5. Adjustment Period</h3>
+        <p>Use <strong>Adjustment Period</strong> when you attended a different subject during the selected lecture's scheduled time.</p>
+        <div class="user-guide-action"><strong>Choose Adjustment Period</strong><span>Lecture → 3 dots → Attended → Adjustment Period</span></div>
+        <p>INVICTUS then opens the <strong>Adjustment Period</strong> dialogue. Choose a category — <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong> — and select the subject/class you actually attended.</p>
+        <p>The option list can be scrolled inside the dialogue. The page behind it is locked while you are choosing the adjustment, so accidental background scrolling or interaction does not change the flow.</p>
+        <p>Tap <strong>Apply</strong> after selecting the subject. If you edit an existing Adjustment Period later, the complete Subjects/Lab/Others lists remain available, including the lecture's original scheduled subject.</p>
+        <p>Selecting the original scheduled subject when editing clears the adjustment and returns the lecture to its normal scheduled subject.</p>
+        <div class="user-guide-note">💡 An Adjustment Period changes the subject credited for that lecture without changing the underlying lecture identity used by attendance tracking.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>🏖️ Holidays</h3>
-        <p>Some college holidays are already recorded in INVICTUS. You will see them as <strong>Holiday</strong> in Attendance History.</p>
+        <h3>🕐 6. Schedule Exception</h3>
+        <p>Schedule Exception is for a date when your actual timetable differs from the normal timetable.</p>
+        <p>From <strong>24 September 2026</strong> onward, the <strong>🕐 clock</strong> is available for a date recorded as <strong>Present → Regular College Day</strong>. It is not shown for dates such as Absent, Holiday, Blank, unmarked dates, or other Present reasons.</p>
+        <p>Tap the clock to open <strong>Schedule Exception</strong>. The screen lists the lectures for that date.</p>
+        <p>Tap a lecture to open <strong>Replace Lecture</strong>. The replacement screen shows the lecture time and current subject, then lets you choose from <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong>.</p>
+        <p><strong>PST</strong> is available in Subjects, and <strong>PST LAB</strong> is displayed with that exact name wherever applicable.</p>
+        <p>Selecting a replacement opens <strong>Confirm Replacement</strong>. Choose <strong>Yes</strong> to apply it or <strong>No</strong> to return to the replacement choices. Use <strong>×</strong> on the replacement screen to return to Schedule Exception without applying a replacement.</p>
+        <p>After applying a replacement, Schedule Exception opens again and shows the updated lecture. Other lectures on that date are not changed.</p>
+      </section>
+
+      <section class="user-guide-section">
+        <h3>↩️ 7. Set to Default</h3>
+        <p>Inside <strong>Schedule Exception</strong>, the current timetable card can be used to return changed timetable parts to the default timetable.</p>
+        <p>If only one type of change exists, INVICTUS opens the confirmation for that specific change.</p>
+        <p>If both an <strong>Adjustment</strong> and a <strong>Replacement</strong> exist, INVICTUS first shows <strong>What do you want to Default?</strong> with three choices:</p>
+        <div class="user-guide-action"><strong>Adjustment</strong><span>Default only the Adjustment Period change.</span></div>
+        <div class="user-guide-action"><strong>Replacement</strong><span>Default only the replaced lecture change.</span></div>
+        <div class="user-guide-action"><strong>Both</strong><span>Default both types of changes for that date.</span></div>
+        <p>After choosing a scope, INVICTUS shows <strong>Set to Default?</strong>. Tap <strong>Yes</strong> to apply the selected defaulting action or <strong>No</strong> to cancel. When both changes were present, <strong>No</strong> returns you to the Adjustment/Replacement/Both selection. Tap <strong>×</strong> there to return to Schedule Exception without making a change.</p>
+        <div class="user-guide-note">📌 Set to Default is not a generic app reset. It only restores the selected timetable change(s) for the current date.</div>
+      </section>
+
+      <section class="user-guide-section">
+        <h3>🔎 8. Unmarked Lectures &amp; Attendance Review</h3>
+        <p>Use <strong>Check Unmarked Lectures</strong> to find eligible lectures from previous dates that still need an attendance mark. The check does not treat today's unfinished lectures as previous-date unmarked lectures.</p>
+        <p>Use <strong>Lecture Wise Percentage</strong> and <strong>Lectures Breakdown</strong> to review attendance at lecture level and understand how your recorded outcomes are distributed.</p>
+        <p>Adjustment Period attendance remains distinguishable from normal <strong>Attended</strong> credit in the attendance views.</p>
+      </section>
+
+      <section class="user-guide-section">
+        <h3>🏖️ 9. Holidays &amp; Special Days</h3>
+        <p>Some college holidays are already recorded in INVICTUS. They appear as <strong>Holiday</strong> in the relevant attendance views.</p>
         <p>Protected holidays cannot be changed through the normal attendance controls.</p>
-        <p><strong>23 September 2026 — Shaheed-Diwas</strong> is one of the protected holidays.</p>
+        <p><strong>23 September 2026 — Shaheed-Diwas</strong> is a protected holiday recorded by INVICTUS.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📝 Results</h3>
-        <p>Open <strong>Semester → All Sumbitted Results</strong> to manage your academic results.</p>
-        <p><strong>Subject Results</strong> — Open a subject to view its submitted results. Where available, you can edit or delete a result.</p>
-        <p><strong>Surprise Tests</strong> — Add and manage your surprise-test results.</p>
-        <p><strong>Class Tests</strong> — Enter <strong>Total Marks</strong> first, then enter <strong>Marks Gained</strong>.</p>
-        <p><strong>Exam Results</strong> — Enter the required exam information and continue with <strong>Next</strong> until you reach the confirmation screen. Choose <strong>Yes</strong> to submit or <strong>No</strong> to return to your previous screen with your draft.</p>
+        <h3>📝 10. Results</h3>
+        <p>Open <strong>Semester → All Submitted Results</strong> to manage the results you have submitted.</p>
+        <p><strong>Subject Results</strong> — Open a subject to view its submitted results. Where supported, you can edit or delete an entry.</p>
+        <p><strong>Surprise Tests</strong> — Add and manage surprise-test results. The Surprise Tests card shows the number of submitted/completed Surprise Tests when that count is greater than zero.</p>
+        <p><strong>Class Tests</strong> — Enter <strong>Total Marks</strong> and then <strong>Marks Gained</strong> as requested by the form.</p>
+        <p><strong>Exam Results</strong> — Complete the required information and use <strong>Next</strong> until the confirmation screen. Choose <strong>Yes</strong> to submit or <strong>No</strong> to return with your draft. Successfully submitted Exam Results cannot be deleted.</p>
         <p>Use the <strong>🔔 Bell</strong> to find <strong>Pending Results</strong> that still need to be completed.</p>
-        <div class="user-guide-note">🔒 Successfully submitted Exam Results cannot be deleted.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>📈 Dashboard</h3>
-        <p>Open <strong>Dashboard</strong> to check your timetable and academic progress.</p>
-        <p><strong>Weekly Timetable</strong> — View your weekly timetable.</p>
-        <p><strong>Monthly - Lectures Status</strong> — Review your lecture status for the month.</p>
-        <p><strong>Monthly Report</strong> — Review your monthly attendance.</p>
-        <p><strong>Semester - Lectures Status</strong> — Review your lecture progress for the semester.</p>
-        <p><strong>Semester Report</strong> — Review your semester attendance.</p>
+        <h3>↕️ 11. Sorting Submitted Results</h3>
+        <p>Inside a Submitted Results directory, tap <strong>Sort by ▾</strong> to change the order in which results are displayed.</p>
+        <div class="user-guide-action"><strong>Newest on Top</strong><span>Shows the most recently submitted results first.</span></div>
+        <div class="user-guide-action"><strong>Oldest on Top</strong><span>Shows the earliest submitted results first.</span></div>
+        <div class="user-guide-action"><strong>Arrange in Ascending</strong><span>Arranges results using their latest activity order.</span></div>
+        <div class="user-guide-action"><strong>Arrange in Descending</strong><span>Arranges results using the reverse latest-activity order.</span></div>
+        <p>Sorting changes only the current view. When the results directory is closed, the temporary sort choice is discarded.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>👤 Profile &amp; Account</h3>
-        <p>Open <strong>Settings → Account</strong> to manage your profile.</p>
-        <p><strong>Upload profile photo</strong> — Tap Upload profile photo and choose your photo.</p>
-        <p><strong>View profile photo</strong> — Tap your uploaded profile photo in the header to open it in the viewer.</p>
-        <p><strong>Delete profile photo</strong> — In the photo viewer, tap <strong>🗑️ Delete</strong>. Choose <strong>Yes</strong> to remove the photo or <strong>No</strong> to keep it.</p>
-        <p><strong>Change Name</strong> and <strong>Change Gmail</strong> — Use the corresponding options in Account.</p>
-        <p><strong>Log out</strong> — Use Log out when you want to end your current session.</p>
+        <h3>📈 12. Dashboard</h3>
+        <p>Open <strong>Dashboard</strong> to review your timetable and attendance progress without changing your records.</p>
+        <p><strong>Weekly Timetable</strong> — View your weekly schedule.</p>
+        <p><strong>Monthly - Lectures Status</strong> — Review lecture status for the month.</p>
+        <p><strong>Monthly Report</strong> — Review monthly attendance.</p>
+        <p><strong>Semester - Lectures Status</strong> — Review semester lecture progress.</p>
+        <p><strong>Semester Report</strong> — Review semester attendance.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>⚙️ Settings</h3>
-        <p><strong>Account</strong> — Manage your profile photo, name, Gmail, and session.</p>
-        <p><strong>App</strong> — Use the available app refresh/update options.</p>
-        <p><strong>Notifications</strong> — Turn the INVICTUS attendance and lecture reminders on or off.</p>
-        <p><strong>Data</strong> — Export a backup, import a compatible backup, or reset your app data.</p>
+        <h3>👤 13. Profile &amp; Account</h3>
+        <p>Open <strong>Settings → Account</strong> to manage your account information.</p>
+        <p><strong>Upload profile photo</strong> — Use the profile-photo option and choose a photo.</p>
+        <p><strong>View profile photo</strong> — Tap your uploaded photo in the header to open it in the viewer.</p>
+        <p><strong>Delete profile photo</strong> — In the viewer, tap <strong>🗑️ Delete</strong>, then confirm with <strong>Yes</strong> or keep it with <strong>No</strong>.</p>
+        <p><strong>Change Name / Change Gmail</strong> — Use the corresponding Account options.</p>
+        <p><strong>Log out</strong> — Use Log out when you want to end the current session.</p>
+      </section>
+
+      <section class="user-guide-section">
+        <h3>⚙️ 14. Settings</h3>
+        <p><strong>Account</strong> — Manage profile and account information.</p>
+        <p><strong>App</strong> — Use the available app refresh/update controls.</p>
+        <p><strong>Notifications</strong> — Control attendance and lecture reminders.</p>
+        <p><strong>Data</strong> — Export a backup, import a compatible backup, or reset app data.</p>
         <p><strong>Size</strong> — Adjust Font Size and Display Size.</p>
         <p><strong>Security</strong> — Manage the available Student ID and Password options.</p>
         <p><strong>Appearance</strong> — Choose Light or Dark mode.</p>
@@ -5284,34 +5484,34 @@ function getHardcodedSpecialDay(dateKey){
       </section>
 
       <section class="user-guide-section">
-        <h3>🔔 Notification Centre</h3>
+        <h3>🔔 15. Notification Centre</h3>
         <p>Tap the <strong>bell</strong> to open the Notification Centre.</p>
-        <p><strong>Submit Your Attendance</strong> can remind you during the attendance window when today's attendance has not been submitted.</p>
+        <p><strong>Submit Your Attendance</strong> can remind you when today's attendance has not been submitted during the applicable attendance window.</p>
         <p><strong>Mark Your Today Lecture</strong> can remind you when an eligible lecture has ended and still needs to be marked.</p>
-        <p>You can turn these reminders on or off from <strong>Settings → Notifications</strong>.</p>
+        <p>Use <strong>Settings → Notifications</strong> to turn the available reminders on or off.</p>
         <div class="user-guide-note">🔔 INVICTUS notifications are shown inside the app.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>💾 Backup &amp; Reset</h3>
-        <p><strong>Export Data</strong> — Create a backup of your INVICTUS data. Keep a recent backup if you may need to restore your records later.</p>
+        <h3>💾 16. Backup &amp; Reset</h3>
+        <p><strong>Export Data</strong> — Create a backup of your INVICTUS records.</p>
         <p><strong>Import Data</strong> — Restore data from a compatible INVICTUS backup.</p>
-        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your submitted Attendance and Semester records and clears your saved College Joining Date. Use Reset only when you intentionally want to start again.</div>
+        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your saved application records and your College Joining Date. Use it only when you intentionally want to start again.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>💡 Helpful Tips</h3>
-        <p>• Use <strong>Submit Your Attendance</strong> for your daily attendance and <strong>Daily Timetable</strong> for individual lectures.</p>
-        <p>• Tap the <strong>3 dots</strong> on a lecture to see its marking options.</p>
-        <p>• Use <strong>Adjustment Period</strong> when you attended a different subject during a scheduled period.</p>
-        <p>• Check the <strong>Notification Centre</strong> regularly for reminders and pending results.</p>
-        <p>• Use <strong>Dashboard</strong> to review your attendance and lecture progress.</p>
-        <p>• Use <strong>Export Data</strong> when you want a backup of your records.</p>
+        <h3>💡 17. Quick Daily Routine</h3>
+        <p>1. Open <strong>Submit Your Attendance</strong> and record the day's attendance.</p>
+        <p>2. Open <strong>Daily Timetable</strong> and mark each lecture after it is completed.</p>
+        <p>3. Use <strong>Adjustment Period</strong> only when you attended a different subject during a scheduled period.</p>
+        <p>4. If the college timetable changed, use the <strong>🕐 Schedule Exception</strong> control when it is available.</p>
+        <p>5. Check the <strong>bell</strong> for pending reminders/results.</p>
+        <p>6. Use <strong>Dashboard</strong> to review your progress.</p>
       </section>
 
       <section class="user-guide-section user-guide-last">
-        <h3>✅ You're Ready to Use INVICTUS</h3>
-        <p>Use <strong>Attendance</strong> to record your daily attendance, <strong>Semester</strong> to manage classes and results, <strong>Dashboard</strong> to review your progress, and <strong>Settings</strong> to manage your account and preferences.</p>
+        <h3>✅ 18. You're Ready to Use INVICTUS</h3>
+        <p><strong>Attendance</strong> records your day, <strong>Semester</strong> handles your timetable and results, <strong>Dashboard</strong> helps you review progress, and <strong>Settings</strong> manages your account and preferences.</p>
         <p>Whenever you need help, open <strong>Help → User Guide</strong> and return to the section you need.</p>
       </section>
       <button class="primary user-guide-bottom-close" id="closeUserGuideBottom" type="button">Close</button>
@@ -11280,52 +11480,10 @@ const timetableException20260917 = [
   ["01:30 PM","02:10 PM","calab","C.A Lab 130 (Ms. Rupa)"]
 ];
 
-/* V22.6 — Section A Timetable.
-   This is the alternate timetable used by the new college Schedule Exception
-   controls from 24/09/2026 onward. Subject IDs intentionally match the existing
-   Semester 1 subject IDs so lecture marking and analytics use the same pipeline. */
-const SECTION_A_TIMETABLE = Object.freeze({
-  1:Object.freeze([
-    ["09:00 AM","09:50 AM","mfcs","MFCS-I (Mr. Rishi)"],
-    ["09:50 AM","10:40 AM","ca","C.A (Mr. Manoj)"],
-    ["10:40 AM","11:30 AM","evs","EVS (Ms. Vandna)"],
-    ["12:10 PM","12:50 PM","coordinator","Coordinator (Ms. Punam)"],
-    ["12:50 PM","01:30 PM","pstlab","PST Lab 130 (Ms. Pooja)"],
-    ["01:30 PM","02:10 PM","pstlab","PST Lab 130 (Ms. Pooja)"]
-  ]),
-  2:Object.freeze([
-    ["09:00 AM","09:50 AM","new","French (Mr. Nakul)"],
-    ["09:50 AM","10:40 AM","iks","IKS (Ms. Vandita)"],
-    ["10:40 AM","11:30 AM","hindi","Hindi (Ms. Kaur)"],
-    ["12:10 PM","12:50 PM","pst","PST (Ms. Pooja)"],
-    ["12:50 PM","01:30 PM","english","English-I (Dr. Sunaina)"],
-    ["01:30 PM","02:10 PM","mentor","Mentor (Ms. Punam)"]
-  ]),
-  3:Object.freeze([
-    ["09:00 AM","09:50 AM","ca","C.A (Mr. Manoj)"],
-    ["09:50 AM","10:40 AM","webdev","Web Development (Ms. Amrita)"],
-    ["10:40 AM","11:30 AM","pdp","PDP (Ms. Pinky)"],
-    ["12:10 PM","12:50 PM","pst","PST (Ms. Pooja)"],
-    ["12:50 PM","01:30 PM","iks","IKS (Ms. Vandita)"],
-    ["01:30 PM","02:10 PM","mfcs","MFCS-I (Mr. Rishi)"]
-  ]),
-  4:Object.freeze([
-    ["09:00 AM","09:50 AM","mfcs","MFCS-I (Mr. Rishi)"],
-    ["09:50 AM","10:40 AM","new","French (Mr. Nakul)"],
-    ["10:40 AM","11:30 AM","english","English-I (Dr. Sunaina)"],
-    ["12:10 PM","12:50 PM","webdev","Web Development (Ms. Amrita)"],
-    ["12:50 PM","01:30 PM","calab","C.A Lab 130 (Ms. Rupa)"],
-    ["01:30 PM","02:10 PM","calab","C.A Lab 130 (Ms. Rupa)"]
-  ]),
-  5:Object.freeze([
-    ["09:00 AM","09:50 AM","pst","PST (Ms. Pooja)"],
-    ["09:50 AM","10:40 AM","mfcs","MFCS-I (Mr. Rishi)"],
-    ["10:40 AM","11:30 AM","webdev","Web Development (Ms. Amrita)"],
-    ["12:10 PM","12:50 PM","iks","IKS (Ms. Vandita)"],
-    ["12:50 PM","01:30 PM","ca","C.A (Mr. Manoj)"],
-    ["01:30 PM","02:10 PM","evs","EVS (Ms. Vandna)"]
-  ])
-});
+/* V22.23_Testing_1 — Schedule Exception no longer uses a Section A timetable.
+   The historical 17/09/2026 dated timetable remains part of the existing
+   Semester timetable history; the new clock-based control uses lecture-level
+   replacements only from 24/09/2026 onward. */
 
 const SEMESTER_SCHEDULE_EXCEPTION_START = "2026-09-24";
 
@@ -11379,6 +11537,12 @@ semState.surpriseTestRecords = semState.surpriseTestRecords || {};
 semState.examResults = semState.examResults || {};
 semState.noClassExceptions = semState.noClassExceptions || {};
 semState.scheduleExceptions = semState.scheduleExceptions || {};
+// V22.23_Testing_1: discard legacy Section A-based schedule exceptions.
+// The same state bucket is reused for date-specific lecture replacements.
+Object.keys(semState.scheduleExceptions).forEach(dateKey=>{
+  const ex=semState.scheduleExceptions[dateKey];
+  if(ex?.mode==="section-a-full" || ex?.mode==="section-a-from") delete semState.scheduleExceptions[dateKey];
+});
 /* ============================================================
    V19.31 — CENTRAL STATE / PURE CALCULATIONS / DERIVED CACHE
    ============================================================ */
@@ -11657,15 +11821,10 @@ function semDefaultClassesForDate(key){
   return timetable[d.getDay()] || [];
 }
 
-function getSectionATimetableForDate(key){
-  const d=new Date(key+"T00:00:00");
-  return SECTION_A_TIMETABLE[d.getDay()] || [];
-}
-
 function getScheduleExceptionForDate(key){
   if(!key || key<SEMESTER_SCHEDULE_EXCEPTION_START || key==="2026-09-17") return null;
   const ex=semState.scheduleExceptions?.[key];
-  if(!ex || typeof ex!=="object") return null;
+  if(!ex || typeof ex!=="object" || ex.mode!=="lecture-replacements") return null;
   return ex;
 }
 
@@ -11673,22 +11832,21 @@ function applyScheduleExceptionToClasses(key,baseClasses){
   const exception=getScheduleExceptionForDate(key);
   if(!exception || !Array.isArray(baseClasses) || !baseClasses.length) return baseClasses || [];
 
-  const sectionA=getSectionATimetableForDate(key);
-  if(!sectionA.length) return baseClasses;
+  const replacements=exception.replacements && typeof exception.replacements==="object"
+    ? exception.replacements
+    : {};
 
-  if(exception.mode==="section-a-full"){
-    return sectionA.map(c=>[...c]);
-  }
-
-  if(exception.mode==="section-a-from"){
-    const startIndex=Math.max(0,Math.min(baseClasses.length,Number(exception.startIndex)));
-    return baseClasses.map((c,index)=>{
-      if(index<startIndex) return c;
-      return sectionA[index] ? [...sectionA[index]] : c;
-    });
-  }
-
-  return baseClasses;
+  return baseClasses.map((c,index)=>{
+    const replacement=replacements[String(index)];
+    if(!replacement || typeof replacement!=="object") return c;
+    const subjectId=String(replacement.subjectId||"").trim();
+    const storedSubjectName=String(replacement.subjectName||"").trim();
+    if(!subjectId || !storedSubjectName) return c;
+    // V23.13 — PST LAB has a fixed Schedule Exception display label.
+    // Normalize legacy/mistaken stored labels without changing other subjects.
+    const subjectName=subjectId==="pstlab" ? "PST LAB" : storedSubjectName;
+    return [c[0],c[1],subjectId,subjectName];
+  });
 }
 
 function semClassesForDate(key){
@@ -11897,70 +12055,29 @@ function bindSurpriseMarkInputs(gainedId,totalId){
   const total=document.getElementById(totalId);
   if(!gained || !total)return;
 
-  const totalFirst=(gainedId==="surpriseTestGained" && totalId==="surpriseTestTotal");
-
+  // V22.23_Testing_1.6: Marks Gained/Obtained is intentionally free-entry.
+  // Do not validate, disable, make readonly, or show an inline error while
+  // the user is typing. The Submit handlers perform the single final
+  // validation only when the user explicitly taps Submit.
   const clearGainedValidation=()=>{
     gained.classList.remove("validation-error");
     const message=gained.closest(".surprise-test-input-wrap")?.querySelector(".surprise-test-input-error");
     if(message)message.textContent="";
   };
 
-  const showGainedValidation=()=>{
-    const totalValue=Number(total.value);
-    const hasValidTotal=Number.isFinite(totalValue) && totalValue>0;
-    if(hasValidTotal){
-      clearGainedValidation();
-      return;
-    }
-    gained.classList.add("validation-error");
-    const message=gained.closest(".surprise-test-input-wrap")?.querySelector(".surprise-test-input-error");
-    if(message)message.textContent="Error:Enter Total Marks !";
-  };
+  gained.disabled=false;
+  gained.readOnly=false;
+  gained.removeAttribute("disabled");
+  gained.removeAttribute("readonly");
+  gained.removeAttribute("aria-disabled");
+  gained.removeAttribute("aria-readonly");
+  gained.removeAttribute("max");
 
-  const syncLimit=()=>{
-    const totalValue=Number(total.value);
-    const hasValidTotal=Number.isFinite(totalValue) && totalValue>0;
-
-    if(totalFirst){
-      gained.disabled=!hasValidTotal;
-      gained.tabIndex=hasValidTotal ? 0 : -1;
-      gained.setAttribute("aria-disabled",String(!hasValidTotal));
-    }else{
-      gained.readOnly=!hasValidTotal;
-      gained.setAttribute("aria-readonly",String(!hasValidTotal));
-    }
-
-    gained.removeAttribute("max");
-    if(hasValidTotal){
-      const gainedValue=Number(gained.value);
-      if(gained.value!=="" && Number.isFinite(gainedValue) && gainedValue>totalValue){
-        gained.classList.add("validation-error");
-        const message=gained.closest(".surprise-test-input-wrap")?.querySelector(".surprise-test-input-error");
-        if(message)message.textContent="Error: Marks Obtained cannot be greater than Total Marks.";
-      }else{
-        clearGainedValidation();
-      }
-    }else{
-      clearGainedValidation();
-    }
-  };
-
-  if(!totalFirst){
-    gained.addEventListener("click",()=>{
-      const totalValue=Number(total.value);
-      const hasValidTotal=Number.isFinite(totalValue) && totalValue>0;
-      if(!hasValidTotal)showGainedValidation();
-    });
-    gained.addEventListener("focus",()=>{
-      const totalValue=Number(total.value);
-      const hasValidTotal=Number.isFinite(totalValue) && totalValue>0;
-      if(!hasValidTotal)showGainedValidation();
-    });
-  }
-
-  gained.addEventListener("input",syncLimit);
-  total.addEventListener("input",syncLimit);
-  syncLimit();
+  // If the user previously received a submit validation error, editing
+  // either marks field clears that old error. No live validation is added.
+  gained.addEventListener("input",clearGainedValidation);
+  total.addEventListener("input",clearGainedValidation);
+  clearGainedValidation();
 }
 function openNoClassReasonModal(recordKey,subject){
   if(!requireCollegeJoiningDate("lecture")) return;
@@ -12506,6 +12623,7 @@ function commitExamResultSubmission(submission){
   rec.status=(submission.gainedRaw!=="")?"Completed":"Pending";
   rec.autoGenerated=true;
   rec.attendanceDate=rec.date;
+  rec.editedAt=new Date().toISOString();
 
   const fromPendingResults=!!submission.fromPendingResults;
   const returnToSubmittedEntries=!!submission.returnToSubmittedEntries;
@@ -12719,7 +12837,7 @@ function renderSurpriseTestCard(){
         </div>
         <button type="button" class="surprise-test-subject-card surprise-test-direct-card" id="surpriseTestsCard">
           <span class="surprise-test-subject-head">
-            <span>Surprise Tests</span><span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
+            <span>Surprise Tests</span>${surpriseCompleted.length ? `<span class="surprise-test-subject-count">(${surpriseCompleted.length})</span>` : ""}<span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
           </span>
         </button>
         <button type="button" class="surprise-test-subject-card surprise-test-direct-card" id="examResultsCard">
@@ -12818,92 +12936,103 @@ function renderSharedResultReport({date,title,subject,time,gained,total,status="
 */
 let submittedResultsDirectoryContext=null;
 
-function submittedResultsDirectoryItems(kind,subjectId){
-  if(kind==="subject"){
-    return surpriseTestEntries()
-      .filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===subjectId)
-      .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+function submittedResultTimestamp(record,mode="activity"){
+  if(!record) return 0;
+  const raw=mode==="activity" ? (record.editedAt || record.createdAt) : record.createdAt;
+  const t=raw ? Date.parse(raw) : NaN;
+  if(Number.isFinite(t)) return t;
+  const fallback=Date.parse(`${String(record.date||"")}T00:00:00`);
+  return Number.isFinite(fallback) ? fallback : 0;
+}
+
+function sortSubmittedResultEntries(items,sortMode="newest"){
+  const list=[...items];
+  const submissionSort=sortMode==="oldest" || sortMode==="newest";
+  const direction=(sortMode==="oldest" || sortMode==="ascending") ? 1 : -1;
+  const timestampMode=submissionSort ? "submission" : "activity";
+  return list.sort((a,b)=>{
+    const at=submittedResultTimestamp(a,timestampMode), bt=submittedResultTimestamp(b,timestampMode);
+    if(at!==bt) return (at-bt)*direction;
+    return String(a.id||"").localeCompare(String(b.id||""));
+  });
+}
+
+function submittedResultsDirectoryItems(kind,subjectId,sortMode="newest"){
+  let items=[];
+  if(kind==="subject") items=surpriseTestEntries().filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===subjectId);
+  else if(kind==="surprise") items=surpriseTestRecordEntries().filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null);
+  else if(kind==="exam") items=examResultEntries().filter(x=>x.status==="Completed" && x.title && x.scoreGained!=null && x.totalMarks!=null);
+  return sortSubmittedResultEntries(items,sortMode);
+}
+
+function submittedResultsDirectorySortLabel(mode){
+  return mode==="oldest" ? "Oldest on Top" : mode==="ascending" ? "Arrange in Ascending" : mode==="descending" ? "Arrange in Descending" : "Newest on Top";
+}
+
+function renderSubmittedResultsDirectoryItems(){
+  const ctx=submittedResultsDirectoryContext;
+  const list=document.getElementById("submittedResultsDirectoryList");
+  if(!ctx || !list)return;
+  const currentItems=submittedResultsDirectoryItems(ctx.kind,ctx.subjectId,ctx.sortMode||"newest");
+  if(!currentItems.length){
+    list.innerHTML='<div class="submitted-results-directory-empty">No submitted results found !</div>';
+  }else{
+    list.innerHTML=currentItems.map(x=>{
+      const itemTitle=ctx.kind==="subject" ? semWeekdayLabel(x.date) : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
+      return `<button type="button" class="submitted-results-directory-item" data-submitted-result-kind="${escapeHtml(ctx.kind)}" data-submitted-result-id="${escapeHtml(x.id)}"><span class="submitted-results-directory-item-main"><strong class="submitted-results-directory-item-date">${escapeHtml(semDateLabel(x.date))}</strong><small class="submitted-results-directory-item-title">${escapeHtml(itemTitle)}</small></span><span class="submitted-results-directory-item-chevron" aria-hidden="true">›</span></button>`;
+    }).join("");
   }
-  if(kind==="surprise"){
-    return surpriseTestRecordEntries()
-      .filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null)
-      .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
-  }
-  if(kind==="exam"){
-    return examResultEntries()
-      .filter(x=>x.status==="Completed" && x.title && x.scoreGained!=null && x.totalMarks!=null)
-      .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(b.createdAt||"").localeCompare(String(a.createdAt||"")) || (b.examNumber||0)-(a.examNumber||0));
-  }
-  return [];
+  list.querySelectorAll("[data-submitted-result-kind]").forEach(btn=>btn.addEventListener("click",e=>{
+    e.stopPropagation();
+    const itemId=btn.dataset.submittedResultId, itemKind=btn.dataset.submittedResultKind, ctxNow=submittedResultsDirectoryContext;
+    if(itemKind==="subject"){
+      const rec=semState.surpriseTests?.[itemId]; if(rec)openClassTestSingleResultModal(itemId,ctxNow?.subjectName||"Subject");
+    }else if(itemKind==="surprise") openSurpriseTestResultsModal(itemId);
+    else if(itemKind==="exam") openExamResultDetail(itemId);
+  }));
+}
+
+function closeSubmittedResultsSortMenu(){
+  const menu=document.getElementById("submittedResultsDirectorySortMenu"), button=document.getElementById("submittedResultsDirectorySortButton");
+  if(menu){menu.classList.remove("open");menu.setAttribute("aria-hidden","true");}
+  if(button)button.setAttribute("aria-expanded","false");
+}
+
+function bindSubmittedResultsDirectorySort(){
+  const button=document.getElementById("submittedResultsDirectorySortButton"), menu=document.getElementById("submittedResultsDirectorySortMenu");
+  if(!button || !menu)return;
+  button.onclick=e=>{e.stopPropagation();const open=!menu.classList.contains("open");menu.classList.toggle("open",open);menu.setAttribute("aria-hidden",String(!open));button.setAttribute("aria-expanded",String(open));};
+  menu.querySelectorAll("[data-result-sort]").forEach(option=>option.onclick=e=>{
+    e.stopPropagation(); if(!submittedResultsDirectoryContext)return;
+    submittedResultsDirectoryContext.sortMode=option.dataset.resultSort||"newest";
+    button.textContent=`Sort by: ${submittedResultsDirectorySortLabel(submittedResultsDirectoryContext.sortMode)} ▾`;
+    menu.querySelectorAll("[data-result-sort]").forEach(x=>x.classList.toggle("active",x===option));
+    closeSubmittedResultsSortMenu(); renderSubmittedResultsDirectoryItems();
+  });
+}
+
+function resetSubmittedResultsSortUI(){
+  const button=document.getElementById("submittedResultsDirectorySortButton"), menu=document.getElementById("submittedResultsDirectorySortMenu");
+  if(button){button.textContent="Sort by ▾";button.setAttribute("aria-expanded","false");}
+  if(menu){menu.classList.remove("open");menu.setAttribute("aria-hidden","true");menu.querySelectorAll("[data-result-sort]").forEach(x=>x.classList.toggle("active",x.dataset.resultSort==="newest"));}
 }
 
 function closeSubmittedResultsDirectory(){
   const back=document.getElementById("submittedResultsDirectoryBackdrop");
   if(back)back.classList.remove("open");
+  closeSubmittedResultsSortMenu();
+  resetSubmittedResultsSortUI();
   submittedResultsDirectoryContext=null;
 }
 
 function openSubmittedResultsDirectory(kind,subjectId=null){
-  const back=document.getElementById("submittedResultsDirectoryBackdrop");
-  const title=document.getElementById("submittedResultsDirectoryTitle");
-  const list=document.getElementById("submittedResultsDirectoryList");
+  const back=document.getElementById("submittedResultsDirectoryBackdrop"), title=document.getElementById("submittedResultsDirectoryTitle"), list=document.getElementById("submittedResultsDirectoryList");
   if(!back || !title || !list)return;
-
   const subject=subjectId ? semesterSubjects.find(s=>s.id===subjectId) : null;
   const subjectName=subject?.name || subjectId || "Subject";
-  const items=submittedResultsDirectoryItems(kind,subjectId);
-
-  submittedResultsDirectoryContext={
-    kind,
-    subjectId:subjectId||null,
-    subjectName
-  };
-
+  submittedResultsDirectoryContext={kind,subjectId:subjectId||null,subjectName,sortMode:"newest"};
   title.textContent=kind==="subject" ? subjectName : (kind==="surprise" ? "Surprise Tests" : "Exam Results");
-
-  const renderItems=()=>{
-    const ctx=submittedResultsDirectoryContext;
-    if(!ctx)return;
-    const currentItems=submittedResultsDirectoryItems(ctx.kind,ctx.subjectId);
-
-    if(!currentItems.length){
-      list.innerHTML='<div class="submitted-results-directory-empty">No submitted results found !</div>';
-      return;
-    }
-
-    list.innerHTML=currentItems.map(x=>{
-      const itemTitle=ctx.kind==="subject" ? semWeekdayLabel(x.date) : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
-      return `<button type="button" class="submitted-results-directory-item"
-        data-submitted-result-kind="${escapeHtml(ctx.kind)}"
-        data-submitted-result-id="${escapeHtml(x.id)}">
-        <span class="submitted-results-directory-item-main">
-          <strong class="submitted-results-directory-item-date">${escapeHtml(semDateLabel(x.date))}</strong>
-          <small class="submitted-results-directory-item-title">${escapeHtml(itemTitle)}</small>
-        </span>
-        <span class="submitted-results-directory-item-chevron" aria-hidden="true">›</span>
-      </button>`;
-    }).join("");
-
-    list.querySelectorAll("[data-submitted-result-kind]").forEach(btn=>{
-      btn.addEventListener("click",e=>{
-        e.stopPropagation();
-        const itemId=btn.dataset.submittedResultId;
-        const itemKind=btn.dataset.submittedResultKind;
-
-        if(itemKind==="subject"){
-          const rec=semState.surpriseTests?.[itemId];
-          if(rec)openClassTestSingleResultModal(itemId,ctx.subjectName);
-        }else if(itemKind==="surprise"){
-          openSurpriseTestResultsModal(itemId);
-        }else if(itemKind==="exam"){
-          openExamResultDetail(itemId);
-        }
-      });
-    });
-  };
-
-  renderItems();
-  back.classList.add("open");
+  resetSubmittedResultsSortUI(); renderSubmittedResultsDirectoryItems(); bindSubmittedResultsDirectorySort(); back.classList.add("open");
 }
 
 let resultDirectoryReturnState=null;
@@ -13067,35 +13196,7 @@ function confirmClassTestDelete(){
 
     const directory=document.getElementById("submittedResultsDirectoryBackdrop");
     if(directory?.classList.contains("open")){
-      const list=document.getElementById("submittedResultsDirectoryList");
-      if(list && submittedResultsDirectoryContext){
-        const ctx=submittedResultsDirectoryContext;
-        const currentItems=submittedResultsDirectoryItems(ctx.kind,ctx.subjectId);
-        const renderDirectoryItems=()=>{
-          if(!currentItems.length){
-            list.innerHTML='<div class="submitted-results-directory-empty">No submitted results found !</div>';
-            return;
-          }
-          list.innerHTML=currentItems.map(x=>{
-            const itemTitle=ctx.kind==="subject" ? semWeekdayLabel(x.date) : (ctx.kind==="surprise" ? (x.name||"Surprise Test") : (x.title||`Exam ${x.examNumber||""}`));
-            return `<button type="button" class="submitted-results-directory-item" data-submitted-result-kind="${escapeHtml(ctx.kind)}" data-submitted-result-id="${escapeHtml(x.id)}"><span class="submitted-results-directory-item-main"><strong class="submitted-results-directory-item-date">${escapeHtml(semDateLabel(x.date))}</strong><small class="submitted-results-directory-item-title">${escapeHtml(itemTitle)}</small></span><span class="submitted-results-directory-item-chevron" aria-hidden="true">›</span></button>`;
-          }).join("");
-          list.querySelectorAll("[data-submitted-result-kind]").forEach(btn=>btn.addEventListener("click",e=>{
-            e.stopPropagation();
-            const itemId=btn.dataset.submittedResultId;
-            const itemKind=btn.dataset.submittedResultKind;
-            if(itemKind==="subject"){
-              const rec=semState.surpriseTests?.[itemId];
-              if(rec)openClassTestSingleResultModal(itemId,ctx.subjectName);
-            }else if(itemKind==="surprise"){
-              openSurpriseTestResultsModal(itemId);
-            }else if(itemKind==="exam"){
-              openExamResultDetail(itemId);
-            }
-          }));
-        };
-        renderDirectoryItems();
-      }
+      renderSubmittedResultsDirectoryItems();
       return;
     }
 
@@ -13372,7 +13473,6 @@ function submitNoClassSurpriseNew(){
   }
   if(gained!=="" && (!Number.isFinite(gainedValue) || gainedValue<0 || gainedValue>totalValue)){
     if(message)message.textContent="Error: Marks Obtained cannot be greater than Total Marks.";
-    document.getElementById("surpriseNewTestGained")?.classList.add("validation-error");
     return;
   }
   if(pendingId){
@@ -13385,6 +13485,7 @@ function submitNoClassSurpriseNew(){
     rec.name=cleanName;
     rec.totalMarks=totalValue;
     rec.scoreGained=hasValidGained ? gainedValue : null;
+    rec.editedAt=new Date().toISOString();
     markAssessmentLectureAttended(recordKey,subject);
     if(validName && validMarks){
       rec.status="Completed";
@@ -13500,7 +13601,6 @@ function submitNoClassSurprise(){
   }
   if(gained!=="" && (!Number.isFinite(gainedValue) || gainedValue<0 || gainedValue>totalValue)){
     if(message)message.textContent="Error: Marks Obtained cannot be greater than Total Marks.";
-    document.getElementById("surpriseTestGained")?.classList.add("validation-error");
     return;
   }
   if(pendingId){
@@ -13512,6 +13612,7 @@ function submitNoClassSurprise(){
     }
     rec.totalMarks=totalValue;
     rec.scoreGained=hasValidGained ? gainedValue : null;
+    rec.editedAt=new Date().toISOString();
     markAssessmentLectureAttended(recordKey,subject);
     if(hasValidGained){
       rec.status="Completed";
@@ -13664,7 +13765,6 @@ function renderSemester(){
           </div>
         </div>
         <div class="sem-day-view" id="semDayView"><div class="sem-day-track" id="semDayTrack"></div></div>
-        <div class="sem-day-dots" id="semDayDots"></div>
         <div class="sem-calendar-inline">
           <button class="sem-calendar-toggle" id="semCalendarBtn" aria-label="Choose date">📅</button>
           <span class="sem-calendar-caption">Tap the calendar to switch to other dates</span>
@@ -14117,46 +14217,47 @@ function scheduleExceptionButtonMarkup(key){
 }
 
 function scheduleExceptionCurrentLabel(key){
-  if(key==="2026-09-17") return "Section A Timetable — Full Day (existing 17/09/2026 exception)";
-  const ex=getScheduleExceptionForDate(key);
-  if(!ex) return "Default — Section B Timetable";
-  if(ex.mode==="section-a-full") return "Section A Timetable — Full Day";
-  if(ex.mode==="section-a-from"){
-    const base=semDefaultClassesForDate(key);
-    const index=Math.max(0,Math.min(Math.max(0,base.length-1),Number(ex.startIndex)));
-    return `Section A Timetable from Lecture ${index+1}`;
-  }
-  return "Default — Section B Timetable";
+  // V22.23_Testing_1.3: The Current card is intentionally stable. It never
+  // exposes how many lectures were customized; only the selected date changes.
+  return "Default Timetable";
 }
 
-function clearDayLectureMarksForScheduleReset(dateKey){
-  const prefix=`${dateKey}|`;
+function clearScheduleOverrideLectureMarks(dateKey,lectureClass){
+  if(!dateKey || !Array.isArray(lectureClass)) return;
+  clearScheduleLectureSlotMarks(dateKey,lectureClass[0]);
+}
 
-  Object.keys(semState.lectures || {}).forEach(key=>{
-    if(key.startsWith(prefix)) delete semState.lectures[key];
+// V22.23_Testing_1.12 — A lecture slot is the identity for timetable
+// mutations. Schedule Replacement and Adjustment must not leave the old
+// subject's attendance/assessment record behind when the subject occupying
+// that exact date + time changes.
+function clearScheduleLectureSlotMarks(dateKey,time){
+  if(!dateKey || !time) return;
+  semState.lectures=semState.lectures || {};
+  semState.noClassExceptions=semState.noClassExceptions || {};
+
+  Object.keys(semState.lectures).forEach(recordKey=>{
+    const parts=String(recordKey).split("|");
+    if(parts[0]===dateKey && parts[2]===String(time)) delete semState.lectures[recordKey];
+  });
+  Object.keys(semState.noClassExceptions).forEach(recordKey=>{
+    const parts=String(recordKey).split("|");
+    if(parts[0]===dateKey && parts[2]===String(time)) delete semState.noClassExceptions[recordKey];
   });
 
-  Object.keys(semState.noClassExceptions || {}).forEach(key=>{
-    if(key.startsWith(prefix)) delete semState.noClassExceptions[key];
-  });
-
-  // Class Test / Surprise Test entries are lecture-linked marking records.
-  // Remove only entries belonging to this date so saveSem() does not recreate
-  // deleted lecture records through its existing assessment synchronization.
   ["surpriseTests","surpriseTestRecords"].forEach(collection=>{
-    Object.keys(semState[collection] || {}).forEach(id=>{
-      const rec=semState[collection][id];
-      if(rec?.date===dateKey) delete semState[collection][id];
+    const records=semState[collection] || {};
+    Object.keys(records).forEach(id=>{
+      const rec=records[id];
+      if(rec?.date===dateKey && rec?.time===time) delete records[id];
     });
   });
 }
 
 function persistScheduleException(dateKey=""){
-  // If the day was already marked Absent, keep V22.3/V22.4's explicit
-  // lecture-Absent propagation aligned with the newly effective timetable.
-  if(dateKey && state.records?.[dateKey]==="absent"){
-    markScheduledLecturesAbsentForDay(dateKey);
-  }
+  // Keep V22.3/V22.4 day-level Absent propagation aligned with the current
+  // effective timetable if a date is already marked Absent.
+  if(dateKey && state.records?.[dateKey]==="absent") markScheduledLecturesAbsentForDay(dateKey);
   invalidateSemesterDerivedState();
   saveSem();
   renderSemester();
@@ -14170,23 +14271,380 @@ function closeScheduleExceptionModal(){
   document.body.classList.remove("sem-calendar-locked");
 }
 
+function openScheduleExceptionReplacementDialog(dateKey,lectureIndex,lectureClass){
+  const oldDialog=document.getElementById("scheduleExceptionReplacementBackdrop");
+  if(oldDialog) oldDialog.remove();
+
+  // V22.23_Testing_1.5: Dialogue 1 is closed before Dialogue 2 opens.
+  // This removes the parent modal/touch layer completely and gives Dialogue 2
+  // a clean native-scroll environment on Android/WebView.
+  closeScheduleExceptionModal();
+
+  const grouped={
+    Subjects:semesterSubjects.filter(s=>s.type==="subject"),
+    Lab:semesterSubjects.filter(s=>s.type==="lab"),
+    Others:semesterSubjects.filter(s=>s.type==="other")
+  };
+  // V23.13 — PST must always be available in Schedule Exception → Subjects.
+  // Keep the existing subject registry as the source of truth while defensively
+  // restoring the expected PST entry if a prior state/configuration omitted it.
+  if(!grouped.Subjects.some(s=>s.id==="pst")){
+    grouped.Subjects.push({id:"pst",name:"PST",type:"subject"});
+    grouped.Subjects.sort((a,b)=>a.name.localeCompare(b.name));
+  }
+
+  const existingReplacement=getScheduleExceptionForDate(dateKey)?.replacements?.[String(lectureIndex)];
+  const currentSubjectId=String(existingReplacement?.subjectId || lectureClass[2] || "");
+  const initialCategory=Object.entries(grouped).find(([_,items])=>items.some(item=>item.id===currentSubjectId))?.[0] || "Subjects";
+
+  const back=document.createElement("div");
+  back.id="scheduleExceptionReplacementBackdrop";
+  back.className="schedule-exception-replacement-layer";
+  back.setAttribute("role","presentation");
+  back.innerHTML=`
+    <div class="lecture-adjustment-dialog" role="dialog" aria-modal="true" aria-labelledby="scheduleExceptionReplacementTitle">
+      <div class="lecture-mismatch-head">
+        <h2 id="scheduleExceptionReplacementTitle">Replace Lecture ${lectureIndex+1}</h2>
+        <button type="button" class="lecture-mismatch-close" id="scheduleExceptionReplacementClose" aria-label="Close">×</button>
+      </div>
+      <div class="schedule-exception-replacement-meta">
+        <div class="schedule-exception-replacement-time">${escapeHtml(lectureClass[0])} – ${escapeHtml(lectureClass[1])}</div>
+        <div class="schedule-exception-replacement-subject">${escapeHtml(lectureClass[3])}</div>
+      </div>
+      <div class="lecture-adjustment-tabs" id="scheduleExceptionReplacementTabs">
+        ${Object.keys(grouped).map(label=>`<button type="button" class="lecture-adjustment-tab ${label===initialCategory?"selected":""}" data-replacement-category="${label}">${label}</button>`).join("")}
+      </div>
+      <div class="lecture-adjustment-list" id="scheduleExceptionReplacementList"></div>
+      <div class="message lecture-adjustment-message" id="scheduleExceptionReplacementMessage"></div>
+    </div>`;
+  document.body.appendChild(back);
+
+  // Dialogue 2 is the only active interaction surface. The page is blocked by
+  // this fixed backdrop, while html/body are deliberately unlocked so the
+  // list can use native Android vertical scrolling.
+  document.documentElement.classList.remove("sem-calendar-locked");
+  document.body.classList.remove("sem-calendar-locked");
+
+  const list=back.querySelector("#scheduleExceptionReplacementList");
+  const message=back.querySelector("#scheduleExceptionReplacementMessage");
+  let activeCategory=initialCategory;
+
+  const returnToScheduleException=()=>{
+    if(back.parentNode) back.parentNode.removeChild(back);
+    openScheduleExceptionModal(dateKey);
+  };
+
+  back.querySelector("#scheduleExceptionReplacementClose").onclick=returnToScheduleException;
+  // The dark backdrop itself does not dismiss Dialogue 2. X is the explicit
+  // back action requested for this flow.
+  back.addEventListener("click",e=>e.stopPropagation());
+
+  const applyReplacement=(subject)=>{
+    const currentEffective=semClassesForDate(dateKey);
+    const oldClass=currentEffective[lectureIndex] || lectureClass;
+
+    semState.scheduleExceptions=semState.scheduleExceptions || {};
+    const ex=getScheduleExceptionForDate(dateKey) || {mode:"lecture-replacements",replacements:{}};
+    ex.mode="lecture-replacements";
+    ex.replacements=ex.replacements && typeof ex.replacements==="object" ? ex.replacements : {};
+
+    if(subject.id===oldClass[2]){
+      delete ex.replacements[String(lectureIndex)];
+    }else{
+      ex.replacements[String(lectureIndex)]={subjectId:subject.id,subjectName:subject.name};
+    }
+
+    if(Object.keys(ex.replacements).length){
+      semState.scheduleExceptions[dateKey]=ex;
+    }else{
+      delete semState.scheduleExceptions[dateKey];
+    }
+
+    // A timetable replacement changes the lecture identity. Clear every
+    // tracked record belonging to this exact date + lecture-time slot so the
+    // newly selected subject starts as Not Tracked.
+    if(subject.id!==oldClass[2]) clearScheduleLectureSlotMarks(dateKey,oldClass[0]);
+
+    persistScheduleException(dateKey);
+    if(back.parentNode) back.parentNode.removeChild(back);
+    openScheduleExceptionModal(dateKey);
+  };
+
+  const showReplacementConfirmation=(subject)=>{
+    const oldConfirm=back.querySelector("#scheduleExceptionReplacementConfirmLayer");
+    if(oldConfirm) oldConfirm.remove();
+
+    const currentEffective=semClassesForDate(dateKey);
+    const oldClass=currentEffective[lectureIndex] || lectureClass;
+    const currentName=String(oldClass[3] || "");
+    const replacementName=String(subject.name || "");
+
+    const confirmLayer=document.createElement("div");
+    confirmLayer.id="scheduleExceptionReplacementConfirmLayer";
+    confirmLayer.className="schedule-exception-replacement-confirm-layer";
+    confirmLayer.innerHTML=`
+      <div class="schedule-exception-confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="scheduleExceptionReplacementConfirmTitle">
+        <h3 class="schedule-exception-confirm-title" id="scheduleExceptionReplacementConfirmTitle">Confirm Replacement</h3>
+        <div class="schedule-exception-confirm-message">Replace <strong>${escapeHtml(currentName)}</strong> with <strong>${escapeHtml(replacementName)}</strong> for Lecture ${lectureIndex+1}?</div>
+        <div class="schedule-exception-confirm-actions">
+          <button type="button" class="schedule-exception-confirm-no" id="scheduleExceptionReplacementConfirmNo">No</button>
+          <button type="button" class="schedule-exception-confirm-yes" id="scheduleExceptionReplacementConfirmYes">Yes</button>
+        </div>
+      </div>`;
+    back.appendChild(confirmLayer);
+
+    const closeConfirm=()=>{
+      if(confirmLayer.parentNode) confirmLayer.parentNode.removeChild(confirmLayer);
+    };
+    confirmLayer.addEventListener("click",e=>e.stopPropagation());
+    confirmLayer.querySelector("#scheduleExceptionReplacementConfirmNo").onclick=closeConfirm;
+    confirmLayer.querySelector("#scheduleExceptionReplacementConfirmYes").onclick=()=>{
+      closeConfirm();
+      applyReplacement(subject);
+    };
+  };
+
+  const renderCategory=()=>{
+    const items=grouped[activeCategory]||[];
+    list.innerHTML=items.length
+      ? items.map(item=>`<button type="button" class="lecture-adjustment-item" data-replacement-subject="${escapeHtml(item.id)}"><strong>${escapeHtml(item.name)}</strong></button>`).join("")
+      : `<div class="lecture-adjustment-empty">No options available</div>`;
+    list.querySelectorAll("[data-replacement-subject]").forEach(btn=>btn.onclick=()=>{
+      const subject=semesterSubjects.find(item=>item.id===btn.dataset.replacementSubject);
+      if(subject) showReplacementConfirmation(subject);
+    });
+  };
+
+  back.querySelectorAll("[data-replacement-category]").forEach(btn=>btn.onclick=()=>{
+    activeCategory=btn.dataset.replacementCategory||"Subjects";
+    back.querySelectorAll("[data-replacement-category]").forEach(b=>b.classList.toggle("selected",b===btn));
+    renderCategory();
+    if(message)message.textContent="";
+  });
+
+  renderCategory();
+}
+function scheduleExceptionDefaultScopes(dateKey){
+  const ex=getScheduleExceptionForDate(dateKey);
+  const replacementIndexes=ex?.replacements && typeof ex.replacements==="object"
+    ? Object.keys(ex.replacements).filter(index=>ex.replacements[index] && typeof ex.replacements[index]==="object")
+    : [];
+  const adjustmentTimes=new Set();
+
+  Object.keys(semState.lectures || {}).forEach(recordKey=>{
+    const parts=String(recordKey).split("|");
+    if(parts[0]!==dateKey) return;
+    const record=semState.lectures[recordKey];
+    if(record?.status==="att" && String(record.adjustmentSubject||"").trim()) adjustmentTimes.add(String(parts[2]||""));
+  });
+
+  return {
+    hasReplacement:replacementIndexes.length>0,
+    hasAdjustment:adjustmentTimes.size>0,
+    replacementIndexes,
+    adjustmentTimes
+  };
+}
+
+function clearChangedScheduleExceptionMarksBeforeDefault(dateKey){
+  const effectiveClasses=semClassesForDate(dateKey) || [];
+  const defaultClasses=semDefaultClassesForDate(dateKey) || [];
+  const slotTimes=new Set();
+
+  effectiveClasses.forEach((c,index)=>{
+    const d=defaultClasses[index];
+    if(!c) return;
+    const replacementChanged=!!d && String(c[2])!==String(d[2]);
+    const originalKey=semRecordKey(dateKey,c[2],c[0]);
+    const originalRecord=semState.lectures?.[originalKey];
+    const hasAdjustment=!!(originalRecord?.status==="att" && String(originalRecord.adjustmentSubject||"").trim());
+    if(replacementChanged || hasAdjustment) slotTimes.add(String(c[0]));
+  });
+
+  slotTimes.forEach(time=>clearScheduleLectureSlotMarks(dateKey,time));
+}
+
+function setScheduleExceptionDefaultScope(dateKey,scope){
+  const defaults=semDefaultClassesForDate(dateKey) || [];
+  const current=semClassesForDate(dateKey) || [];
+  const ex=getScheduleExceptionForDate(dateKey);
+
+  if(scope==="both"){
+    clearChangedScheduleExceptionMarksBeforeDefault(dateKey);
+    semState.scheduleExceptions=semState.scheduleExceptions || {};
+    delete semState.scheduleExceptions[dateKey];
+    persistScheduleException(dateKey);
+    return;
+  }
+
+  if(scope==="adjustment"){
+    const adjustmentTimes=scheduleExceptionDefaultScopes(dateKey).adjustmentTimes;
+    adjustmentTimes.forEach(time=>clearScheduleLectureSlotMarks(dateKey,time));
+    persistScheduleException(dateKey);
+    return;
+  }
+
+  if(scope==="replacement"){
+    const replacementIndexes=scheduleExceptionDefaultScopes(dateKey).replacementIndexes;
+    replacementIndexes.forEach(index=>{
+      const i=Number(index);
+      const currentClass=current[i];
+      const defaultClass=defaults[i];
+      if(!currentClass || !defaultClass) return;
+
+      const currentKey=semRecordKey(dateKey,currentClass[2],currentClass[0]);
+      const defaultKey=semRecordKey(dateKey,defaultClass[2],defaultClass[0]);
+      const currentRecord=semState.lectures?.[currentKey];
+      const adjustmentSubject=currentRecord?.status==="att"
+        ? String(currentRecord.adjustmentSubject||"").trim()
+        : "";
+
+      clearScheduleLectureSlotMarks(dateKey,currentClass[0]);
+
+      // Replacement and Adjustment are independent. If the same slot has an
+      // Adjustment record, move that record to the default lecture identity
+      // before removing the replacement so the Adjustment remains intact.
+      if(adjustmentSubject){
+        semState.lectures=semState.lectures || {};
+        semState.lectures[defaultKey]={
+          ...currentRecord,
+          subject:defaultClass[2],
+          date:dateKey,
+          status:"att",
+          adjustmentSubject
+        };
+      }
+    });
+
+    semState.scheduleExceptions=semState.scheduleExceptions || {};
+    const remaining={...(ex?.replacements || {})};
+    replacementIndexes.forEach(index=>delete remaining[String(index)]);
+    if(Object.keys(remaining).length){
+      semState.scheduleExceptions[dateKey]={
+        ...(ex || {mode:"lecture-replacements"}),
+        mode:"lecture-replacements",
+        replacements:remaining
+      };
+    }else{
+      delete semState.scheduleExceptions[dateKey];
+    }
+    persistScheduleException(dateKey);
+  }
+}
+
+function showScheduleExceptionDefaultSelection(dateKey,parentBackdrop){
+  const existing=parentBackdrop?.querySelector("#scheduleExceptionSetDefaultSelectionLayer");
+  if(existing) existing.remove();
+
+  const selectionLayer=document.createElement("div");
+  selectionLayer.id="scheduleExceptionSetDefaultSelectionLayer";
+  selectionLayer.className="schedule-exception-confirm-layer";
+  selectionLayer.innerHTML=`
+    <div class="schedule-exception-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="scheduleExceptionSetDefaultSelectionTitle">
+      <div class="schedule-exception-default-selection-head">
+        <h3 class="schedule-exception-confirm-title" id="scheduleExceptionSetDefaultSelectionTitle">What do you want to Default?</h3>
+        <button type="button" class="schedule-exception-default-selection-close" id="scheduleExceptionSetDefaultSelectionClose" aria-label="Back to Schedule Exception">×</button>
+      </div>
+      <div class="schedule-exception-default-selection-actions">
+        <button type="button" data-default-scope="adjustment">Adjustment</button>
+        <button type="button" data-default-scope="replacement">Replacement</button>
+        <button type="button" data-default-scope="both">Both</button>
+      </div>
+    </div>`;
+
+  const parentModal=parentBackdrop?.querySelector(".schedule-exception-modal");
+  if(!parentModal) return;
+  parentModal.appendChild(selectionLayer);
+
+  selectionLayer.addEventListener("click",e=>e.stopPropagation());
+  selectionLayer.querySelector("#scheduleExceptionSetDefaultSelectionClose").onclick=()=>{
+    selectionLayer.remove();
+  };
+  selectionLayer.querySelectorAll("[data-default-scope]").forEach(button=>{
+    button.onclick=()=>{
+      const scope=button.dataset.defaultScope;
+      selectionLayer.remove();
+      showScheduleExceptionSetDefaultConfirmation(dateKey,parentBackdrop,scope);
+    };
+  });
+}
+
+function showScheduleExceptionSetDefaultConfirmation(dateKey,parentBackdrop,scope=null){
+  const existing=parentBackdrop?.querySelector("#scheduleExceptionSetDefaultConfirmLayer");
+  if(existing) existing.remove();
+
+  const labels={
+    adjustment:`Set the Adjustment Lecture for <strong>${escapeHtml(semDateLabel(dateKey))}</strong> back to the default timetable?`,
+    replacement:`Set the Replaced Lecture for <strong>${escapeHtml(semDateLabel(dateKey))}</strong> back to the default timetable?`,
+    both:`Set the timetable for <strong>${escapeHtml(semDateLabel(dateKey))}</strong> back to the default timetable?`
+  };
+
+  const confirmLayer=document.createElement("div");
+  confirmLayer.id="scheduleExceptionSetDefaultConfirmLayer";
+  confirmLayer.className="schedule-exception-confirm-layer";
+  confirmLayer.innerHTML=`
+    <div class="schedule-exception-confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="scheduleExceptionSetDefaultConfirmTitle">
+      <h3 class="schedule-exception-confirm-title" id="scheduleExceptionSetDefaultConfirmTitle">Set to Default?</h3>
+      <div class="schedule-exception-confirm-message">${labels[scope || "both"]}</div>
+      <div class="schedule-exception-confirm-actions">
+        <button type="button" class="schedule-exception-confirm-no" id="scheduleExceptionSetDefaultConfirmNo">No</button>
+        <button type="button" class="schedule-exception-confirm-yes" id="scheduleExceptionSetDefaultConfirmYes">Yes</button>
+      </div>
+    </div>`;
+
+  const parentModal=parentBackdrop?.querySelector(".schedule-exception-modal");
+  if(!parentModal) return;
+  parentModal.appendChild(confirmLayer);
+
+  const closeConfirm=()=>{
+    if(confirmLayer.parentNode) confirmLayer.parentNode.removeChild(confirmLayer);
+  };
+
+  confirmLayer.addEventListener("click",e=>e.stopPropagation());
+  confirmLayer.querySelector("#scheduleExceptionSetDefaultConfirmNo").onclick=()=>{
+    // V23.13 — when the both-present selection flow is active, No returns
+    // exactly one step back to the scope-selection dialog. For a single-scope
+    // confirmation, No simply closes the confirmation and leaves the current
+    // Schedule Exception dialog unchanged. No data changes in either case.
+    closeConfirm();
+    const scopes=scheduleExceptionDefaultScopes(dateKey);
+    if(parentBackdrop?.isConnected && scopes.hasAdjustment && scopes.hasReplacement){
+      showScheduleExceptionDefaultSelection(dateKey,parentBackdrop);
+    }
+  };
+  confirmLayer.querySelector("#scheduleExceptionSetDefaultConfirmYes").onclick=()=>{
+    setScheduleExceptionDefaultScope(dateKey,scope || "both");
+    closeConfirm();
+    closeScheduleExceptionModal();
+    openScheduleExceptionModal(dateKey);
+  };
+}
+
+function scheduleExceptionDisplayClasses(dateKey){
+  const classes=semClassesForDate(dateKey) || [];
+  return classes.map(c=>{
+    const recordKey=semRecordKey(dateKey,c[2],c[0]);
+    const record=semState.lectures?.[recordKey];
+    const adjustmentId=(record?.status==="att" && record?.adjustmentSubject)
+      ? String(record.adjustmentSubject).trim()
+      : "";
+    if(!adjustmentId) return c;
+    const adjustment=semesterSubjects.find(s=>s.id===adjustmentId);
+    if(!adjustment) return c;
+    const displayName=adjustment.id==="pstlab" ? "PST LAB" : adjustment.name;
+    return [c[0],c[1],c[2],displayName];
+  });
+}
+
 function openScheduleExceptionModal(dateKey){
   if(!scheduleExceptionIsAvailableForDate(dateKey)) return;
 
   const existing=document.getElementById("scheduleExceptionBackdrop");
   if(existing) existing.remove();
 
-  const baseClasses=semDefaultClassesForDate(dateKey);
-  const sectionAClasses=getSectionATimetableForDate(dateKey);
-  if(!baseClasses.length || !sectionAClasses.length) return;
-
-  // V22.22: The option cards must describe the timetable that is actually
-  // active on this date. With no exception this is Section B; after a saved
-  // Section A exception it is the effective Section A/mixed timetable.
-  const effectiveClasses=semClassesForDate(dateKey);
+  const effectiveClasses=scheduleExceptionDisplayClasses(dateKey);
   if(!effectiveClasses.length) return;
 
-  const exception=getScheduleExceptionForDate(dateKey);
   const back=document.createElement("div");
   back.id="scheduleExceptionBackdrop";
   back.className="modal-backdrop open";
@@ -14197,24 +14655,17 @@ function openScheduleExceptionModal(dateKey){
         <h2 id="scheduleExceptionTitle">Schedule Exception</h2>
         <button type="button" class="schedule-exception-close" id="scheduleExceptionClose" aria-label="Close">×</button>
       </div>
-      <div class="schedule-exception-current">
+      <button type="button" class="schedule-exception-current" id="scheduleExceptionCurrentCard" aria-label="Set timetable to default">
         <strong>${escapeHtml(semDateLabel(dateKey))}</strong><br>
         Current: <strong id="scheduleExceptionCurrent">${escapeHtml(scheduleExceptionCurrentLabel(dateKey))}</strong>
-      </div>
-
+      </button>
+      <div style="margin-top:10px;font-size:13px;color:#666">Tap any lecture to choose a replacement subject, lab, or other class.</div>
       <div class="schedule-exception-list" id="scheduleExceptionLectureList">
         ${effectiveClasses.map((c,i)=>`
-          <button type="button"
-            class="schedule-exception-option${exception?.mode==="section-a-from" && Number(exception.startIndex)===i?" active":""}"
-            data-schedule-exception-start="${i}">
-            <div class="schedule-exception-option-title">From Lecture ${i+1}</div>
-            <div class="schedule-exception-option-sub">${escapeHtml(c[0])} – ${escapeHtml(c[1])} • ${escapeHtml(c[3])}</div>
+          <button type="button" class="schedule-exception-option" data-schedule-exception-lecture="${i}">
+            <div class="schedule-exception-option-title">Lecture ${i+1}</div>
+            <div class="schedule-exception-option-sub">${escapeHtml(c[0])} – ${escapeHtml(c[1])} · ${escapeHtml(c[3])}</div>
           </button>`).join("")}
-      </div>
-
-      <div class="schedule-exception-footer">
-        <button type="button" class="secondary" id="scheduleExceptionFull">Replace Current Timetable with Section A</button>
-        <button type="button" class="danger-button" id="scheduleExceptionDefault">Change to Default</button>
       </div>
     </div>`;
   document.body.appendChild(back);
@@ -14223,135 +14674,125 @@ function openScheduleExceptionModal(dateKey){
   document.body.classList.add("sem-calendar-locked");
 
   document.getElementById("scheduleExceptionClose").onclick=closeScheduleExceptionModal;
+  document.getElementById("scheduleExceptionCurrentCard").onclick=()=>{
+    const scopes=scheduleExceptionDefaultScopes(dateKey);
+    if(scopes.hasAdjustment && scopes.hasReplacement){
+      showScheduleExceptionDefaultSelection(dateKey,back);
+    }else if(scopes.hasAdjustment){
+      showScheduleExceptionSetDefaultConfirmation(dateKey,back,"adjustment");
+    }else if(scopes.hasReplacement){
+      showScheduleExceptionSetDefaultConfirmation(dateKey,back,"replacement");
+    }else{
+      showScheduleExceptionSetDefaultConfirmation(dateKey,back,"both");
+    }
+  };
   back.addEventListener("click",e=>{
     if(e.target===back) closeScheduleExceptionModal();
   });
 
-  const confirmScheduleExceptionSelection=(message,applyAction)=>{
-    // V22.11: The confirmation is intentionally mounted INSIDE the already-open
-    // Schedule Exception modal. It must never create a second body-level modal
-    // underneath/behind the existing dialog or invoke the browser's native prompt.
-    const existingConfirm=back.querySelector("#scheduleExceptionConfirmLayer");
-    if(existingConfirm) existingConfirm.remove();
-
-    const confirmLayer=document.createElement("div");
-    confirmLayer.id="scheduleExceptionConfirmLayer";
-    confirmLayer.className="schedule-exception-confirm-layer";
-    confirmLayer.setAttribute("role","presentation");
-    confirmLayer.innerHTML=`
-      <div class="schedule-exception-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="scheduleExceptionConfirmTitle">
-        <h3 class="schedule-exception-confirm-title" id="scheduleExceptionConfirmTitle">Confirm Action</h3>
-        <div class="schedule-exception-confirm-message" id="scheduleExceptionConfirmMessage"></div>
-        <div class="schedule-exception-confirm-actions">
-          <button type="button" class="schedule-exception-confirm-no" id="scheduleExceptionConfirmNo">No</button>
-          <button type="button" class="schedule-exception-confirm-yes" id="scheduleExceptionConfirmYes">Yes</button>
-        </div>
-      </div>`;
-
-    const parentModal=back.querySelector(".schedule-exception-modal");
-    if(!parentModal) return false;
-    parentModal.appendChild(confirmLayer);
-    confirmLayer.querySelector("#scheduleExceptionConfirmMessage").textContent=message;
-
-    const closeConfirm=()=>{
-      const el=back.querySelector("#scheduleExceptionConfirmLayer");
-      if(el) el.remove();
-    };
-
-    confirmLayer.addEventListener("click",e=>{
-      // Keep the confirmation interaction contained inside the existing dialog.
-      e.stopPropagation();
-    });
-
-    confirmLayer.querySelector("#scheduleExceptionConfirmNo").onclick=()=>{
-      // NO: close only the confirmation layer; the existing Schedule Exception
-      // interface remains open with its current state unchanged.
-      closeConfirm();
-    };
-
-    confirmLayer.querySelector("#scheduleExceptionConfirmYes").onclick=()=>{
-      // YES: apply, persist, and reopen the updated Schedule Exception interface.
-      closeConfirm();
-      applyAction();
-      closeScheduleExceptionModal();
-      persistScheduleException(dateKey);
-      openScheduleExceptionModal(dateKey);
-    };
-
-    confirmLayer.querySelector("#scheduleExceptionConfirmYes").focus();
-    return true;
-  };
-
-  back.querySelectorAll("[data-schedule-exception-start]").forEach(btn=>{
+  back.querySelectorAll("[data-schedule-exception-lecture]").forEach(btn=>{
     btn.onclick=()=>{
-      const startIndex=Number(btn.dataset.scheduleExceptionStart);
-      const lectureLabel=`Lecture ${startIndex+1}`;
-      confirmScheduleExceptionSelection(
-        `Apply Section A Timetable from ${lectureLabel} on ${semDateLabel(dateKey)}?`,
-        ()=>{
-          semState.scheduleExceptions[dateKey]={mode:"section-a-from",startIndex};
-        }
-      );
+      const index=Number(btn.dataset.scheduleExceptionLecture);
+      const current=scheduleExceptionDisplayClasses(dateKey);
+      const lecture=current[index];
+      if(!lecture) return;
+      openScheduleExceptionReplacementDialog(dateKey,index,lecture);
     };
   });
+}
 
-  document.getElementById("scheduleExceptionFull").onclick=()=>{
-    confirmScheduleExceptionSelection(
-      `Replace the entire ${semDateLabel(dateKey)} timetable with the Section A Timetable?`,
-      ()=>{
-        semState.scheduleExceptions[dateKey]={mode:"section-a-full"};
-      }
+
+function parseClockSeconds(value){
+  const m=String(value||"").trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if(!m)return null;
+  let h=Number(m[1]);
+  const min=Number(m[2]);
+  if(h===12)h=0;
+  if(m[3].toUpperCase()==="PM")h+=12;
+  return h*3600+min*60;
+}
+
+function lectureProgressPercent(dateKey,startTime,endTime,now=new Date()){
+  const startSec=parseClockSeconds(startTime);
+  const endSec=parseClockSeconds(endTime);
+  if(startSec===null || endSec===null || endSec<=startSec)return 0;
+
+  const todayKey=iso(now);
+  if(dateKey<todayKey)return 100;
+  if(dateKey>todayKey)return 0;
+
+  const currentSec=
+    now.getHours()*3600+
+    now.getMinutes()*60+
+    now.getSeconds()+
+    now.getMilliseconds()/1000;
+
+  if(currentSec<=startSec)return 0;
+  if(currentSec>=endSec)return 100;
+
+  return ((currentSec-startSec)/(endSec-startSec))*100;
+}
+
+function refreshSemLectureProgress(){
+  const root=document.getElementById("semDayTrack");
+  if(!root)return;
+
+  const now=new Date();
+  root.querySelectorAll(".week-lecture[data-progress-date][data-start][data-end]").forEach(card=>{
+    const progress=lectureProgressPercent(
+      card.dataset.progressDate,
+      card.dataset.start,
+      card.dataset.end,
+      now
     );
-  };
+    card.style.setProperty("--lecture-progress",`${progress}%`);
+    card.classList.toggle("is-current-lecture",progress>0 && progress<100);
+  });
+}
 
-  document.getElementById("scheduleExceptionDefault").onclick=()=>{
-    const hasLectureMarks=Object.keys(semState.lectures || {}).some(k=>k.startsWith(`${dateKey}|`));
-    const hasNoClassMarks=Object.keys(semState.noClassExceptions || {}).some(k=>k.startsWith(`${dateKey}|`));
-    const hasAssessmentMarks=[semState.surpriseTests,semState.surpriseTestRecords]
-      .some(collection=>Object.values(collection || {}).some(rec=>rec?.date===dateKey));
+let semLectureProgressTimer=null;
 
-    const warning=`Change ${semDateLabel(dateKey)} to the default Section B timetable?`;
+function scheduleSemLectureProgressRefresh(){
+  if(semLectureProgressTimer){
+    clearInterval(semLectureProgressTimer);
+    semLectureProgressTimer=null;
+  }
 
-    confirmScheduleExceptionSelection(
-      warning,
-      ()=>{
-        delete semState.scheduleExceptions[dateKey];
-        clearDayLectureMarksForScheduleReset(dateKey);
-      }
-    );
-  };
+  // The progress only needs continuous second-level updates while today's
+  // timetable is being displayed. Previous/future dates are static 100%/0%.
+  if(semSelectedDate===iso(new Date())){
+    refreshSemLectureProgress();
+    semLectureProgressTimer=setInterval(refreshSemLectureProgress,1000);
+  }
 }
 
 function renderSemesterDayView(selectedDate){
   const track=document.getElementById("semDayTrack");
-  const dots=document.getElementById("semDayDots");
   const view=document.getElementById("semDayView");
-  if(!track||!dots||!view)return;
+  if(!track||!view)return;
 
   const min=new Date(2026,7,8);
   const max=new Date(2029,6,31);
-  const selectedKey=iso(clampSemDate(selectedDate));
-  const selected=new Date(selectedKey+"T00:00:00");
+  const minKey=iso(min);
+  const maxKey=iso(max);
+  let selectedKey=iso(clampSemDate(selectedDate));
+  let selected=new Date(selectedKey+"T00:00:00");
 
   const prev=new Date(selected);
   prev.setDate(prev.getDate()-1);
   const next=new Date(selected);
   next.setDate(next.getDate()+1);
 
-  const hasPrev=prev>=min;
-  const hasNext=next<=max;
+  let hasPrev=prev>=min;
+  let hasNext=next<=max;
 
-  // Only three slides are kept in the DOM: previous, current, next.
-  // The old implementation rendered all 365 days every time this view opened,
-  // which made swiping and re-rendering unnecessarily heavy on mobile.
+  // Initial render only. Swipes recycle the same three slide nodes below.
   track.innerHTML = `
     ${hasPrev ? renderSemDaySlide(prev) : '<div class="sem-day-slide"></div>'}
     ${renderSemDaySlide(selected)}
     ${hasNext ? renderSemDaySlide(next) : '<div class="sem-day-slide"></div>'}
   `;
-  dots.innerHTML=`<span class="sem-day-dot active"></span>`;
 
-  // Measure after the browser has laid out the newly rendered slides.
   requestAnimationFrame(()=>{
     syncSemDayCommonHeight();
     setTimeout(syncSemDayCommonHeight,80);
@@ -14364,11 +14805,22 @@ function renderSemesterDayView(selectedDate){
     track.style.transition=animate
       ? "transform .28s cubic-bezier(.22,.61,.36,1)"
       : "none";
-    const width=view.clientWidth || 1;
     track.style.transform=`translate3d(calc(-33.333333% + ${offset}px),0,0)`;
   };
 
   requestAnimationFrame(()=>setPosition(false,0));
+
+  const createSemSwipeSlide=(key)=>{
+    if(!key || key<minKey || key>maxKey){
+      const placeholder=document.createElement("div");
+      placeholder.className="sem-day-slide";
+      return placeholder;
+    }
+
+    const holder=document.createElement("div");
+    holder.innerHTML=renderSemDaySlide(new Date(key+"T00:00:00"));
+    return holder.firstElementChild;
+  };
 
   const finishSwipe=(forcedDirection=null)=>{
     if(!dragging || settling)return;
@@ -14391,19 +14843,65 @@ function renderSemesterDayView(selectedDate){
     }
 
     settling=true;
+
+    const newKey=shiftSemDate(selectedKey,direction);
     const targetOffset=direction===1 ? -width : width;
+
+    // IMPORTANT V23.20:
+    // Do not insert/reorder slides before the swipe animation. In the reverse
+    // direction, inserting a new first child while the track is centered would
+    // shift the existing slides underneath the viewport for one paint frame,
+    // producing the exact flash seen on current -> previous navigation.
+    // Instead, animate to the already-rendered adjacent slide first, then
+    // recycle the now-off-screen node after transition completion.
     setPosition(true,targetOffset);
 
     let completed=false;
-    const complete=()=>{
+    const complete=(event)=>{
+      if(event && (event.target!==track || event.propertyName!=="transform"))return;
       if(completed)return;
       completed=true;
+      track.removeEventListener("transitionend",complete);
+
+      const recycledKey=direction===1
+        ? shiftSemDate(newKey,1)
+        : shiftSemDate(newKey,-1);
+      const recycledSlide=createSemSwipeSlide(recycledKey);
+
+      if(direction===1){
+        // We have arrived on the old third slide. Remove the old first slide
+        // and append the new future slide while the track is still at its
+        // completed off-center position.
+        track.removeChild(track.firstElementChild);
+        track.appendChild(recycledSlide);
+      }else{
+        // We have arrived on the old first slide. Insert the new previous slide
+        // and remove the old last slide while the arrived slide is on-screen.
+        // The transform is snapped back to center in the same task, so there is
+        // no intermediate painted state with the wrong slide visible.
+        track.insertBefore(recycledSlide,track.firstElementChild);
+        track.removeChild(track.lastElementChild);
+      }
+
+      selectedKey=newKey;
+      selected=new Date(selectedKey+"T00:00:00");
+      hasPrev=selectedKey>minKey;
+      hasNext=selectedKey<maxKey;
+      semSelectedDate=selectedKey;
+
+      // Keep the arrived slide visible continuously. All DOM recycling above
+      // is completed before this no-animation recenter operation.
+      setPosition(false,0);
+      syncSemDayCommonHeight();
       settling=false;
-      const newKey=shiftSemDate(selectedKey,direction);
-      semSelectedDate=newKey;
-      renderSemesterDayView(new Date(newKey+"T00:00:00"));
+
+      attachSemDayActions();
+      refreshSemLectureStartLocks();
+      scheduleSemLectureStartGateRefresh();
+      refreshSemLectureProgress();
+      scheduleSemLectureProgressRefresh();
     };
-    track.addEventListener("transitionend",complete,{once:true});
+    track.addEventListener("transitionend",complete);
 
     // Fallback for browsers that do not emit transitionend reliably.
     setTimeout(()=>{
@@ -14465,6 +14963,8 @@ function renderSemesterDayView(selectedDate){
   attachSemDayActions();
   refreshSemLectureStartLocks();
   scheduleSemLectureStartGateRefresh();
+  refreshSemLectureProgress();
+  scheduleSemLectureProgressRefresh();
 }
 function renderSemDaySlide(d){
   const key=iso(d), today=iso(new Date()), special=semSpecialDay(key), classes=semClassesForDate(key);
@@ -14517,6 +15017,18 @@ function renderSemDaySlide(d){
     const rec=semState.lectures[recordKey]; const status=noClassException ? "nc" : (rec?.status||"pending");
     const ncReasonClass=noClassException==="surprise" ? "nc-class-test" : noClassException==="surprise-new" ? "nc-surprise-test" : "";
     const assessmentAttendedClass=lectureAttendanceDisplayClass(recordKey,status);
+
+    // V22.23_Testing_1.9 — Adjustment Period is independent from Schedule
+    // Exception replacements. Keep the original lecture/record key intact
+    // for attendance analytics, but display the selected adjustment subject
+    // on the Daily Timetable card.
+    const adjustmentSubjectId=(status==="att" && rec?.adjustmentSubject)
+      ? String(rec.adjustmentSubject).trim()
+      : "";
+    const adjustmentSubject=adjustmentSubjectId
+      ? semesterSubjects.find(s=>s.id===adjustmentSubjectId)
+      : null;
+    const displaySubjectName=adjustmentSubject?.name || c[3];
     if(isFutureDate){
       return `<div class="week-lecture future-lecture"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(c[3])}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status pending">Not marked</span><button class="week-dots disabled" type="button" disabled aria-label="Attendance unavailable for future date" title="Attendance unavailable for future date">⋮</button></div></div>`;
     }
@@ -14528,7 +15040,9 @@ function renderSemDaySlide(d){
       ? "Open attendance options"
       : `Attendance unavailable until ${c[0]}`;
 
-    return `<div class="week-lecture"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(c[3])}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${status}${status==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(status)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div></div>`;
+    const progress=lectureProgressPercent(key,c[0],c[1]);
+    const currentLectureClass=(progress>0 && progress<100) ? " is-current-lecture" : "";
+    return `<div class="week-lecture${currentLectureClass}" data-progress-date="${key}" data-start="${escapeHtml(c[0])}" data-end="${escapeHtml(c[1])}" style="--lecture-progress:${progress}%"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(displaySubjectName)}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${status}${status==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(status)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div></div>`;
   }).join("")}</div></div>`;
 }
 
@@ -14554,18 +15068,30 @@ function saveLectureAttendanceAdjustment(mode,subjectId){
 
   semState.lectures=semState.lectures || {};
   semState.noClassExceptions=semState.noClassExceptions || {};
+  const recordParts=String(ctx.recordKey).split("|");
+  const dateKey=recordParts[0];
+  const time=recordParts[2];
   const existing=semState.lectures[ctx.recordKey] || {};
 
   if(mode==="adjustment") {
     const target=String(subjectId||"").trim();
-    if(!target || target===ctx.originalSubject || !semesterSubjects.some(s=>s.id===target)) return;
+    if(!target || !semesterSubjects.some(s=>s.id===target)) return;
+
+    // The adjustment record remains attached to the original lecture identity
+    // for analytics. The selected subject is only the effective occupant shown
+    // to the user. Selecting the original scheduled subject means there is no
+    // longer a different-subject adjustment, so remove adjustmentSubject and
+    // leave the lecture on its normal attended/current subject.
+    clearScheduleLectureSlotMarks(dateKey,time);
     semState.lectures[ctx.recordKey]={
       ...existing,
       subject:ctx.originalSubject,
-      date:ctx.recordKey.split("|")[0],
-      status:"att",
-      adjustmentSubject:target
+      date:dateKey,
+      status:"att"
     };
+    if(target!==ctx.originalSubject){
+      semState.lectures[ctx.recordKey].adjustmentSubject=target;
+    }
   }else{
     semState.lectures[ctx.recordKey]={
       ...existing,
@@ -14589,10 +15115,14 @@ function openLectureAttendanceAdjustment(recordKey,originalSubject){
   const existing=semState.lectures?.[recordKey];
   const currentAdjustment=existing?.status==="att" ? String(existing.adjustmentSubject||"").trim() : "";
   const originalName=semesterSubjects.find(s=>s.id===originalSubject)?.name || originalSubject || "Selected lecture";
+  // V23.15 — Adjustment Period is freely editable. Keep the complete
+  // Subjects/Lab/Others registry visible, including the lecture's original
+  // scheduled subject, so a user can change an adjustment back to the
+  // original subject or to any other available subject at any time.
   const grouped={
-    Subjects:semesterSubjects.filter(s=>s.type==="subject" && s.id!==originalSubject),
-    Lab:semesterSubjects.filter(s=>s.type==="lab" && s.id!==originalSubject),
-    Others:semesterSubjects.filter(s=>s.type==="other" && s.id!==originalSubject)
+    Subjects:semesterSubjects.filter(s=>s.type==="subject"),
+    Lab:semesterSubjects.filter(s=>s.type==="lab"),
+    Others:semesterSubjects.filter(s=>s.type==="other")
   };
   const initialCategory=Object.entries(grouped).find(([_,items])=>items.some(item=>item.id===currentAdjustment))?.[0] || "Subjects";
 
@@ -14651,6 +15181,12 @@ function openLectureAttendanceAdjustment(recordKey,originalSubject){
       </div>`;
     document.body.appendChild(dialog);
 
+    // V23.16 — Adjustment Period is a fully locked modal surface. The page
+    // behind it must not scroll or accept interaction; only the option list
+    // inside this dialogue remains vertically scrollable.
+    document.documentElement.classList.add("lecture-adjustment-target-locked");
+    document.body.classList.add("lecture-adjustment-target-locked");
+
     const list=dialog.querySelector("#lectureAdjustmentList");
     const targetMessage=dialog.querySelector("#lectureAdjustmentTargetMessage");
     let activeCategory=initialCategory;
@@ -14675,7 +15211,11 @@ function openLectureAttendanceAdjustment(recordKey,originalSubject){
       if(targetMessage)targetMessage.textContent="";
     });
 
-    const closeTarget=()=>dialog.remove();
+    const closeTarget=()=>{
+      if(dialog.parentNode)dialog.remove();
+      document.documentElement.classList.remove("lecture-adjustment-target-locked");
+      document.body.classList.remove("lecture-adjustment-target-locked");
+    };
     dialog.querySelector("#lectureAdjustmentTargetClose").onclick=closeTarget;
     dialog.querySelector("#lectureAdjustmentTargetCancel").onclick=closeTarget;
     dialog.onclick=e=>{if(e.target===dialog)closeTarget();};
@@ -14685,7 +15225,7 @@ function openLectureAttendanceAdjustment(recordKey,originalSubject){
         return;
       }
       saveLectureAttendanceAdjustment("adjustment",selectedSubject);
-      dialog.remove();
+      closeTarget();
     };
 
     renderCategory();
@@ -14782,10 +15322,14 @@ function openLectureAttendanceChoice(recordKey,originalSubject){
   });
 }
 
-function attachSemDayActions(){
-  const root=document.getElementById("semDayTrack"); if(!root)return;
+function attachSemDayActions(scope=document.getElementById("semDayTrack")){
+  const root=scope; if(!root)return;
 
   root.querySelectorAll(".week-schedule-clock").forEach(btn=>{
+    // V23.19: These listeners are bound once per newly-created slide so
+    // retained timetable slides do not accumulate duplicate click handlers.
+    if(btn.dataset.semScheduleActionBound==="1")return;
+    btn.dataset.semScheduleActionBound="1";
     btn.addEventListener("pointerdown",e=>e.stopPropagation());
     btn.addEventListener("click",e=>{
       e.stopPropagation();
@@ -15854,8 +16398,8 @@ window.invictusV11Storage = {
   }
 </style>
 <script>
-// [V22.21 TESTS / DEVELOPMENT — regression tests]
-// #region JS — V19.31 REGRESSION TESTS
+// [V22.23 TESTS / DEVELOPMENT — regression tests]
+// #region JS — V22.23 REGRESSION TESTS
   (function(){
     const results=[]; const assert=(ok,msg)=>{if(!ok)throw new Error(msg);}; const d=(y,m,day,h=0,min=0)=>new Date(y,m-1,day,h,min,0,0);
     const eligible=new Set(["2026-08-08"]), unavailable=new Set(["2026-08-01","2026-08-02","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"]);
@@ -15871,10 +16415,57 @@ window.invictusV11Storage = {
       ["Late watermark",()=>assert(shouldShowLateSubmissionWatermark({"2026-09-14":true},"2026-09-14")&&!shouldShowLateSubmissionWatermark({},"2026-09-14"),"watermark rule failed")],
       ["Blank/Holiday excluded",()=>{const s=calculateAttendanceStats({a:"present",b:"blank",c:"holiday",d:"absent"});assert(s.attended===1&&s.absent===1&&s.total===2,"attendance denominator failed")}],
       ["Semester progressive unlock",()=>assert(!isSemesterUnlockedAt("15/09/2026",d(2026,9,14))&&isSemesterUnlockedAt("15/09/2026",d(2026,9,15)),"semester unlock failed")],
-      ["History filters",()=>{const r={"2026-09-14":"present","2026-09-13":"absent","2026-08-28":"holiday","2026-08-27":"blank"};assert(filterAttendanceHistoryEntries(r,{status:"present",month:"all"}).length===1&&filterAttendanceHistoryEntries(r,{status:"all",month:"2026-08"}).length===2,"history filter failed")}]
+      ["History filters",()=>{const r={"2026-09-14":"present","2026-09-13":"absent","2026-08-28":"holiday","2026-08-27":"blank"};assert(filterAttendanceHistoryEntries(r,{status:"present",month:"all"}).length===1&&filterAttendanceHistoryEntries(r,{status:"all",month:"2026-08"}).length===2,"history filter failed")}],
+      ["V22.23 marks validation",()=>{
+        assert(surpriseTestValuesValid("5","10"),"valid marks rejected");
+        assert(!surpriseTestValuesValid("11","10"),"marks above total accepted");
+        assert(!surpriseTestValuesValid("","10"),"blank gained marks accepted");
+        assert(!surpriseTestValuesValid("5",""),"blank total marks accepted");
+      }],
+      ["V22.23 free-entry binding",()=>{
+        const gained=document.createElement("input"), total=document.createElement("input");
+        gained.id="__v2223_gained_test"; total.id="__v2223_total_test";
+        document.body.appendChild(gained); document.body.appendChild(total);
+        bindSurpriseMarkInputs(gained.id,total.id);
+        assert(!gained.disabled&&!gained.readOnly&&!gained.hasAttribute("max"),"marks input is not free-entry");
+        gained.value="999"; gained.dispatchEvent(new Event("input",{bubbles:true}));
+        assert(gained.value==="999","free-entry value was blocked");
+        gained.remove(); total.remove();
+      }],
+      ["V22.23 replacement application",()=>{
+        const original=semState.scheduleExceptions;
+        semState.scheduleExceptions={};
+        const base=semDefaultClassesForDate("2026-09-24");
+        if(base.length){
+          semState.scheduleExceptions["2026-09-24"]={mode:"lecture-replacements",replacements:{"0":{subjectId:"webdev",subjectName:"Web Development (Ms. Amrita)"}}};
+          const effective=semClassesForDate("2026-09-24");
+          assert(effective[0][0]===base[0][0]&&effective[0][1]===base[0][1],"replacement changed lecture time");
+          assert(effective[0][2]==="webdev","replacement subject not applied");
+        }
+        semState.scheduleExceptions=original;
+      }],
+      ["V22.23 default restoration label",()=>{
+        assert(scheduleExceptionCurrentLabel("2026-09-24")==="Default Timetable","default timetable label changed");
+      }],
+      ["V22.23 lecture-slot cleanup",()=>{
+        const oldLectures=semState.lectures, oldNoClass=semState.noClassExceptions;
+        const oldSurprise=semState.surpriseTests, oldRecords=semState.surpriseTestRecords;
+        semState.lectures={"2026-09-24|english|09:00 AM":{status:"att"},"2026-09-24|mfcs|10:00 AM":{status:"att"}};
+        semState.noClassExceptions={"2026-09-24|english|09:00 AM":{reason:"free"}};
+        semState.surpriseTests={x:{date:"2026-09-24",time:"09:00 AM"}};
+        semState.surpriseTestRecords={y:{date:"2026-09-24",time:"09:00 AM"}};
+        clearScheduleLectureSlotMarks("2026-09-24","09:00 AM");
+        assert(!semState.lectures["2026-09-24|english|09:00 AM"],"old lecture mark remained");
+        assert(!semState.noClassExceptions["2026-09-24|english|09:00 AM"],"old no-class mark remained");
+        assert(!semState.surpriseTests.x&&!semState.surpriseTestRecords.y,"old assessment tracking remained");
+        assert(semState.lectures["2026-09-24|mfcs|10:00 AM"],"unrelated lecture mark was removed");
+        semState.lectures=oldLectures; semState.noClassExceptions=oldNoClass;
+        semState.surpriseTests=oldSurprise; semState.surpriseTestRecords=oldRecords;
+      }]
     ];
     tests.forEach(([name,fn])=>{try{fn();results.push({name,passed:true});}catch(e){results.push({name,passed:false,error:String(e.message||e)});}});
     window.INVICTUS_V1931_TESTS=Object.freeze({results,passed:results.filter(x=>x.passed).length,total:results.length,allPassed:results.every(x=>x.passed),run:()=>results.slice()});
+    window.INVICTUS_V2223_TESTS=window.INVICTUS_V1931_TESTS;
     if(!window.INVICTUS_V1931_TESTS.allPassed)console.warn("INVICTUS V19.31 regression tests:",results);
   })();
   // #endregion JS — V19.31 REGRESSION TESTS
