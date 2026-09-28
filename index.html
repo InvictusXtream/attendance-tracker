@@ -624,6 +624,15 @@
 <!-- V23.19: Fixed the Daily Timetable swipe flash by reusing and rotating the existing three slide DOM nodes instead of rebuilding the timetable after every swipe. Swipe animation, date navigation, attendance actions, and timetable data behavior remain unchanged. -->
 <!-- V23.20: Corrected the reverse-swipe recycling order. Previous-day navigation now animates the existing previous slide first, then recycles the off-screen nodes only after the transition, eliminating the visible flash caused by inserting a new slide before the current track position was adjusted. Forward and backward swipe geometry are kept symmetric. -->
 <!-- V23.21: Fixed User Guide Close controls being visible but unbound during the forced first-login flow. The static top-right and bottom Close controls are now bound once during app initialization, before a first successful login can open the guide. Normal Help → User Guide behavior and all other modal close controls remain unchanged. -->
+<!-- V23.22: Moved Adjustment Period selection out of the Attendance → Attended flow and into Schedule Exception. Tapping a scheduled lecture now opens a choice for Set Replacement or Set Adjustment; each enters the existing replacement/adjustment selection system. Attended now submits directly. Adjustment is stored as a lecture-slot exception and, when attendance is later marked, the scheduled/original lecture receives Teacher Absent while the selected adjustment lecture receives the user's chosen status (Attended, Absent, Teacher Absent, or No Classes). Existing Replacement, Set to Default, attendance calculations, assessment flows, storage, and all unrelated functionality remain unchanged. -->
+<!-- V23.23: Fixed a Daily Timetable rendering regression introduced in V23.22 by defining displayStatus before it is used to calculate the attendance display class. No V23.22 behavior is otherwise changed. -->
+<!-- V23.24: Adjustment now follows the existing Replacement dialogue lifecycle: Schedule Exception closes before Adjustment opens, allowing native list scrolling; X/Cancel/Apply return to Schedule Exception. No Adjustment or Replacement business logic changed. -->
+<!-- V23.25: Cancel/back from an active Replacement or Adjustment selection returns to the lecture choice menu (Set Replacement / Set Adjustment) instead of directly returning to Schedule Exception. The choice menu remains the navigation point until the user explicitly closes it. -->
+<!-- V23.26: Added Cancel and Apply actions to Schedule Exception → Set Replacement. Replacement X now returns directly to Schedule Exception, Cancel returns to the lecture choice menu, and Apply commits the selected replacement through the existing confirmation flow. Set Adjustment now always opens on the Subjects tab by default; its existing logic, lists, saving, and navigation remain unchanged. -->
+<!-- V23.27: Unified Replacement and Adjustment selection initialization so both dialogs highlight the current lecture subject when no existing exception selection is present. Added Apply-time validation preventing a Replacement or Adjustment from being applied to the same subject that is already the current/original lecture. Existing exception selections remain highlighted when editing. -->
+<!-- V23.28: Added a confirmation step to Set Adjustment so Apply now asks the user to confirm the selected adjustment before committing it. No returns to the Adjustment dialog; Yes applies the adjustment and returns to Schedule Exception. Existing same-subject validation, navigation, storage, and Adjustment business logic remain unchanged. -->
+<!-- V23.29: Fixed stale Adjustment state when an existing Replacement is changed to a new Replacement on the same date + lecture slot. The old slot-specific Adjustment is cleared when the Replacement changes; all other Replacement, Adjustment, attendance, navigation, and storage behavior remains unchanged. -->
+<!-- V23.30: Reorganized the V23 Version History into strict chronological order through V23.30 and updated the application title to V23.30. No application, data, storage, or runtime behavior changed. -->
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -706,7 +715,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V23.21</title>
+<title>Invictus V23.30</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -5380,18 +5389,18 @@ function getHardcodedSpecialDay(dateKey){
         <p>Move between dates using the timetable's date controls or calendar. The timetable remains directly swipeable; the old day-position indicator is no longer displayed.</p>
         <p>Each lecture card shows its scheduled time and subject. Tap the lecture's <strong>3 dots</strong> to open the attendance choices.</p>
         <p>You can mark the lecture as <strong>Attended</strong>, <strong>Absent</strong>, <strong>Teacher Absent</strong>, or <strong>No Classes</strong>.</p>
-        <p>When you choose <strong>Attended</strong>, INVICTUS lets you choose between <strong>Current — Selected Lecture</strong> and <strong>Adjustment Period</strong>.</p>
+        <p>When you choose <strong>Attended</strong>, INVICTUS submits the attendance directly. If an Adjustment has already been configured for that lecture through Schedule Exception, the adjustment rules are applied automatically.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>🔄 5. Adjustment Period</h3>
         <p>Use <strong>Adjustment Period</strong> when you attended a different subject during the selected lecture's scheduled time.</p>
-        <div class="user-guide-action"><strong>Choose Adjustment Period</strong><span>Lecture → 3 dots → Attended → Adjustment Period</span></div>
-        <p>INVICTUS then opens the <strong>Adjustment Period</strong> dialogue. Choose a category — <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong> — and select the subject/class you actually attended.</p>
+        <div class="user-guide-action"><strong>Choose Adjustment</strong><span>Daily Timetable → Schedule Exception → Lecture → Set Adjustment</span></div>
+        <p>INVICTUS opens the <strong>Adjustment Period</strong> selection. Choose a category — <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong> — and select the subject/class that should receive the attendance status for that lecture slot.</p>
         <p>The option list can be scrolled inside the dialogue. The page behind it is locked while you are choosing the adjustment, so accidental background scrolling or interaction does not change the flow.</p>
         <p>Tap <strong>Apply</strong> after selecting the subject. If you edit an existing Adjustment Period later, the complete Subjects/Lab/Others lists remain available, including the lecture's original scheduled subject.</p>
         <p>Selecting the original scheduled subject when editing clears the adjustment and returns the lecture to its normal scheduled subject.</p>
-        <div class="user-guide-note">💡 An Adjustment Period changes the subject credited for that lecture without changing the underlying lecture identity used by attendance tracking.</div>
+        <div class="user-guide-note">💡 An Adjustment keeps the scheduled lecture as the original lecture for tracking, but when you mark attendance, the original lecture is recorded as <strong>Teacher Absent</strong> and the selected adjustment subject receives the attendance status you choose.</div>
       </section>
 
       <section class="user-guide-section">
@@ -5399,7 +5408,8 @@ function getHardcodedSpecialDay(dateKey){
         <p>Schedule Exception is for a date when your actual timetable differs from the normal timetable.</p>
         <p>From <strong>24 September 2026</strong> onward, the <strong>🕐 clock</strong> is available for a date recorded as <strong>Present → Regular College Day</strong>. It is not shown for dates such as Absent, Holiday, Blank, unmarked dates, or other Present reasons.</p>
         <p>Tap the clock to open <strong>Schedule Exception</strong>. The screen lists the lectures for that date.</p>
-        <p>Tap a lecture to open <strong>Replace Lecture</strong>. The replacement screen shows the lecture time and current subject, then lets you choose from <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong>.</p>
+        <p>Tap a lecture to open a choice menu with <strong>Set Replacement</strong> and <strong>Set Adjustment</strong>. Choose <strong>Set Replacement</strong> to open the existing <strong>Replace Lecture</strong> system, or choose <strong>Set Adjustment</strong> to open the Adjustment Period selection.</p>
+        <p><strong>Replacement</strong> changes which lecture occupies that scheduled slot. <strong>Adjustment</strong> keeps the scheduled lecture identity but changes which subject receives the attendance status when the lecture is marked.</p>
         <p><strong>PST</strong> is available in Subjects, and <strong>PST LAB</strong> is displayed with that exact name wherever applicable.</p>
         <p>Selecting a replacement opens <strong>Confirm Replacement</strong>. Choose <strong>Yes</strong> to apply it or <strong>No</strong> to return to the replacement choices. Use <strong>×</strong> on the replacement screen to return to Schedule Exception without applying a replacement.</p>
         <p>After applying a replacement, Schedule Exception opens again and shows the updated lecture. Other lectures on that date are not changed.</p>
@@ -7917,25 +7927,13 @@ function getDailyTimetableLectureStatuses(dateKey){
 
     // Explicit Daily Timetable mark is authoritative immediately.
     if(record?.status){
-      const adjustedSubject=record.status==="att" ? String(record.adjustmentSubject||"").trim() : "";
+      const adjustedSubject=String(record.adjustmentSubject||"").trim();
+      const adjustmentStatus=String(record.adjustmentStatus||"").trim();
       if(adjustedSubject && adjustedSubject!==c[2]){
-        rows.push({
-          date:dateKey,
-          subject:c[2],
-          time:c[0],
-          status:"ta",
-          attendanceStatus:"att",
-          attendanceSubject:adjustedSubject
-        });
+        const targetStatus=adjustmentStatus || (record.status==="att" ? "att" : "");
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:targetStatus || "ta",attendanceSubject:adjustedSubject});
       }else{
-        rows.push({
-          date:dateKey,
-          subject:c[2],
-          time:c[0],
-          status:record.status,
-          attendanceStatus:record.status==="att" ? "att" : record.status,
-          attendanceSubject:c[2]
-        });
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:record.status,attendanceStatus:record.status==="att" ? "att" : record.status,attendanceSubject:c[2]});
       }
       return;
     }
@@ -11840,6 +11838,63 @@ function getScheduleExceptionForDate(key){
   return ex;
 }
 
+function getScheduleAdjustmentForLecture(dateKey,lectureClass){
+  if(!dateKey || !Array.isArray(lectureClass)) return null;
+  const ex=getScheduleExceptionForDate(dateKey);
+  const time=String(lectureClass[0]||"");
+  const configured=ex?.adjustments && typeof ex.adjustments==="object" ? ex.adjustments[time] : null;
+  if(configured && typeof configured==="object"){
+    const subjectId=String(configured.subjectId||"").trim();
+    const subject=semesterSubjects.find(s=>s.id===subjectId);
+    if(subject) return {subjectId:subject.id,subjectName:subject.id==="pstlab"?"PST LAB":subject.name};
+  }
+  // V23.22 keeps legacy V23.21 Adjustment Period records readable.
+  const recordKey=semRecordKey(dateKey,lectureClass[2],time);
+  const legacy=semState.lectures?.[recordKey];
+  if(legacy?.status==="att" && legacy?.adjustmentSubject){
+    const subject=semesterSubjects.find(s=>s.id===String(legacy.adjustmentSubject));
+    if(subject) return {subjectId:subject.id,subjectName:subject.id==="pstlab"?"PST LAB":subject.name,legacy:true};
+  }
+  return null;
+}
+
+function setScheduleAdjustmentForLecture(dateKey,lectureClass,subject){
+  if(!dateKey || !Array.isArray(lectureClass) || !subject?.id) return;
+  semState.scheduleExceptions=semState.scheduleExceptions || {};
+  const ex=getScheduleExceptionForDate(dateKey) || {mode:"lecture-replacements",replacements:{}};
+  ex.mode="lecture-replacements";
+  ex.replacements=ex.replacements && typeof ex.replacements==="object" ? ex.replacements : {};
+  ex.adjustments=ex.adjustments && typeof ex.adjustments==="object" ? ex.adjustments : {};
+  const time=String(lectureClass[0]||"");
+  const effectiveSubjectId=String(lectureClass[2]||"");
+  if(String(subject.id)===effectiveSubjectId) delete ex.adjustments[time];
+  else ex.adjustments[time]={subjectId:subject.id,subjectName:subject.id==="pstlab"?"PST LAB":subject.name};
+  if(Object.keys(ex.replacements).length || Object.keys(ex.adjustments).length) semState.scheduleExceptions[dateKey]=ex;
+  else delete semState.scheduleExceptions[dateKey];
+  clearScheduleLectureSlotMarks(dateKey,time);
+  persistScheduleException(dateKey);
+}
+
+function applyScheduleAdjustedAttendance(recordKey,originalSubject,action){
+  const dateKey=String(recordKey||"").split("|")[0];
+  if(!dateKey || !action)return false;
+  const parts=String(recordKey).split("|");
+  const classes=semClassesForDate(dateKey) || [];
+  const lecture=classes.find(c=>String(c[0])===String(parts[2]) && String(c[2])===String(parts[1])) || classes.find(c=>String(c[0])===String(parts[2]));
+  const adjustment=lecture ? getScheduleAdjustmentForLecture(dateKey,lecture) : null;
+  if(!adjustment || adjustment.subjectId===originalSubject)return false;
+  if(isBeforeCollegeJoiningDate(dateKey))return true;
+  if(isInvictusProtectedTeacherAbsent(recordKey) || isInvictusProtectedFreePeriod(recordKey))return true;
+  semState.lectures=semState.lectures || {};
+  semState.noClassExceptions=semState.noClassExceptions || {};
+  semState.lectures[recordKey]={subject:originalSubject,date:dateKey,status:"ta",adjustmentSubject:adjustment.subjectId,adjustmentStatus:action};
+  delete semState.noClassExceptions[recordKey];
+  saveSem();
+  v20RunNotificationChecks();
+  renderSemester();
+  return true;
+}
+
 function applyScheduleExceptionToClasses(key,baseClasses){
   const exception=getScheduleExceptionForDate(key);
   if(!exception || !Array.isArray(baseClasses) || !baseClasses.length) return baseClasses || [];
@@ -11898,10 +11953,15 @@ function semSubjectCounts(){
       const original=out[row.subject];
       if(!original)return;
 
-      if(row.status==="ta" && row.attendanceStatus==="att" && row.attendanceSubject && row.attendanceSubject!==row.subject){
+      if(row.status==="ta" && row.attendanceSubject && row.attendanceSubject!==row.subject){
         original.ta++;
         const adjusted=out[row.attendanceSubject];
-        if(adjusted) adjusted.adj++;
+        if(adjusted){
+          if(row.attendanceStatus==="att") adjusted.adj++;
+          else if(row.attendanceStatus==="abs") adjusted.abs++;
+          else if(row.attendanceStatus==="ta") adjusted.ta++;
+          else if(row.attendanceStatus==="nc") adjusted.nc++;
+        }
         return;
       }
 
@@ -12201,15 +12261,22 @@ function examResultEntries(){
 // the normal Attended lecture pipeline, not No Classes.
 function markAssessmentLectureAttended(recordKey,subject){
   if(!recordKey)return;
+  const cleanSubject=subject || String(recordKey).split("|")[1] || "";
+  const adjustment=getConfiguredAdjustmentForRecord(recordKey);
+  if(adjustment && adjustment.subjectId!==cleanSubject){
+    const dateKey=String(recordKey).split("|")[0];
+    if(isBeforeCollegeJoiningDate(dateKey))return;
+    semState.lectures=semState.lectures || {};
+    semState.noClassExceptions=semState.noClassExceptions || {};
+    semState.lectures[recordKey]={subject:cleanSubject,date:dateKey,status:"ta",adjustmentSubject:adjustment.subjectId,adjustmentStatus:"att"};
+    delete semState.noClassExceptions[recordKey];
+    return;
+  }
   if(isBeforeCollegeJoiningDate(String(recordKey||"").split("|")[0]))return;
   semState.lectures=semState.lectures || {};
   semState.noClassExceptions=semState.noClassExceptions || {};
   const date=String(recordKey).split("|")[0];
-  semState.lectures[recordKey]={
-    subject:subject || String(recordKey).split("|")[1] || "",
-    date,
-    status:"att"
-  };
+  semState.lectures[recordKey]={subject:cleanSubject,date,status:"att"};
   delete semState.noClassExceptions[recordKey];
 }
 
@@ -13558,6 +13625,10 @@ function submitNoClassReason(){
     openNoClassSurpriseNewModal(recordKey,subject);
     return;
   }
+  if(applyScheduleAdjustedAttendance(recordKey,subject,"nc")){
+    closeNoClassReasonModal();
+    return;
+  }
   semState.lectures[recordKey]={subject,date:recordKey.split("|")[0],status:"nc"};
   saveSem();
   v20RunNotificationChecks();
@@ -14327,6 +14398,7 @@ function openScheduleExceptionReplacementDialog(dateKey,lectureIndex,lectureClas
         ${Object.keys(grouped).map(label=>`<button type="button" class="lecture-adjustment-tab ${label===initialCategory?"selected":""}" data-replacement-category="${label}">${label}</button>`).join("")}
       </div>
       <div class="lecture-adjustment-list" id="scheduleExceptionReplacementList"></div>
+      <div class="modal-actions" style="margin-top:16px;flex:0 0 auto"><button class="secondary" id="scheduleExceptionReplacementCancel" type="button">Cancel</button><button class="primary" id="scheduleExceptionReplacementApply" type="button">Apply</button></div>
       <div class="message lecture-adjustment-message" id="scheduleExceptionReplacementMessage"></div>
     </div>`;
   document.body.appendChild(back);
@@ -14340,25 +14412,49 @@ function openScheduleExceptionReplacementDialog(dateKey,lectureIndex,lectureClas
   const list=back.querySelector("#scheduleExceptionReplacementList");
   const message=back.querySelector("#scheduleExceptionReplacementMessage");
   let activeCategory=initialCategory;
+  let selectedSubjectId=currentSubjectId;
 
   const returnToScheduleException=()=>{
     if(back.parentNode) back.parentNode.removeChild(back);
     openScheduleExceptionModal(dateKey);
   };
 
+  const returnToLectureChoice=()=>{
+    if(back.parentNode) back.parentNode.removeChild(back);
+    openScheduleExceptionModal(dateKey);
+    const lectureButton=document.querySelector(`#scheduleExceptionBackdrop [data-schedule-exception-lecture="${lectureIndex}"]`);
+    if(lectureButton) lectureButton.click();
+  };
+
+  // V23.26 — Replacement now mirrors Adjustment navigation: X closes the
+  // active flow to Schedule Exception, while Cancel returns to the lecture
+  // choice menu. Apply commits the selected replacement.
   back.querySelector("#scheduleExceptionReplacementClose").onclick=returnToScheduleException;
-  // The dark backdrop itself does not dismiss Dialogue 2. X is the explicit
-  // back action requested for this flow.
+  back.querySelector("#scheduleExceptionReplacementCancel").onclick=returnToLectureChoice;
   back.addEventListener("click",e=>e.stopPropagation());
 
   const applyReplacement=(subject)=>{
     const currentEffective=semClassesForDate(dateKey);
     const oldClass=currentEffective[lectureIndex] || lectureClass;
 
+    // V23.27: A replacement must actually change the current lecture subject.
+    // Re-applying the same subject is blocked instead of silently clearing an
+    // existing replacement or creating a no-op replacement.
+    if(String(subject.id)===String(oldClass[2])){
+      if(message) message.textContent="Please select a different subject from the current lecture.";
+      return;
+    }
+
     semState.scheduleExceptions=semState.scheduleExceptions || {};
     const ex=getScheduleExceptionForDate(dateKey) || {mode:"lecture-replacements",replacements:{}};
     ex.mode="lecture-replacements";
     ex.replacements=ex.replacements && typeof ex.replacements==="object" ? ex.replacements : {};
+    ex.adjustments=ex.adjustments && typeof ex.adjustments==="object" ? ex.adjustments : {};
+
+    // V23.29: Changing the Replacement changes the effective lecture identity.
+    // Any Adjustment attached to this exact date + lecture-time slot belongs to
+    // the previous effective lecture and must not carry over to the new one.
+    delete ex.adjustments[String(oldClass[0])];
 
     if(subject.id===oldClass[2]){
       delete ex.replacements[String(lectureIndex)];
@@ -14419,11 +14515,12 @@ function openScheduleExceptionReplacementDialog(dateKey,lectureIndex,lectureClas
   const renderCategory=()=>{
     const items=grouped[activeCategory]||[];
     list.innerHTML=items.length
-      ? items.map(item=>`<button type="button" class="lecture-adjustment-item" data-replacement-subject="${escapeHtml(item.id)}"><strong>${escapeHtml(item.name)}</strong></button>`).join("")
+      ? items.map(item=>`<button type="button" class="lecture-adjustment-item ${selectedSubjectId===item.id?"selected":""}" data-replacement-subject="${escapeHtml(item.id)}"><strong>${escapeHtml(item.name)}</strong></button>`).join("")
       : `<div class="lecture-adjustment-empty">No options available</div>`;
     list.querySelectorAll("[data-replacement-subject]").forEach(btn=>btn.onclick=()=>{
-      const subject=semesterSubjects.find(item=>item.id===btn.dataset.replacementSubject);
-      if(subject) showReplacementConfirmation(subject);
+      selectedSubjectId=btn.dataset.replacementSubject||"";
+      renderCategory();
+      if(message)message.textContent="";
     });
   };
 
@@ -14434,14 +14531,175 @@ function openScheduleExceptionReplacementDialog(dateKey,lectureIndex,lectureClas
     if(message)message.textContent="";
   });
 
+  back.querySelector("#scheduleExceptionReplacementApply").onclick=()=>{
+    if(!selectedSubjectId){if(message)message.textContent="Please select a replacement subject.";return;}
+    const subject=semesterSubjects.find(s=>s.id===selectedSubjectId) || (selectedSubjectId==="pst"?{id:"pst",name:"PST",type:"subject"}:null);
+    if(!subject)return;
+    showReplacementConfirmation(subject);
+  };
+
   renderCategory();
 }
+
+function openScheduleExceptionAdjustmentDialog(dateKey,lectureIndex,lectureClass){
+  const oldDialog=document.getElementById("scheduleExceptionAdjustmentBackdrop");
+  if(oldDialog) oldDialog.remove();
+
+  // V23.24 — Match the existing Replacement dialogue lifecycle. Close
+  // Schedule Exception before opening Adjustment so the parent modal/touch
+  // lock cannot interfere with the Adjustment list's native vertical scroll.
+  closeScheduleExceptionModal();
+
+  const grouped={
+    Subjects:semesterSubjects.filter(s=>s.type==="subject"),
+    Lab:semesterSubjects.filter(s=>s.type==="lab"),
+    Others:semesterSubjects.filter(s=>s.type==="other")
+  };
+  if(!grouped.Subjects.some(s=>s.id==="pst")) grouped.Subjects.push({id:"pst",name:"PST",type:"subject"});
+  const existing=getScheduleAdjustmentForLecture(dateKey,lectureClass);
+  // V23.27: Keep an existing adjustment selected when editing it; otherwise
+  // initialize the selection to the original/current lecture subject so the
+  // Adjustment dialog uses the same visual selection rule as Replacement.
+  const currentSubjectId=String(existing?.subjectId || lectureClass[2] || "");
+  // V23.26 — Set Adjustment always opens on Subjects. Existing selection is
+  // preserved, but the default visible category is always Subjects.
+  const initialCategory="Subjects";
+  const back=document.createElement("div");
+  back.id="scheduleExceptionAdjustmentBackdrop";
+  back.className="schedule-exception-replacement-layer";
+  back.setAttribute("role","presentation");
+  back.innerHTML=`
+    <div class="lecture-adjustment-dialog" role="dialog" aria-modal="true" aria-labelledby="scheduleExceptionAdjustmentTitle">
+      <div class="lecture-mismatch-head">
+        <h2 id="scheduleExceptionAdjustmentTitle">Adjust Lecture ${lectureIndex+1}</h2>
+        <button type="button" class="lecture-mismatch-close" id="scheduleExceptionAdjustmentClose" aria-label="Close">×</button>
+      </div>
+      <div class="schedule-exception-replacement-meta">
+        <div class="schedule-exception-replacement-time">${escapeHtml(lectureClass[0])} – ${escapeHtml(lectureClass[1])}</div>
+        <div class="schedule-exception-replacement-subject">${escapeHtml(lectureClass[3])}</div>
+      </div>
+      <div class="lecture-adjustment-tabs" id="scheduleExceptionAdjustmentTabs">
+        ${Object.keys(grouped).map(label=>`<button type="button" class="lecture-adjustment-tab ${label===initialCategory?"selected":""}" data-adjustment-category="${label}">${label}</button>`).join("")}
+      </div>
+      <div class="lecture-adjustment-list" id="scheduleExceptionAdjustmentList"></div>
+      <div class="modal-actions" style="margin-top:16px;flex:0 0 auto"><button class="secondary" id="scheduleExceptionAdjustmentCancel" type="button">Cancel</button><button class="primary" id="scheduleExceptionAdjustmentApply" type="button">Apply</button></div>
+      <div class="message lecture-adjustment-message" id="scheduleExceptionAdjustmentMessage"></div>
+    </div>`;
+  document.body.appendChild(back);
+
+  // Dialogue 2 is now the only active interaction surface, exactly like the
+  // existing Replacement flow. The standalone backdrop handles interaction
+  // while html/body remain unlocked so the list can use native scrolling.
+  document.documentElement.classList.remove("sem-calendar-locked");
+  document.body.classList.remove("sem-calendar-locked");
+
+  const list=back.querySelector("#scheduleExceptionAdjustmentList");
+  const message=back.querySelector("#scheduleExceptionAdjustmentMessage");
+  let activeCategory=initialCategory;
+  let selectedSubject=currentSubjectId;
+  const returnToScheduleException=()=>{
+    if(back.parentNode) back.remove();
+    openScheduleExceptionModal(dateKey);
+  };
+  const returnToLectureChoice=()=>{
+    if(back.parentNode) back.remove();
+    openScheduleExceptionModal(dateKey);
+    const lectureButton=document.querySelector(`#scheduleExceptionBackdrop [data-schedule-exception-lecture="${lectureIndex}"]`);
+    if(lectureButton) lectureButton.click();
+  };
+  back.querySelector("#scheduleExceptionAdjustmentClose").onclick=returnToScheduleException;
+  // V23.25 — explicit Cancel returns one navigation level to the lecture
+  // choice menu (Set Replacement / Set Adjustment).
+  back.querySelector("#scheduleExceptionAdjustmentCancel").onclick=returnToLectureChoice;
+  // Keep the standalone Adjustment dialogue from dismissing on backdrop taps.
+  // X/Cancel are the explicit back actions, matching Replacement.
+  back.addEventListener("click",e=>e.stopPropagation());
+  const renderCategory=()=>{
+    const items=grouped[activeCategory]||[];
+    list.innerHTML=items.length
+      ? items.map(item=>`<button type="button" class="lecture-adjustment-item ${selectedSubject===item.id?"selected":""}" data-schedule-adjustment-subject="${escapeHtml(item.id)}">${escapeHtml(item.name)}</button>`).join("")
+      : `<div class="lecture-adjustment-empty">No options available</div>`;
+    list.querySelectorAll("[data-schedule-adjustment-subject]").forEach(btn=>btn.onclick=()=>{
+      selectedSubject=btn.dataset.scheduleAdjustmentSubject||"";
+      renderCategory();
+      if(message)message.textContent="";
+    });
+  };
+  back.querySelectorAll("[data-adjustment-category]").forEach(btn=>btn.onclick=()=>{
+    activeCategory=btn.dataset.adjustmentCategory||"Subjects";
+    back.querySelectorAll("[data-adjustment-category]").forEach(b=>b.classList.toggle("selected",b===btn));
+    renderCategory();
+    if(message)message.textContent="";
+  });
+  const applyAdjustment=(subject)=>{
+    // V23.27: Adjustment changes what occurred during the slot, but does not
+    // change the scheduled lecture identity. Applying the original scheduled
+    // subject would therefore be a no-op and is explicitly rejected.
+    if(String(subject.id)===String(lectureClass[2])){
+      if(message) message.textContent="Please select a different subject from the current lecture.";
+      return;
+    }
+    setScheduleAdjustmentForLecture(dateKey,lectureClass,subject);
+    returnToScheduleException();
+  };
+
+  const showAdjustmentConfirmation=(subject)=>{
+    const oldConfirm=back.querySelector("#scheduleExceptionAdjustmentConfirmLayer");
+    if(oldConfirm) oldConfirm.remove();
+
+    const currentName=String(lectureClass[3] || "");
+    const adjustmentName=String(subject.name || "");
+
+    const confirmLayer=document.createElement("div");
+    confirmLayer.id="scheduleExceptionAdjustmentConfirmLayer";
+    confirmLayer.className="schedule-exception-replacement-confirm-layer";
+    confirmLayer.innerHTML=`
+      <div class="schedule-exception-confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="scheduleExceptionAdjustmentConfirmTitle">
+        <h3 class="schedule-exception-confirm-title" id="scheduleExceptionAdjustmentConfirmTitle">Confirm Adjustment</h3>
+        <div class="schedule-exception-confirm-message">Adjust <strong>${escapeHtml(currentName)}</strong> to <strong>${escapeHtml(adjustmentName)}</strong> for Lecture ${lectureIndex+1}?</div>
+        <div class="schedule-exception-confirm-actions">
+          <button type="button" class="schedule-exception-confirm-no" id="scheduleExceptionAdjustmentConfirmNo">No</button>
+          <button type="button" class="schedule-exception-confirm-yes" id="scheduleExceptionAdjustmentConfirmYes">Yes</button>
+        </div>
+      </div>`;
+    back.appendChild(confirmLayer);
+
+    const closeConfirm=()=>{
+      if(confirmLayer.parentNode) confirmLayer.parentNode.removeChild(confirmLayer);
+    };
+    confirmLayer.addEventListener("click",e=>e.stopPropagation());
+    confirmLayer.querySelector("#scheduleExceptionAdjustmentConfirmNo").onclick=closeConfirm;
+    confirmLayer.querySelector("#scheduleExceptionAdjustmentConfirmYes").onclick=()=>{
+      closeConfirm();
+      applyAdjustment(subject);
+    };
+  };
+
+  back.querySelector("#scheduleExceptionAdjustmentApply").onclick=()=>{
+    if(!selectedSubject){if(message)message.textContent="Please select an adjustment subject.";return;}
+    const subject=semesterSubjects.find(s=>s.id===selectedSubject) || (selectedSubject==="pst"?{id:"pst",name:"PST",type:"subject"}:null);
+    if(!subject)return;
+    // V23.27: Reject the original scheduled subject before confirmation because
+    // it would be a no-op. Only a valid, different adjustment reaches confirmation.
+    if(String(subject.id)===String(lectureClass[2])){
+      if(message) message.textContent="Please select a different subject from the current lecture.";
+      return;
+    }
+    showAdjustmentConfirmation(subject);
+  };
+  renderCategory();
+}
+
 function scheduleExceptionDefaultScopes(dateKey){
   const ex=getScheduleExceptionForDate(dateKey);
   const replacementIndexes=ex?.replacements && typeof ex.replacements==="object"
     ? Object.keys(ex.replacements).filter(index=>ex.replacements[index] && typeof ex.replacements[index]==="object")
     : [];
   const adjustmentTimes=new Set();
+  const configuredAdjustments=ex?.adjustments && typeof ex.adjustments==="object" ? ex.adjustments : {};
+  Object.keys(configuredAdjustments).forEach(time=>{
+    if(configuredAdjustments[time] && typeof configuredAdjustments[time]==="object") adjustmentTimes.add(String(time));
+  });
 
   Object.keys(semState.lectures || {}).forEach(recordKey=>{
     const parts=String(recordKey).split("|");
@@ -14469,8 +14727,9 @@ function clearChangedScheduleExceptionMarksBeforeDefault(dateKey){
     const replacementChanged=!!d && String(c[2])!==String(d[2]);
     const originalKey=semRecordKey(dateKey,c[2],c[0]);
     const originalRecord=semState.lectures?.[originalKey];
+    const configuredAdjustment=!!getScheduleAdjustmentForLecture(dateKey,c);
     const hasAdjustment=!!(originalRecord?.status==="att" && String(originalRecord.adjustmentSubject||"").trim());
-    if(replacementChanged || hasAdjustment) slotTimes.add(String(c[0]));
+    if(replacementChanged || configuredAdjustment || hasAdjustment) slotTimes.add(String(c[0]));
   });
 
   slotTimes.forEach(time=>clearScheduleLectureSlotMarks(dateKey,time));
@@ -14492,6 +14751,12 @@ function setScheduleExceptionDefaultScope(dateKey,scope){
   if(scope==="adjustment"){
     const adjustmentTimes=scheduleExceptionDefaultScopes(dateKey).adjustmentTimes;
     adjustmentTimes.forEach(time=>clearScheduleLectureSlotMarks(dateKey,time));
+    semState.scheduleExceptions=semState.scheduleExceptions || {};
+    const currentEx=semState.scheduleExceptions[dateKey];
+    if(currentEx && typeof currentEx==="object"){
+      delete currentEx.adjustments;
+      if(!(currentEx.replacements && Object.keys(currentEx.replacements).length)) delete semState.scheduleExceptions[dateKey];
+    }
     persistScheduleException(dateKey);
     return;
   }
@@ -14635,16 +14900,9 @@ function showScheduleExceptionSetDefaultConfirmation(dateKey,parentBackdrop,scop
 function scheduleExceptionDisplayClasses(dateKey){
   const classes=semClassesForDate(dateKey) || [];
   return classes.map(c=>{
-    const recordKey=semRecordKey(dateKey,c[2],c[0]);
-    const record=semState.lectures?.[recordKey];
-    const adjustmentId=(record?.status==="att" && record?.adjustmentSubject)
-      ? String(record.adjustmentSubject).trim()
-      : "";
-    if(!adjustmentId) return c;
-    const adjustment=semesterSubjects.find(s=>s.id===adjustmentId);
+    const adjustment=getScheduleAdjustmentForLecture(dateKey,c);
     if(!adjustment) return c;
-    const displayName=adjustment.id==="pstlab" ? "PST LAB" : adjustment.name;
-    return [c[0],c[1],c[2],displayName];
+    return [c[0],c[1],c[2],adjustment.subjectName];
   });
 }
 
@@ -14671,7 +14929,7 @@ function openScheduleExceptionModal(dateKey){
         <strong>${escapeHtml(semDateLabel(dateKey))}</strong><br>
         Current: <strong id="scheduleExceptionCurrent">${escapeHtml(scheduleExceptionCurrentLabel(dateKey))}</strong>
       </button>
-      <div style="margin-top:10px;font-size:13px;color:#666">Tap any lecture to choose a replacement subject, lab, or other class.</div>
+      <div style="margin-top:10px;font-size:13px;color:#666">Tap any lecture to choose Set Replacement or Set Adjustment.</div>
       <div class="schedule-exception-list" id="scheduleExceptionLectureList">
         ${effectiveClasses.map((c,i)=>`
           <button type="button" class="schedule-exception-option" data-schedule-exception-lecture="${i}">
@@ -14708,7 +14966,30 @@ function openScheduleExceptionModal(dateKey){
       const current=scheduleExceptionDisplayClasses(dateKey);
       const lecture=current[index];
       if(!lecture) return;
-      openScheduleExceptionReplacementDialog(dateKey,index,lecture);
+      const existingChoice=back.querySelector("#scheduleExceptionLectureChoiceLayer");
+      if(existingChoice) existingChoice.remove();
+      const choiceLayer=document.createElement("div");
+      choiceLayer.id="scheduleExceptionLectureChoiceLayer";
+      choiceLayer.className="schedule-exception-confirm-layer";
+      choiceLayer.innerHTML=`
+        <div class="lecture-attendance-choice-modal" role="dialog" aria-modal="true" aria-labelledby="scheduleExceptionLectureChoiceTitle">
+          <div class="lecture-mismatch-head">
+            <h2 id="scheduleExceptionLectureChoiceTitle">Lecture ${index+1}</h2>
+            <button type="button" class="lecture-mismatch-close" id="scheduleExceptionLectureChoiceClose" aria-label="Close">×</button>
+          </div>
+          <div style="margin-top:8px;font-size:13px;color:#666">${escapeHtml(lecture[0])} – ${escapeHtml(lecture[1])}</div>
+          <div style="margin-top:2px;font-size:13px;color:#666"><strong>${escapeHtml(lecture[3])}</strong></div>
+          <div class="lecture-adjustment-options">
+            <button type="button" class="lecture-adjustment-option" id="scheduleExceptionSetReplacement">Set Replacement</button>
+            <button type="button" class="lecture-adjustment-option" id="scheduleExceptionSetAdjustment">Set Adjustment</button>
+          </div>
+        </div>`;
+      back.querySelector(".schedule-exception-modal")?.appendChild(choiceLayer);
+      const closeChoice=()=>choiceLayer.remove();
+      choiceLayer.addEventListener("click",e=>e.stopPropagation());
+      choiceLayer.querySelector("#scheduleExceptionLectureChoiceClose").onclick=closeChoice;
+      choiceLayer.querySelector("#scheduleExceptionSetReplacement").onclick=()=>{closeChoice();openScheduleExceptionReplacementDialog(dateKey,index,lecture);};
+      choiceLayer.querySelector("#scheduleExceptionSetAdjustment").onclick=()=>{closeChoice();openScheduleExceptionAdjustmentDialog(dateKey,index,lecture);};
     };
   });
 }
@@ -15028,19 +15309,18 @@ function renderSemDaySlide(d){
     }
     const rec=semState.lectures[recordKey]; const status=noClassException ? "nc" : (rec?.status||"pending");
     const ncReasonClass=noClassException==="surprise" ? "nc-class-test" : noClassException==="surprise-new" ? "nc-surprise-test" : "";
-    const assessmentAttendedClass=lectureAttendanceDisplayClass(recordKey,status);
 
     // V22.23_Testing_1.9 — Adjustment Period is independent from Schedule
     // Exception replacements. Keep the original lecture/record key intact
     // for attendance analytics, but display the selected adjustment subject
     // on the Daily Timetable card.
-    const adjustmentSubjectId=(status==="att" && rec?.adjustmentSubject)
-      ? String(rec.adjustmentSubject).trim()
-      : "";
-    const adjustmentSubject=adjustmentSubjectId
-      ? semesterSubjects.find(s=>s.id===adjustmentSubjectId)
-      : null;
+    const configuredAdjustment=getScheduleAdjustmentForLecture(key,c);
+    const adjustmentSubjectId=configuredAdjustment?.subjectId || ((rec?.status==="att" && rec?.adjustmentSubject) ? String(rec.adjustmentSubject).trim() : "");
+    const adjustmentSubject=adjustmentSubjectId ? semesterSubjects.find(s=>s.id===adjustmentSubjectId) : null;
+    const adjustmentStatus=rec?.adjustmentStatus || (configuredAdjustment && rec?.status==="ta" ? "att" : "");
     const displaySubjectName=adjustmentSubject?.name || c[3];
+    const displayStatus=(configuredAdjustment && rec?.status==="ta" && adjustmentStatus) ? adjustmentStatus : status;
+    const assessmentAttendedClass=lectureAttendanceDisplayClass(recordKey,displayStatus);
     if(isFutureDate){
       return `<div class="week-lecture future-lecture"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(c[3])}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status pending">Not marked</span><button class="week-dots disabled" type="button" disabled aria-label="Attendance unavailable for future date" title="Attendance unavailable for future date">⋮</button></div></div>`;
     }
@@ -15054,7 +15334,7 @@ function renderSemDaySlide(d){
 
     const progress=lectureProgressPercent(key,c[0],c[1]);
     const currentLectureClass=(progress>0 && progress<100) ? " is-current-lecture" : "";
-    return `<div class="week-lecture${currentLectureClass}" data-progress-date="${key}" data-start="${escapeHtml(c[0])}" data-end="${escapeHtml(c[1])}" style="--lecture-progress:${progress}%"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(displaySubjectName)}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${status}${status==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(status)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div></div>`;
+    return `<div class="week-lecture${currentLectureClass}" data-progress-date="${key}" data-start="${escapeHtml(c[0])}" data-end="${escapeHtml(c[1])}" style="--lecture-progress:${progress}%"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(displaySubjectName)}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${displayStatus}${displayStatus==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(displayStatus)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div></div>`;
   }).join("")}</div></div>`;
 }
 
@@ -15306,9 +15586,16 @@ function openLectureAttendanceChoice(recordKey,originalSubject){
     const action=btn.dataset.attendanceAction;
 
     if(action==="att"){
-      back.classList.remove("open");
-      back.dataset.childDialog="attended";
-      openLectureAttendanceAdjustment(recordKey,originalSubject);
+      close();
+      if(applyScheduleAdjustedAttendance(recordKey,originalSubject,"att")) return;
+      if(isBeforeCollegeJoiningDate(String(recordKey||"").split("|")[0]))return;
+      if(isInvictusProtectedTeacherAbsent(recordKey) || isInvictusProtectedFreePeriod(recordKey))return;
+      semState.lectures=semState.lectures || {};
+      delete semState.noClassExceptions[recordKey];
+      semState.lectures[recordKey]={subject:originalSubject,date:recordKey.split("|")[0],status:"att"};
+      saveSem();
+      v20RunNotificationChecks();
+      renderSemester();
       return;
     }
     if(action==="nc"){
@@ -15319,15 +15606,13 @@ function openLectureAttendanceChoice(recordKey,originalSubject){
     }
 
     close();
-
+    if(applyScheduleAdjustedAttendance(recordKey,originalSubject,action)) return;
     if(isBeforeCollegeJoiningDate(String(recordKey||"").split("|")[0]))return;
     if(isInvictusProtectedTeacherAbsent(recordKey) || isInvictusProtectedFreePeriod(recordKey))return;
+    semState.noClassExceptions=semState.noClassExceptions || {};
     delete semState.noClassExceptions[recordKey];
-    semState.lectures[recordKey]={
-      subject:originalSubject,
-      date:recordKey.split("|")[0],
-      status:action
-    };
+    semState.lectures=semState.lectures || {};
+    semState.lectures[recordKey]={subject:originalSubject,date:recordKey.split("|")[0],status:action};
     saveSem();
     v20RunNotificationChecks();
     renderSemester();
