@@ -633,6 +633,10 @@
 <!-- V23.28: Added a confirmation step to Set Adjustment so Apply now asks the user to confirm the selected adjustment before committing it. No returns to the Adjustment dialog; Yes applies the adjustment and returns to Schedule Exception. Existing same-subject validation, navigation, storage, and Adjustment business logic remain unchanged. -->
 <!-- V23.29: Fixed stale Adjustment state when an existing Replacement is changed to a new Replacement on the same date + lecture slot. The old slot-specific Adjustment is cleared when the Replacement changes; all other Replacement, Adjustment, attendance, navigation, and storage behavior remains unchanged. -->
 <!-- V23.30: Reorganized the V23 Version History into strict chronological order through V23.30 and updated the application title to V23.30. No application, data, storage, or runtime behavior changed. -->
+<!-- V24.1: Reorganized All Submitted Results into semester-specific sections using the existing central semester date configuration. Only semesters whose configured START date has been reached are shown; each visible semester remains collapsed by default and contains its own Subject, Surprise Tests, and Exam Results directories. Existing submitted-result records are classified by their result date and all result data, sorting, editing, deletion, pending-result handling, and storage behavior remain unchanged. -->
+<!-- V24.2: Added a persistent Set Semester preference in Settings with Semester 1–6 and All options. A selected semester opens directly in Lecture Breakdown, All Submitted Results, and Weekly Timetable; All keeps the existing semester-selection list behavior. The preference is stored until changed and is included in reset/backup handling. -->
+<!-- V24.3: All Submitted Results → Subject now shows only subjects with at least one completed submitted result in that semester. Zero-result subjects are hidden and the Subject section automatically fits the remaining entries; counters and all existing result behavior remain unchanged. -->
+<!-- V24.4: Rewrote the in-app User Guide from the current V24.3 user-facing behavior for new users. Clarified daily attendance, lecture marking, Schedule Exception, Adjustment/Replacement, Set to Default, semester-aware results, hidden zero-result subjects, Set Semester, Dashboard, notifications, backup/reset, and the recommended daily workflow. Help content only; no application/data behavior changed. -->
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -715,7 +719,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V23.30</title>
+<title>Invictus V24.4</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -767,6 +771,23 @@
   border-top:1px solid #f0f0f0;
   margin:0 0 12px;
 }
+
+  /* V24.2 — persistent default-semester preference */
+  .settings-semester-current{display:block;margin-top:3px;font-size:calc(12px * var(--invictus-font-scale));color:#777;font-weight:500}
+  .semester-preference-backdrop{align-items:center;justify-content:center;padding:14px;z-index:12000}
+  .semester-preference-modal{width:min(420px,100%);max-height:88vh;overflow-y:auto;background:#fff;color:#222;border:1px solid #e4e4e4;border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.25)}
+  .semester-preference-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+  .semester-preference-head h2{margin:0;font-size:20px}
+  .semester-preference-close{width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:#666;font-size:26px;line-height:1;cursor:pointer}
+  .semester-preference-options{display:grid;gap:9px}
+  .semester-preference-option{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border:1px solid #e3e3e3;border-radius:13px;background:#fff;color:inherit;font:inherit;text-align:left;font-weight:750;cursor:pointer}
+  .semester-preference-option.selected{background:#f0ebff;border-color:var(--purple);color:var(--purple)}
+  .semester-preference-option-mark{font-size:18px;opacity:0}
+  .semester-preference-option.selected .semester-preference-option-mark{opacity:1}
+  html[data-theme="dark"] .semester-preference-modal{background:#181818;color:#f3f3f3;border-color:#333}
+  html[data-theme="dark"] .semester-preference-option{background:#202020;border-color:#333}
+  html[data-theme="dark"] .semester-preference-option.selected{background:#2a2145;border-color:#8c72e8;color:#d8ccff}
+  html[data-theme="dark"] .settings-semester-current{color:#aaa}
 
   /* V16.6.1 — Semester tab Card 1.1: Lectures breakdown. */
   /* V19.4 Testing — Semester card active-border highlighting. UI-only. */
@@ -1554,6 +1575,17 @@
   .surprise-test-row-detail{margin-top:3px;color:#777;font-size:calc(12px * var(--invictus-font-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .surprise-test-score{font-size:calc(17px * var(--invictus-font-scale));font-weight:900;color:var(--purple);white-space:nowrap}
   .surprise-test-empty{margin-top:10px;color:#777;font-size:calc(13px * var(--invictus-font-scale));text-align:center}
+  .submitted-results-semester-list{display:grid;gap:8px;padding:10px 0 2px}
+  .submitted-results-semester-card{border:1px solid var(--line);border-radius:12px;background:#fafafa;overflow:hidden}
+  .submitted-results-semester-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 13px;border:0;background:transparent;color:inherit;font:inherit;font-weight:800;text-align:left;cursor:pointer}
+  .submitted-results-semester-head[aria-expanded="true"]{background:#f0ebff;color:var(--purple)}
+  .submitted-results-semester-label{min-width:0}
+  .submitted-results-semester-chevron{color:#777;font-size:21px;line-height:1;transition:transform .18s ease}
+  .submitted-results-semester-head[aria-expanded="true"] .submitted-results-semester-chevron{transform:rotate(90deg);color:var(--purple)}
+  .submitted-results-semester-content{padding:0 10px 10px}
+  .submitted-results-semester-content[hidden]{display:none !important}
+  html[data-theme="dark"] .submitted-results-semester-card{background:#181818;border-color:#333}
+  html[data-theme="dark"] .submitted-results-semester-head[aria-expanded="true"]{background:#2a2145;color:var(--purple)}
   .surprise-test-subject-card{border:1px solid var(--line);border-radius:10px;background:#fafafa;overflow:hidden}
   .surprise-test-direct-card{width:100%;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer;}
   .surprise-test-subject-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border:0;background:transparent;color:inherit;font:inherit;font-weight:800;text-align:left;cursor:pointer}
@@ -5355,178 +5387,166 @@ function getHardcodedSpecialDay(dateKey){
 
     <div class="user-guide-content">
       <section class="user-guide-intro">
-        <strong>Welcome to INVICTUS.</strong> This guide explains the current app from a student’s point of view — what you see, what to tap, what to choose, and what INVICTUS does next.
+        <strong>Welcome to INVICTUS.</strong> This guide is a simple starting point for a new user. It explains what each main area does, what to tap, and how the app records your attendance, timetable changes, and results.
       </section>
 
       <section class="user-guide-section">
         <h3>🚀 1. Getting Started</h3>
-        <p>On your first use, complete the information INVICTUS asks for, including your <strong>College Joining Date</strong>. After setup, the main areas of the app are <strong>Dashboard</strong>, <strong>Attendance</strong>, <strong>Semester</strong>, and <strong>Settings</strong>.</p>
-        <div class="user-guide-action"><strong>Record your day</strong><span>Attendance → Submit Your Attendance</span></div>
-        <div class="user-guide-action"><strong>See and mark individual lectures</strong><span>Semester → Daily Timetable</span></div>
-        <div class="user-guide-action"><strong>Manage results</strong><span>Semester → All Submitted Results</span></div>
+        <p>After signing in, complete the basic information INVICTUS asks for, especially your <strong>College Joining Date</strong>. The main areas are <strong>Dashboard</strong>, <strong>Attendance</strong>, <strong>Semester</strong>, and <strong>Settings</strong>.</p>
+        <div class="user-guide-action"><strong>Record a college day</strong><span>Attendance → Submit Your Attendance</span></div>
+        <div class="user-guide-action"><strong>Mark individual lectures</strong><span>Semester → Daily Timetable</span></div>
+        <div class="user-guide-action"><strong>Manage submitted results</strong><span>Semester → All Submitted Results</span></div>
         <div class="user-guide-action"><strong>Review progress</strong><span>Dashboard</span></div>
-        <p>When the first-login User Guide is shown, scroll through it and use the <strong>Close</strong> button at the end to enter the app.</p>
+        <p>On the first successful login, the User Guide may open automatically. Scroll to the bottom and tap <strong>Close</strong>.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📊 2. Submit Your Attendance</h3>
-        <p>Use <strong>Attendance → Submit Your Attendance</strong> when you want to record the status of a college day.</p>
-        <p>Choose the status offered for that date, such as <strong>Present</strong>, <strong>Absent</strong>, <strong>Holiday</strong>, or <strong>Blank</strong>, and then complete the reason/details requested by INVICTUS.</p>
-        <p>For a normal college day, <strong>Present</strong> can be submitted during the attendance window. A Present submission after the window is recorded as a <strong>Late Submission</strong>; Present cannot be submitted before the window opens.</p>
-        <p>After submitting, use <strong>Attendance History</strong> to review what you recorded. The daily submission and individual lecture marking are separate parts of the attendance system.</p>
-        <div class="user-guide-note">📌 Your <strong>College Joining Date</strong> controls the earliest date for which you can record your personal attendance.</div>
+        <h3>📅 2. College Joining Date</h3>
+        <p>Your <strong>College Joining Date</strong> defines the earliest date for which INVICTUS lets you record your personal attendance.</p>
+        <p>Set it through <strong>Attendance → Submit Your Attendance</strong> when requested. If you reset all app data, the joining date is cleared and must be entered again.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📅 3. College Joining Date</h3>
-        <p>INVICTUS uses your College Joining Date when deciding which attendance dates are available to you.</p>
-        <p>If INVICTUS asks for it, set it through <strong>Submit Your Attendance</strong>. If you later use <strong>Reset All App Data</strong>, the saved joining date is cleared and must be set again.</p>
+        <h3>📊 3. Submit Your Attendance</h3>
+        <p>Use <strong>Attendance → Submit Your Attendance</strong> to record the status of a college day.</p>
+        <p>Select the available status for that date, such as <strong>Present</strong>, <strong>Absent</strong>, <strong>Holiday</strong>, or <strong>Blank</strong>, then complete the requested reason/details.</p>
+        <p>For a normal college day, use <strong>Present → Regular College Day</strong>. The attendance window controls when a Present submission can be made; submitting after the window is recorded as a <strong>Late Submission</strong>.</p>
+        <p>After submission, use <strong>Attendance History</strong> to review the day. Daily attendance and individual lecture marking are separate.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>📚 4. Daily Timetable</h3>
-        <p>Open <strong>Semester → Daily Timetable</strong> to see the lectures scheduled for a date.</p>
-        <p>Move between dates using the timetable's date controls or calendar. The timetable remains directly swipeable; the old day-position indicator is no longer displayed.</p>
-        <p>Each lecture card shows its scheduled time and subject. Tap the lecture's <strong>3 dots</strong> to open the attendance choices.</p>
-        <p>You can mark the lecture as <strong>Attended</strong>, <strong>Absent</strong>, <strong>Teacher Absent</strong>, or <strong>No Classes</strong>.</p>
-        <p>When you choose <strong>Attended</strong>, INVICTUS submits the attendance directly. If an Adjustment has already been configured for that lecture through Schedule Exception, the adjustment rules are applied automatically.</p>
+        <p>Open <strong>Semester → Daily Timetable</strong> to see the lectures scheduled for a date. Use the date controls, calendar, or swipe to move between days.</p>
+        <p>Tap a lecture's <strong>3 dots</strong> to open its attendance actions:</p>
+        <div class="user-guide-action"><strong>Attended</strong><span>Records the lecture as attended. If an Adjustment is configured, its rules are applied.</span></div>
+        <div class="user-guide-action"><strong>Absent</strong><span>Records the lecture as absent.</span></div>
+        <div class="user-guide-action"><strong>Teacher Absent</strong><span>Records that the teacher was absent.</span></div>
+        <div class="user-guide-action"><strong>No Classes</strong><span>Records that the lecture did not take place.</span></div>
       </section>
 
       <section class="user-guide-section">
-        <h3>🔄 5. Adjustment Period</h3>
-        <p>Use <strong>Adjustment Period</strong> when you attended a different subject during the selected lecture's scheduled time.</p>
-        <div class="user-guide-action"><strong>Choose Adjustment</strong><span>Daily Timetable → Schedule Exception → Lecture → Set Adjustment</span></div>
-        <p>INVICTUS opens the <strong>Adjustment Period</strong> selection. Choose a category — <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong> — and select the subject/class that should receive the attendance status for that lecture slot.</p>
-        <p>The option list can be scrolled inside the dialogue. The page behind it is locked while you are choosing the adjustment, so accidental background scrolling or interaction does not change the flow.</p>
-        <p>Tap <strong>Apply</strong> after selecting the subject. If you edit an existing Adjustment Period later, the complete Subjects/Lab/Others lists remain available, including the lecture's original scheduled subject.</p>
-        <p>Selecting the original scheduled subject when editing clears the adjustment and returns the lecture to its normal scheduled subject.</p>
-        <div class="user-guide-note">💡 An Adjustment keeps the scheduled lecture as the original lecture for tracking, but when you mark attendance, the original lecture is recorded as <strong>Teacher Absent</strong> and the selected adjustment subject receives the attendance status you choose.</div>
+        <h3>🕐 5. Schedule Exception</h3>
+        <p>Use <strong>Schedule Exception</strong> when the timetable for a particular college day is different from the normal schedule.</p>
+        <p>On an eligible <strong>Present → Regular College Day</strong>, tap the <strong>🕐 clock</strong> to see that day's scheduled lectures. Tap a lecture to choose <strong>Set Replacement</strong> or <strong>Set Adjustment</strong>.</p>
+        <div class="user-guide-action"><strong>Set Replacement</strong><span>Changes which lecture occupies that timetable slot.</span></div>
+        <div class="user-guide-action"><strong>Set Adjustment</strong><span>Keeps the scheduled lecture for timetable/lecture tracking but sends the attendance credit to the selected subject when marked.</span></div>
+        <p>Replacement changes are confirmed before they are applied. After applying one, Schedule Exception reopens and shows the updated lecture. Other lecture slots are unchanged.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>🕐 6. Schedule Exception</h3>
-        <p>Schedule Exception is for a date when your actual timetable differs from the normal timetable.</p>
-        <p>From <strong>24 September 2026</strong> onward, the <strong>🕐 clock</strong> is available for a date recorded as <strong>Present → Regular College Day</strong>. It is not shown for dates such as Absent, Holiday, Blank, unmarked dates, or other Present reasons.</p>
-        <p>Tap the clock to open <strong>Schedule Exception</strong>. The screen lists the lectures for that date.</p>
-        <p>Tap a lecture to open a choice menu with <strong>Set Replacement</strong> and <strong>Set Adjustment</strong>. Choose <strong>Set Replacement</strong> to open the existing <strong>Replace Lecture</strong> system, or choose <strong>Set Adjustment</strong> to open the Adjustment Period selection.</p>
-        <p><strong>Replacement</strong> changes which lecture occupies that scheduled slot. <strong>Adjustment</strong> keeps the scheduled lecture identity but changes which subject receives the attendance status when the lecture is marked.</p>
-        <p><strong>PST</strong> is available in Subjects, and <strong>PST LAB</strong> is displayed with that exact name wherever applicable.</p>
-        <p>Selecting a replacement opens <strong>Confirm Replacement</strong>. Choose <strong>Yes</strong> to apply it or <strong>No</strong> to return to the replacement choices. Use <strong>×</strong> on the replacement screen to return to Schedule Exception without applying a replacement.</p>
-        <p>After applying a replacement, Schedule Exception opens again and shows the updated lecture. Other lectures on that date are not changed.</p>
+        <h3>🔄 6. Adjustment Period</h3>
+        <p>Use an <strong>Adjustment</strong> when you attended a different subject during a scheduled lecture period.</p>
+        <p>Go to <strong>Daily Timetable → 🕐 Schedule Exception → Lecture → Set Adjustment</strong>. Choose from <strong>Subjects</strong>, <strong>Lab</strong>, or <strong>Others</strong>, select the class, then tap <strong>Apply</strong>.</p>
+        <p>The selection list scrolls inside the dialogue. When an Adjustment is used for attendance, the original scheduled lecture remains the tracked lecture and is recorded as <strong>Teacher Absent</strong>, while the selected adjustment subject receives the attendance status you choose.</p>
+        <p>When editing an existing Adjustment, selecting the original scheduled subject removes that Adjustment.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>↩️ 7. Set to Default</h3>
-        <p>Inside <strong>Schedule Exception</strong>, the current timetable card can be used to return changed timetable parts to the default timetable.</p>
-        <p>If only one type of change exists, INVICTUS opens the confirmation for that specific change.</p>
-        <p>If both an <strong>Adjustment</strong> and a <strong>Replacement</strong> exist, INVICTUS first shows <strong>What do you want to Default?</strong> with three choices:</p>
-        <div class="user-guide-action"><strong>Adjustment</strong><span>Default only the Adjustment Period change.</span></div>
-        <div class="user-guide-action"><strong>Replacement</strong><span>Default only the replaced lecture change.</span></div>
-        <div class="user-guide-action"><strong>Both</strong><span>Default both types of changes for that date.</span></div>
-        <p>After choosing a scope, INVICTUS shows <strong>Set to Default?</strong>. Tap <strong>Yes</strong> to apply the selected defaulting action or <strong>No</strong> to cancel. When both changes were present, <strong>No</strong> returns you to the Adjustment/Replacement/Both selection. Tap <strong>×</strong> there to return to Schedule Exception without making a change.</p>
-        <div class="user-guide-note">📌 Set to Default is not a generic app reset. It only restores the selected timetable change(s) for the current date.</div>
+        <p>Use <strong>Set to Default</strong> inside Schedule Exception when you want to remove a timetable change for that date.</p>
+        <p>If both types exist, choose what to restore:</p>
+        <div class="user-guide-action"><strong>Adjustment</strong><span>Remove only the Adjustment.</span></div>
+        <div class="user-guide-action"><strong>Replacement</strong><span>Remove only the Replacement.</span></div>
+        <div class="user-guide-action"><strong>Both</strong><span>Remove both changes.</span></div>
+        <p>Confirm with <strong>Yes</strong>. Choosing <strong>No</strong> leaves the change untouched.</p>
+        <div class="user-guide-note">📌 Set to Default changes the selected timetable exception only. It is not the same as Reset All App Data.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>🔎 8. Unmarked Lectures &amp; Attendance Review</h3>
-        <p>Use <strong>Check Unmarked Lectures</strong> to find eligible lectures from previous dates that still need an attendance mark. The check does not treat today's unfinished lectures as previous-date unmarked lectures.</p>
-        <p>Use <strong>Lecture Wise Percentage</strong> and <strong>Lectures Breakdown</strong> to review attendance at lecture level and understand how your recorded outcomes are distributed.</p>
-        <p>Adjustment Period attendance remains distinguishable from normal <strong>Attended</strong> credit in the attendance views.</p>
+        <h3>🔎 8. Attendance Review</h3>
+        <p>Use <strong>Check Unmarked Lectures</strong> to find eligible lectures from previous dates that still need a mark. Today's unfinished lectures are not treated as previous-day unmarked lectures.</p>
+        <p>Use <strong>Lecture Wise Percentage</strong> and <strong>Lecture Breakdown</strong> to understand lecture-level attendance and the different recorded outcomes, including Adjustment Period attendance.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>🏖️ 9. Holidays &amp; Special Days</h3>
-        <p>Some college holidays are already recorded in INVICTUS. They appear as <strong>Holiday</strong> in the relevant attendance views.</p>
-        <p>Protected holidays cannot be changed through the normal attendance controls.</p>
-        <p><strong>23 September 2026 — Shaheed-Diwas</strong> is a protected holiday recorded by INVICTUS.</p>
+        <p>Recorded college holidays appear as <strong>Holiday</strong> in the relevant attendance views. Protected holidays cannot be changed through normal attendance controls.</p>
+        <p>Use the attendance status and reason shown by INVICTUS for the date instead of trying to mark individual lectures on a non-college day.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>📝 10. Results</h3>
-        <p>Open <strong>Semester → All Submitted Results</strong> to manage the results you have submitted.</p>
-        <p><strong>Subject Results</strong> — Open a subject to view its submitted results. Where supported, you can edit or delete an entry.</p>
-        <p><strong>Surprise Tests</strong> — Add and manage surprise-test results. The Surprise Tests card shows the number of submitted/completed Surprise Tests when that count is greater than zero.</p>
-        <p><strong>Class Tests</strong> — Enter <strong>Total Marks</strong> and then <strong>Marks Gained</strong> as requested by the form.</p>
-        <p><strong>Exam Results</strong> — Complete the required information and use <strong>Next</strong> until the confirmation screen. Choose <strong>Yes</strong> to submit or <strong>No</strong> to return with your draft. Successfully submitted Exam Results cannot be deleted.</p>
-        <p>Use the <strong>🔔 Bell</strong> to find <strong>Pending Results</strong> that still need to be completed.</p>
+        <h3>📝 10. All Submitted Results</h3>
+        <p>Open <strong>Semester → All Submitted Results</strong> to manage submitted results. Results are organized by semester using the app's semester dates.</p>
+        <p>Inside a semester, the <strong>Subject</strong> section shows only subjects that actually have at least one completed submitted result. Subjects with no submitted result stay hidden, and the number beside each visible subject shows its result count.</p>
+        <p><strong>Surprise Tests</strong> and <strong>Exam Results</strong> remain separate result areas. Their existing counters, pending handling, editing, deletion rules, and submission flows continue to apply.</p>
+        <p>Tap the <strong>🔔 Bell</strong> when you need to find <strong>Pending Results</strong>.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>↕️ 11. Sorting Submitted Results</h3>
-        <p>Inside a Submitted Results directory, tap <strong>Sort by ▾</strong> to change the order in which results are displayed.</p>
-        <div class="user-guide-action"><strong>Newest on Top</strong><span>Shows the most recently submitted results first.</span></div>
-        <div class="user-guide-action"><strong>Oldest on Top</strong><span>Shows the earliest submitted results first.</span></div>
-        <div class="user-guide-action"><strong>Arrange in Ascending</strong><span>Arranges results using their latest activity order.</span></div>
-        <div class="user-guide-action"><strong>Arrange in Descending</strong><span>Arranges results using the reverse latest-activity order.</span></div>
-        <p>Sorting changes only the current view. When the results directory is closed, the temporary sort choice is discarded.</p>
+        <p>Inside a submitted-results directory, tap <strong>Sort by ▾</strong> to change the current display order.</p>
+        <div class="user-guide-action"><strong>Newest on Top</strong><span>Most recently submitted first.</span></div>
+        <div class="user-guide-action"><strong>Oldest on Top</strong><span>Earliest submitted first.</span></div>
+        <div class="user-guide-action"><strong>Arrange in Ascending</strong><span>Uses latest activity order.</span></div>
+        <div class="user-guide-action"><strong>Arrange in Descending</strong><span>Uses the reverse latest-activity order.</span></div>
+        <p>The selected sort is temporary and resets when the results directory is closed.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>📈 12. Dashboard</h3>
-        <p>Open <strong>Dashboard</strong> to review your timetable and attendance progress without changing your records.</p>
-        <p><strong>Weekly Timetable</strong> — View your weekly schedule.</p>
-        <p><strong>Monthly - Lectures Status</strong> — Review lecture status for the month.</p>
-        <p><strong>Monthly Report</strong> — Review monthly attendance.</p>
-        <p><strong>Semester - Lectures Status</strong> — Review semester lecture progress.</p>
-        <p><strong>Semester Report</strong> — Review semester attendance.</p>
+        <p><strong>Dashboard</strong> is your progress overview. It lets you review information without changing your records.</p>
+        <div class="user-guide-action"><strong>Weekly Timetable</strong><span>View the weekly schedule for the selected semester.</span></div>
+        <div class="user-guide-action"><strong>Monthly - Lectures Status</strong><span>Review lecture status for the month.</span></div>
+        <div class="user-guide-action"><strong>Monthly Report</strong><span>Review monthly attendance.</span></div>
+        <div class="user-guide-action"><strong>Semester - Lectures Status</strong><span>Review semester lecture progress.</span></div>
+        <div class="user-guide-action"><strong>Semester Report</strong><span>Review semester attendance.</span></div>
       </section>
 
       <section class="user-guide-section">
         <h3>👤 13. Profile &amp; Account</h3>
-        <p>Open <strong>Settings → Account</strong> to manage your account information.</p>
-        <p><strong>Upload profile photo</strong> — Use the profile-photo option and choose a photo.</p>
-        <p><strong>View profile photo</strong> — Tap your uploaded photo in the header to open it in the viewer.</p>
-        <p><strong>Delete profile photo</strong> — In the viewer, tap <strong>🗑️ Delete</strong>, then confirm with <strong>Yes</strong> or keep it with <strong>No</strong>.</p>
-        <p><strong>Change Name / Change Gmail</strong> — Use the corresponding Account options.</p>
-        <p><strong>Log out</strong> — Use Log out when you want to end the current session.</p>
+        <p>Open <strong>Settings → Account</strong> to manage your profile and account.</p>
+        <p><strong>Profile Photo</strong> — Upload, view, or delete your photo. Deletion requires confirmation.</p>
+        <p><strong>Change Name / Change Gmail</strong> — Update the corresponding account information.</p>
+        <p><strong>Set Semester</strong> — Choose <strong>Semester 1–6</strong> to open that semester directly in <strong>Lecture Breakdown</strong>, <strong>All Submitted Results</strong>, and <strong>Weekly Timetable</strong>. Choose <strong>All</strong> to show the semester-selection list each time.</p>
+        <p><strong>Log out</strong> — End the current session.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>⚙️ 14. Settings</h3>
-        <p><strong>Account</strong> — Manage profile and account information.</p>
-        <p><strong>App</strong> — Use the available app refresh/update controls.</p>
-        <p><strong>Notifications</strong> — Control attendance and lecture reminders.</p>
-        <p><strong>Data</strong> — Export a backup, import a compatible backup, or reset app data.</p>
-        <p><strong>Size</strong> — Adjust Font Size and Display Size.</p>
-        <p><strong>Security</strong> — Manage the available Student ID and Password options.</p>
-        <p><strong>Appearance</strong> — Choose Light or Dark mode.</p>
-        <p><strong>Help</strong> — Open this User Guide.</p>
-        <p><strong>About</strong> — View information about INVICTUS.</p>
+        <p>Settings contains the app's account, app, notification, data, display, security, appearance, help, and information controls.</p>
+        <div class="user-guide-action"><strong>Account</strong><span>Profile, account details, Set Semester, and Log out.</span></div>
+        <div class="user-guide-action"><strong>App</strong><span>Available app refresh/update controls.</span></div>
+        <div class="user-guide-action"><strong>Notifications</strong><span>Turn available attendance and lecture reminders on or off.</span></div>
+        <div class="user-guide-action"><strong>Data</strong><span>Export, import, or reset app data.</span></div>
+        <div class="user-guide-action"><strong>Size</strong><span>Adjust Font Size and Display Size.</span></div>
+        <div class="user-guide-action"><strong>Security</strong><span>Manage the available Student ID and Password options.</span></div>
+        <div class="user-guide-action"><strong>Appearance</strong><span>Choose Light or Dark mode.</span></div>
+        <div class="user-guide-action"><strong>Help / About</strong><span>Open this guide or view information about INVICTUS.</span></div>
       </section>
 
       <section class="user-guide-section">
         <h3>🔔 15. Notification Centre</h3>
         <p>Tap the <strong>bell</strong> to open the Notification Centre.</p>
-        <p><strong>Submit Your Attendance</strong> can remind you when today's attendance has not been submitted during the applicable attendance window.</p>
+        <p><strong>Submit Your Attendance</strong> can remind you when today's attendance has not been submitted during the applicable window.</p>
         <p><strong>Mark Your Today Lecture</strong> can remind you when an eligible lecture has ended and still needs to be marked.</p>
-        <p>Use <strong>Settings → Notifications</strong> to turn the available reminders on or off.</p>
-        <div class="user-guide-note">🔔 INVICTUS notifications are shown inside the app.</div>
+        <p>Use <strong>Settings → Notifications</strong> to control the available reminders. INVICTUS notifications are shown inside the app.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>💾 16. Backup &amp; Reset</h3>
-        <p><strong>Export Data</strong> — Create a backup of your INVICTUS records.</p>
-        <p><strong>Import Data</strong> — Restore data from a compatible INVICTUS backup.</p>
-        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your saved application records and your College Joining Date. Use it only when you intentionally want to start again.</div>
+        <p><strong>Export Data</strong> creates a backup of your INVICTUS records. <strong>Import Data</strong> restores data from a compatible INVICTUS backup.</p>
+        <p>Your saved <strong>Set Semester</strong> preference is included in the app's backup/reset handling.</p>
+        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your saved application records and College Joining Date, and resets saved app preferences. Use it only when you intentionally want to start again.</div>
       </section>
 
       <section class="user-guide-section">
         <h3>💡 17. Quick Daily Routine</h3>
-        <p>1. Open <strong>Submit Your Attendance</strong> and record the day's attendance.</p>
-        <p>2. Open <strong>Daily Timetable</strong> and mark each lecture after it is completed.</p>
-        <p>3. Use <strong>Adjustment Period</strong> only when you attended a different subject during a scheduled period.</p>
-        <p>4. If the college timetable changed, use the <strong>🕐 Schedule Exception</strong> control when it is available.</p>
-        <p>5. Check the <strong>bell</strong> for pending reminders/results.</p>
-        <p>6. Use <strong>Dashboard</strong> to review your progress.</p>
+        <p>1. Record the day's attendance in <strong>Submit Your Attendance</strong>.</p>
+        <p>2. Open <strong>Daily Timetable</strong> and mark each completed lecture.</p>
+        <p>3. Use <strong>Schedule Exception → Set Adjustment</strong> only when you attended a different subject during a scheduled period.</p>
+        <p>4. Use <strong>Schedule Exception → Set Replacement</strong> when the lecture occupying a slot actually changed.</p>
+        <p>5. Check the <strong>bell</strong> for reminders and pending results.</p>
+        <p>6. Review <strong>Dashboard</strong> and <strong>Lecture Breakdown</strong> to understand your progress.</p>
       </section>
 
       <section class="user-guide-section user-guide-last">
         <h3>✅ 18. You're Ready to Use INVICTUS</h3>
-        <p><strong>Attendance</strong> records your day, <strong>Semester</strong> handles your timetable and results, <strong>Dashboard</strong> helps you review progress, and <strong>Settings</strong> manages your account and preferences.</p>
-        <p>Whenever you need help, open <strong>Help → User Guide</strong> and return to the section you need.</p>
+        <p><strong>Attendance</strong> records your college day, <strong>Semester</strong> handles your timetable and results, <strong>Dashboard</strong> shows your progress, and <strong>Settings</strong> manages your account and app preferences.</p>
+        <p>For the most accurate workflow, remember: <strong>daily attendance first → lecture marking → exceptions only when needed → check results and progress.</strong></p>
+        <p>Whenever you need help, open <strong>Help → User Guide</strong> and return to the relevant section.</p>
       </section>
       <button class="primary user-guide-bottom-close" id="closeUserGuideBottom" type="button">Close</button>
-    </div>
+    </div></div>
 
   </div>
 </div>
@@ -6090,6 +6110,7 @@ async function buildDataBackup(){
   // V16 configuration travels with the backup so a restore preserves
   // the semester boundaries and semester-specific weekly timetable mapping.
   data.semesterConfig=SEMESTER_CONFIG;
+  data.semesterPreference=getInvictusSemesterPreference();
 
   // Weekly timetable images are application assets, not user data. Keep them
   // out of exported JSON so backups remain small. The timetable itself is
@@ -6186,6 +6207,10 @@ async function importDataJson(jsonText){
         V16_SEMESTER_CONFIG_KEY,
         JSON.stringify(backup.data.semesterConfig)
       );
+    }
+
+    if(backup.data.semesterPreference!==undefined){
+      setInvictusSemesterPreference(backup.data.semesterPreference);
     }
 
     if(backup.data.semesterTimetableConfig!==undefined){
@@ -6992,7 +7017,7 @@ function closeSettingsReset(){
 
 async function resetAllAppData(){
   try{
-    [...DATA_BACKUP_KEYS, "bcaName", "bcaEmail", "bcaPhoto", "attendanceHistoryHidden", "bcaPatch6TodayCleanup", V20_1_NOTIFICATION_HISTORY_KEY, V20_1_NOTIFICATION_SETTINGS_KEY].forEach(key=>localStorage.removeItem(key));
+    [...DATA_BACKUP_KEYS, "bcaName", "bcaEmail", "bcaPhoto", "attendanceHistoryHidden", "bcaPatch6TodayCleanup", V20_1_NOTIFICATION_HISTORY_KEY, V20_1_NOTIFICATION_SETTINGS_KEY, V24_2_SEMESTER_PREFERENCE_KEY].forEach(key=>localStorage.removeItem(key));
     localStorage.removeItem(INVICTUS_COLLEGE_JOINING_DATE_KEY_PREFIX + getLoggedInStudentIdSafe());
     localStorage.removeItem(APPEARANCE_KEY);
     localStorage.removeItem(INVICTUS_FONT_SIZE_KEY);
@@ -8682,19 +8707,22 @@ function renderSemester1NativeTimetable(){
 }
 
 function renderWeeklyTimetableSemesterList(){
-  return Array.from({length:6},(_,i)=>{
-    const n=i+1;
-    if(!v16SemesterUnlocked(n))return "";
+  const semesterPreference=getInvictusSemesterPreference();
+  const semesters=semesterPreference==="all"
+    ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+    : [Number(semesterPreference)];
+  return semesters.map(n=>{
+    const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
     return `<button type="button"
         class="schedule-semester-card"
         id="scheduleWeeklyTimetableSemester${n}"
-        aria-expanded="false">
+        aria-expanded="${defaultOpen}">
       <span>Semester ${n} (${v16ShortSemesterDateRange(n)})</span>
       <span class="schedule-collapsible-chevron" aria-hidden="true">›</span>
     </button>
     <div class="schedule-semester-content"
          id="scheduleWeeklyTimetableSemester${n}Content"
-         hidden>
+         ${defaultOpen ? "" : "hidden"}>
       <div class="schedule-semester-divider"></div>
       ${n===1 ? renderSemester1NativeTimetable() : ""}
     </div>`;
@@ -8859,6 +8887,12 @@ function renderTimetable(){
     if(scheduleWeeklyTimetableExpanded){
       timetableContent?.removeAttribute("hidden");
       ensureSemesterExpandedContentVisible(timetableDisclosure?.closest(".schedule-collapsible-card"));
+      if(getInvictusSemesterPreference()!=="all"){
+        const n=getInvictusSemesterPreference();
+        const button=document.getElementById(`scheduleWeeklyTimetableSemester${n}`);
+        const panel=document.getElementById(`scheduleWeeklyTimetableSemester${n}Content`);
+        if(button && panel){button.setAttribute("aria-expanded","true");panel.hidden=false;}
+      }
     }else{
       /* Collapsing 1.1 also collapses every expanded child semester/data
          panel, so reopening 1.1 always starts at the clean parent level. */
@@ -9513,6 +9547,73 @@ function v20InitNotifications(){
   document.getElementById("invictusNotificationButton")?.addEventListener("click",v20OpenNotificationDialog);
 }
 
+// [V24.2 SETTINGS / SEMESTER PREFERENCE]
+const V24_2_SEMESTER_PREFERENCE_KEY="invictus_default_semester_preference";
+function getInvictusSemesterPreference(){
+  try{
+    const raw=String(localStorage.getItem(V24_2_SEMESTER_PREFERENCE_KEY)||"all").trim().toLowerCase();
+    if(raw==="all")return "all";
+    const n=Number(raw);
+    return Number.isInteger(n) && n>=1 && n<=6 ? String(n) : "all";
+  }catch(e){
+    return "all";
+  }
+}
+function getInvictusSemesterPreferenceLabel(value=getInvictusSemesterPreference()){
+  return value==="all" ? "All (choose every time)" : `Semester ${value}`;
+}
+function setInvictusSemesterPreference(value){
+  const normalized=String(value||"").toLowerCase()==="all" ? "all" : String(Number(value));
+  if(normalized!=="all" && !/^[1-6]$/.test(normalized))return false;
+  try{
+    localStorage.setItem(V24_2_SEMESTER_PREFERENCE_KEY,normalized);
+    return getInvictusSemesterPreference()===normalized;
+  }catch(e){
+    return false;
+  }
+}
+function closeInvictusSemesterPreferenceDialog(){
+  const back=document.getElementById("semesterPreferenceBackdrop");
+  if(back)back.remove();
+  document.documentElement.classList.remove("sem-calendar-locked");
+  document.body.classList.remove("sem-calendar-locked");
+}
+function openInvictusSemesterPreferenceDialog(){
+  closeInvictusSemesterPreferenceDialog();
+  const current=getInvictusSemesterPreference();
+  const back=document.createElement("div");
+  back.id="semesterPreferenceBackdrop";
+  back.className="sem-calendar-backdrop semester-preference-backdrop open";
+  back.setAttribute("role","dialog");
+  back.setAttribute("aria-modal","true");
+  back.setAttribute("aria-labelledby","semesterPreferenceTitle");
+  const options=[1,2,3,4,5,6,"all"];
+  back.innerHTML=`<div class="semester-preference-modal">
+    <div class="semester-preference-head">
+      <h2 id="semesterPreferenceTitle">Set Semester</h2>
+      <button type="button" class="semester-preference-close" id="semesterPreferenceClose" aria-label="Close">×</button>
+    </div>
+    <div class="semester-preference-options">
+      ${options.map(value=>{
+        const key=String(value);
+        const label=value==="all" ? "All" : `Semester ${value} (${v16ShortSemesterDateRange(value)})`;
+        return `<button type="button" class="semester-preference-option ${current===key?"selected":""}" data-semester-preference="${key}"><span>${label}</span><span class="semester-preference-option-mark">✓</span></button>`;
+      }).join("")}
+    </div>
+  </div>`;
+  document.body.appendChild(back);
+  document.documentElement.classList.add("sem-calendar-locked");
+  document.body.classList.add("sem-calendar-locked");
+  back.querySelector("#semesterPreferenceClose")?.addEventListener("click",closeInvictusSemesterPreferenceDialog);
+  back.addEventListener("click",e=>{if(e.target===back)closeInvictusSemesterPreferenceDialog();});
+  back.querySelectorAll("[data-semester-preference]").forEach(button=>button.addEventListener("click",()=>{
+    const value=button.dataset.semesterPreference;
+    if(!setInvictusSemesterPreference(value))return;
+    closeInvictusSemesterPreferenceDialog();
+    if(typeof renderSettings==="function")renderSettings();
+  }));
+}
+
 // [V22.14 SETTINGS / PREFERENCES — settings renderer]
 function renderSettings(){
   main.innerHTML = `
@@ -9545,6 +9646,13 @@ function renderSettings(){
               <span class="settings-icon">✉️</span>
               <span class="settings-item-text">
                 <span class="settings-item-title">Change Gmail</span>
+              </span>
+            </button>
+            <button class="settings-item" id="setSemesterBtn" type="button">
+              <span class="settings-icon">📚</span>
+              <span class="settings-item-text">
+                <span class="settings-item-title">Set Semester</span>
+                <span class="settings-semester-current">Default: ${getInvictusSemesterPreferenceLabel()}</span>
               </span>
             </button>
             <button class="settings-item settings-danger" id="logoutBtn" type="button">
@@ -12889,9 +12997,51 @@ function renderSurpriseTestCard(){
     ["ca","C.A"],["english","English-I"],["evs","EVS"],["new","French"],["hindi","Hindi"],
     ["iks","IKS"],["mfcs","MFCS-I"],["pst","PST"],["webdev","Web Development"],["calab","CA Lab"],["pstlab","PST Lab"]
   ];
-  const surpriseCompleted=surpriseTestRecordEntries()
-    .filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null)
-    .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+
+  const semesterPreference=getInvictusSemesterPreference();
+  const visibleSemesters=semesterPreference==="all"
+    ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+    : [Number(semesterPreference)];
+  const semesterCards=visibleSemesters.map(n=>{
+    const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
+    const subjectButtons=subjectOrder.map(([id,name])=>{
+      const count=surpriseTestEntries().filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===id && submittedResultBelongsToSemester(x,n)).length;
+      if(count===0) return "";
+      return `<button type="button" class="surprise-test-subject-button" data-class-test-subject="${id}" data-results-semester="${n}"><span>${name}</span><span class="surprise-test-subject-count">(${count})</span><span class="surprise-test-subject-chevron" aria-hidden="true">›</span></button>`;
+    }).join("");
+    const subjectSection=subjectButtons ? `<div class="surprise-test-subject-card">
+            <button type="button" class="surprise-test-subject-head" data-results-subject-head="${n}" aria-expanded="false" aria-controls="surpriseTestSubjectContent${n}">
+              <span>Subject</span><span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="surprise-test-subject-content" id="surpriseTestSubjectContent${n}" hidden>
+              <div class="surprise-test-subject-list">${subjectButtons}</div>
+            </div>
+          </div>` : "";
+    const surpriseCount=surpriseTestRecordEntries().filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null && submittedResultBelongsToSemester(x,n)).length;
+    const examCount=examResultEntries().filter(x=>x.status==="Completed" && x.title && x.scoreGained!=null && x.totalMarks!=null && submittedResultBelongsToSemester(x,n)).length;
+    return `<div class="submitted-results-semester-card" data-results-semester-card="${n}">
+      <button type="button" class="submitted-results-semester-head" data-results-semester-head="${n}" aria-expanded="${defaultOpen}" aria-controls="submittedResultsSemester${n}Content">
+        <span class="submitted-results-semester-label">Semester ${n} (${v16ShortSemesterDateRange(n)})</span>
+        <span class="submitted-results-semester-chevron" aria-hidden="true">›</span>
+      </button>
+      <div class="submitted-results-semester-content" id="submittedResultsSemester${n}Content" ${defaultOpen ? "" : "hidden"}>
+        <div class="submitted-results-semester-list">
+          ${subjectSection}
+          <button type="button" class="surprise-test-subject-card surprise-test-direct-card" data-surprise-results-card="${n}">
+            <span class="surprise-test-subject-head">
+              <span>Surprise Tests</span>${surpriseCount ? `<span class="surprise-test-subject-count">(${surpriseCount})</span>` : ""}<span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
+            </span>
+          </button>
+          <button type="button" class="surprise-test-subject-card surprise-test-direct-card" data-exam-results-card="${n}">
+            <span class="surprise-test-subject-head">
+              <span>Exam Results</span>${examCount ? `<span class="surprise-test-subject-count">(${examCount})</span>` : ""}<span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
   return `<div class="card surprise-test-card" id="surpriseTestCard">
     <div class="surprise-test-head">
       <button type="button" class="surprise-test-head-button" id="surpriseTestHead" aria-expanded="false" aria-controls="surpriseTestContent">
@@ -12904,26 +13054,7 @@ function renderSurpriseTestCard(){
     </div>
     <div class="surprise-test-content" id="surpriseTestContent" hidden>
       <div class="surprise-test-list" id="surpriseTestCompletedList">
-        <div class="surprise-test-subject-card" id="surpriseTestSubjectCard">
-          <button type="button" class="surprise-test-subject-head" id="surpriseTestSubjectHead" aria-expanded="false" aria-controls="surpriseTestSubjectContent">
-            <span>Subject</span><span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
-          </button>
-          <div class="surprise-test-subject-content" id="surpriseTestSubjectContent" hidden>
-            <div class="surprise-test-subject-list">
-              ${subjectOrder.map(([id,name])=>{const count=surpriseTestEntries().filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===id).length;return `<button type="button" class="surprise-test-subject-button" data-class-test-subject="${id}"><span>${name}</span>${count>0?`<span class="surprise-test-subject-count">(${count})</span>`:""}<span class="surprise-test-subject-chevron" aria-hidden="true">›</span></button>`}).join("")}
-            </div>
-          </div>
-        </div>
-        <button type="button" class="surprise-test-subject-card surprise-test-direct-card" id="surpriseTestsCard">
-          <span class="surprise-test-subject-head">
-            <span>Surprise Tests</span>${surpriseCompleted.length ? `<span class="surprise-test-subject-count">(${surpriseCompleted.length})</span>` : ""}<span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
-          </span>
-        </button>
-        <button type="button" class="surprise-test-subject-card surprise-test-direct-card" id="examResultsCard">
-          <span class="surprise-test-subject-head">
-            <span>Exam Results</span><span class="surprise-test-subject-head-chevron" aria-hidden="true">›</span>
-          </span>
-        </button>
+        ${semesterCards || '<div class="surprise-test-empty">No semester available yet</div>'}
       </div>
       <div class="surprise-test-pending" id="surpriseTestPendingList">
         ${pending.length ? pending.map(x=>x._pendingType==="exam"
@@ -13036,11 +13167,21 @@ function sortSubmittedResultEntries(items,sortMode="newest"){
   });
 }
 
-function submittedResultsDirectoryItems(kind,subjectId,sortMode="newest"){
+function submittedResultSemesterForRecord(record){
+  if(!record || !record.date) return null;
+  return getSemesterForDate(`${String(record.date).slice(0,10)}T00:00:00`);
+}
+
+function submittedResultBelongsToSemester(record,semester){
+  return Number(submittedResultSemesterForRecord(record))===Number(semester);
+}
+
+function submittedResultsDirectoryItems(kind,subjectId,sortMode="newest",semester=null){
   let items=[];
-  if(kind==="subject") items=surpriseTestEntries().filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===subjectId);
-  else if(kind==="surprise") items=surpriseTestRecordEntries().filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null);
-  else if(kind==="exam") items=examResultEntries().filter(x=>x.status==="Completed" && x.title && x.scoreGained!=null && x.totalMarks!=null);
+  const matchesSemester=record=>semester==null || submittedResultBelongsToSemester(record,semester);
+  if(kind==="subject") items=surpriseTestEntries().filter(x=>x.status==="Completed" && x.scoreGained!=null && x.totalMarks!=null && x.subject===subjectId && matchesSemester(x));
+  else if(kind==="surprise") items=surpriseTestRecordEntries().filter(x=>x.status==="Completed" && x.name && x.scoreGained!=null && x.totalMarks!=null && matchesSemester(x));
+  else if(kind==="exam") items=examResultEntries().filter(x=>x.status==="Completed" && x.title && x.scoreGained!=null && x.totalMarks!=null && matchesSemester(x));
   return sortSubmittedResultEntries(items,sortMode);
 }
 
@@ -13052,7 +13193,7 @@ function renderSubmittedResultsDirectoryItems(){
   const ctx=submittedResultsDirectoryContext;
   const list=document.getElementById("submittedResultsDirectoryList");
   if(!ctx || !list)return;
-  const currentItems=submittedResultsDirectoryItems(ctx.kind,ctx.subjectId,ctx.sortMode||"newest");
+  const currentItems=submittedResultsDirectoryItems(ctx.kind,ctx.subjectId,ctx.sortMode||"newest",ctx.semester);
   if(!currentItems.length){
     list.innerHTML='<div class="submitted-results-directory-empty">No submitted results found !</div>';
   }else{
@@ -13104,12 +13245,13 @@ function closeSubmittedResultsDirectory(){
   submittedResultsDirectoryContext=null;
 }
 
-function openSubmittedResultsDirectory(kind,subjectId=null){
+function openSubmittedResultsDirectory(kind,subjectId=null,semester=null){
   const back=document.getElementById("submittedResultsDirectoryBackdrop"), title=document.getElementById("submittedResultsDirectoryTitle"), list=document.getElementById("submittedResultsDirectoryList");
   if(!back || !title || !list)return;
   const subject=subjectId ? semesterSubjects.find(s=>s.id===subjectId) : null;
   const subjectName=subject?.name || subjectId || "Subject";
-  submittedResultsDirectoryContext={kind,subjectId:subjectId||null,subjectName,sortMode:"newest"};
+  const semesterNumber=semester==null ? null : Number(semester);
+  submittedResultsDirectoryContext={kind,subjectId:subjectId||null,subjectName,semester:semesterNumber,sortMode:"newest"};
   title.textContent=kind==="subject" ? subjectName : (kind==="surprise" ? "Surprise Tests" : "Exam Results");
   resetSubmittedResultsSortUI(); renderSubmittedResultsDirectoryItems(); bindSubmittedResultsDirectorySort(); back.classList.add("open");
 }
@@ -13199,8 +13341,8 @@ function openSurpriseTestResultsModal(testId){
   backdrop.classList.add("stacked-result-report-backdrop","open");
 }
 
-function openClassTestResultsModal(subjectId){
-  openSubmittedResultsDirectory("subject",subjectId);
+function openClassTestResultsModal(subjectId,semester=null){
+  openSubmittedResultsDirectory("subject",subjectId,semester);
 }
 
 function openClassTestSingleResultModal(testId,subjectName){
@@ -13242,19 +13384,7 @@ function confirmClassTestDelete(){
 
   // Preserve the user's current All Sumbitted Results directory state so a
   // delete does not force them to reopen the same cards again.
-  const parentHead=document.getElementById("surpriseTestHead");
-  const parentContent=document.getElementById("surpriseTestContent");
-  const subjectHead=document.getElementById("surpriseTestSubjectHead");
-  const subjectContent=document.getElementById("surpriseTestSubjectContent");
-  const surpriseHead=document.getElementById("surpriseTestsHead");
-  const surpriseContent=document.getElementById("surpriseTestsContent");
-  const directoryState={
-    parentOpen:parentHead?.getAttribute("aria-expanded")==="true",
-    pendingView:parentHead?.getAttribute("aria-expanded")==="true" && document.getElementById("surpriseTestBell")?.getAttribute("aria-expanded")==="true",
-    subjectOpen:subjectHead?.getAttribute("aria-expanded")==="true",
-    surpriseOpen:surpriseHead?.getAttribute("aria-expanded")==="true",
-    examOpen:document.getElementById("examResultsHead")?.getAttribute("aria-expanded")==="true"
-  };
+  const directoryState=captureAllSubmittedDirectoryState();
 
   const {type,id,fromPending}=classTestDeleteContext;
   if(type==="class") delete semState.surpriseTests[id];
@@ -13404,12 +13534,6 @@ function bindSurpriseTestCard(){
     content.hidden=!open;
     head.setAttribute("aria-expanded",String(open));
     document.getElementById("surpriseTestCard")?.classList.toggle("is-open",open);
-    if(!open){
-      const subjectHead=document.getElementById("surpriseTestSubjectHead");
-      const subjectContent=document.getElementById("surpriseTestSubjectContent");
-      if(subjectHead)subjectHead.setAttribute("aria-expanded","false");
-      if(subjectContent)subjectContent.setAttribute("hidden","");
-    }
     renderView();
   };
 
@@ -13420,9 +13544,16 @@ function bindSurpriseTestCard(){
       const otherHead=document.getElementById("semesterBreakdownHead");
       if(otherHead?.getAttribute("aria-expanded")==="true")otherHead.click();
     }
-    const nextOpen=!open;
-    setExpanded(nextOpen);
-    if(nextOpen)ensureSemesterExpandedContentVisible(content);
+    setExpanded(!open);
+    if(!open){
+      ensureSemesterExpandedContentVisible(content);
+      if(getInvictusSemesterPreference()!=="all"){
+        const n=getInvictusSemesterPreference();
+        const button=document.querySelector(`[data-results-semester-head="${n}"]`);
+        const panel=document.getElementById(`submittedResultsSemester${n}Content`);
+        if(button && panel){button.setAttribute("aria-expanded","true");panel.hidden=false;}
+      }
+    }
   };
 
   bell.onclick=(e)=>{
@@ -13430,43 +13561,51 @@ function bindSurpriseTestCard(){
     if(head.getAttribute("aria-expanded")==="true")openPendingResultsDialog();
   };
 
-  const subjectHead=document.getElementById("surpriseTestSubjectHead");
-  const subjectContent=document.getElementById("surpriseTestSubjectContent");
-  if(subjectHead && subjectContent){
-    subjectHead.onclick=(e)=>{
+  completedList.querySelectorAll("[data-results-semester-head]").forEach(button=>{
+    button.onclick=e=>{
       e.stopPropagation();
-      const open=subjectHead.getAttribute("aria-expanded")==="true";
-      if(open){
-        subjectContent.hidden=true;
-        subjectHead.setAttribute("aria-expanded","false");
-        return;
-      }
-      subjectContent.hidden=false;
-      subjectHead.setAttribute("aria-expanded","true");
-      ensureSemesterExpandedContentVisible(subjectContent);
+      const n=button.dataset.resultsSemesterHead;
+      const panel=document.getElementById(`submittedResultsSemester${n}Content`);
+      if(!panel)return;
+      const open=button.getAttribute("aria-expanded")==="true";
+      button.setAttribute("aria-expanded",String(!open));
+      panel.hidden=open;
+      if(!open)ensureSemesterExpandedContentVisible(button.closest(".submitted-results-semester-card") || button);
     };
-  }
-
-  const surpriseTestsCard=document.getElementById("surpriseTestsCard");
-  if(surpriseTestsCard){
-    surpriseTestsCard.onclick=(e)=>{
-      e.stopPropagation();
-      openSubmittedResultsDirectory("surprise");
-    };
-  }
-
-  const examResultsCard=document.getElementById("examResultsCard");
-  if(examResultsCard){
-    examResultsCard.onclick=(e)=>{
-      e.stopPropagation();
-      openSubmittedResultsDirectory("exam");
-    };
-  }
-
-  completedList.querySelectorAll("[data-class-test-subject]").forEach(btn=>btn.onclick=(e)=>{
-    e.stopPropagation();
-    openClassTestResultsModal(btn.dataset.classTestSubject);
   });
+
+  completedList.querySelectorAll("[data-results-subject-head]").forEach(button=>{
+    button.onclick=e=>{
+      e.stopPropagation();
+      const n=button.dataset.resultsSubjectHead;
+      const panel=document.getElementById(`surpriseTestSubjectContent${n}`);
+      if(!panel)return;
+      const open=button.getAttribute("aria-expanded")==="true";
+      button.setAttribute("aria-expanded",String(!open));
+      panel.hidden=open;
+      if(!open)ensureSemesterExpandedContentVisible(button.closest(".submitted-results-semester-card") || button);
+    };
+  });
+
+  completedList.querySelectorAll("[data-class-test-subject]").forEach(btn=>btn.onclick=e=>{
+    e.stopPropagation();
+    openClassTestResultsModal(btn.dataset.classTestSubject,Number(btn.dataset.resultsSemester));
+  });
+
+  completedList.querySelectorAll("[data-surprise-results-card]").forEach(btn=>btn.onclick=e=>{
+    e.stopPropagation();
+    openSubmittedResultsDirectory("surprise",null,Number(btn.dataset.surpriseResultsCard));
+  });
+
+  completedList.querySelectorAll("[data-exam-results-card]").forEach(btn=>btn.onclick=e=>{
+    e.stopPropagation();
+    openSubmittedResultsDirectory("exam",null,Number(btn.dataset.examResultsCard));
+  });
+
+  pendingList.querySelectorAll("[data-pending-exam-result-id]").forEach(btn=>btn.onclick=e=>{e.stopPropagation();openExamResultForm(btn.dataset.pendingExamResultId,true,true);});
+  pendingList.querySelectorAll("[data-pending-surprise-new-id]").forEach(btn=>btn.onclick=e=>{e.stopPropagation();const id=btn.dataset.pendingSurpriseNewId;const rec=semState.surpriseTestRecords?.[id];if(rec)openNoClassSurpriseNewModal(`${rec.date}|${rec.subject}|${rec.time}`,rec.subject,id,false,true);});
+  pendingList.querySelectorAll("[data-pending-surprise-id]").forEach(btn=>btn.onclick=e=>{e.stopPropagation();const id=btn.dataset.pendingSurpriseId;const rec=semState.surpriseTests?.[id];if(rec)openNoClassSurpriseModal(`${rec.date}|${rec.subject}|${rec.time}`,rec.subject,id,false,true);});
+  pendingList.querySelectorAll("[data-pending-delete-type]").forEach(btn=>btn.onclick=e=>{e.stopPropagation();openClassTestDeleteConfirm(btn.dataset.pendingDeleteType,btn.dataset.pendingDeleteId,true);});
 
   renderView();
 }
@@ -13865,15 +14004,19 @@ function renderSemester(){
         </button>
         <div class="semester-breakdown-content" id="semesterBreakdownContent" hidden>
           <div class="semester-breakdown-list">
-            ${Array.from({length:6},(_,i)=>{
-              const n=i+1;
-              if(!v16SemesterUnlocked(n))return "";
+            ${(()=>{
+              const semesterPreference=getInvictusSemesterPreference();
+              const semesters=semesterPreference==="all"
+                ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+                : [Number(semesterPreference)];
+              return semesters.map(n=>{
+              const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
               if(n===1){
-                return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="1" aria-expanded="false" aria-controls="semesterBreakdownSem1Content">
+                return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="1" aria-expanded="${defaultOpen}" aria-controls="semesterBreakdownSem1Content">
                   <span class="semester-breakdown-item-label">Semester 1 (${v16ShortSemesterDateRange(1)})</span>
                   <span class="semester-breakdown-item-chevron" aria-hidden="true">›</span>
                 </button>
-                <div class="semester-breakdown-sem1-content" id="semesterBreakdownSem1Content" hidden>
+                <div class="semester-breakdown-sem1-content" id="semesterBreakdownSem1Content" ${defaultOpen ? "" : "hidden"}>
                   <div class="card sem-total">
                     <div class="sem-total-head">
                       <div><div class="sem-total-title">Total Lectures Attended</div></div>
@@ -13918,11 +14061,12 @@ function renderSemester(){
                   </div>
                 </div>`;
               }
-              return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="${n}" aria-expanded="false">
+              return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="${n}" aria-expanded="${defaultOpen}">
                 <span class="semester-breakdown-item-label">Semester ${n} (${v16ShortSemesterDateRange(n)})</span>
                 <span class="semester-breakdown-item-chevron" aria-hidden="true">›</span>
               </button>`;
-            }).join("")}
+              }).join("");
+            })()}
           </div>
         </div>
       </div>
@@ -13969,6 +14113,12 @@ function renderSemester(){
     if(open){
       semesterBreakdownContent?.removeAttribute("hidden");
       ensureSemesterExpandedContentVisible(semesterBreakdownContent);
+      if(getInvictusSemesterPreference()!=="all"){
+        const n=getInvictusSemesterPreference();
+        const item=document.querySelector(`[data-semester-breakdown="${n}"]`);
+        if(item) item.setAttribute("aria-expanded","true");
+        if(n==="1") semesterBreakdownSem1?.removeAttribute("hidden");
+      }
     }else {
       semesterBreakdownContent?.setAttribute("hidden","");
       semesterBreakdownItems.forEach(item=>item.setAttribute("aria-expanded","false"));
@@ -13988,6 +14138,7 @@ function renderSemester(){
       }
     });
   });
+  if(semSummaryRows && semStatusButton && semStatusMenu && semStatusLabel && semCategoryButton && semCategoryMenu && semCategoryLabel && semCategoryTitle && semStatusPicker && semCategoryPicker){
   const semSummary=document.getElementById("semSummary");
   const semSummaryRows=document.getElementById("semSummaryRows");
   const semStatusPicker=document.getElementById("semStatusPicker");
@@ -14090,6 +14241,7 @@ function renderSemester(){
   };
   document.addEventListener("click",window._semOutsideClickHandler);
 
+  }
   document.getElementById("semCalendarBtn").onclick=()=>{
     const b=document.getElementById("semCalendarBackdrop");
     if(b && b.classList.contains("open")) closeSemCalendar();
@@ -15952,6 +16104,11 @@ function renderSemCalendar(){
     if(id === "menuEmailBtn"){
       const p = getProfile();
       openProfileModal("email", p.email ? "edit" : "add");
+      return;
+    }
+
+    if(id === "setSemesterBtn"){
+      openInvictusSemesterPreferenceDialog();
       return;
     }
 
