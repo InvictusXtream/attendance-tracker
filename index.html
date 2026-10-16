@@ -697,6 +697,8 @@
 <!-- V24.27.1: Fixed the current-lecture Daily Timetable border when the running lecture is the final lecture row. The generic last-child border removal no longer overrides the INVICTUS-purple current-lecture border, so all four sides remain continuously visible. No timetable data, progress calculation, attendance, storage, navigation, or unrelated UI behavior changed. -->
 <!-- V24.27.3: Improved the current-lecture shimmer/border presentation by keeping the animated shimmer and dedicated border overlay visually clear above the lecture content. No timetable data, progress calculation, attendance, storage, navigation, or unrelated functionality changed. -->
 <!-- V24.27.4: Added 02/10/2026 as the protected hardcoded Holiday "Gandhi-Jayanti", using the existing automatic protected-Holiday mechanism. No other functionality changed. -->
+
+<!-- INVICTUS V24.28.x release comments — chronological order -->
 <!-- V24.28.1: From 15/10/2026 onward, Semester 1 Daily Timetable uses the new Section A default schedule. Earlier dates retain their existing dated timetables and historical records. Dashboard → Weekly Timetable → Semester 1 is updated to the same schedule. Existing Schedule Exceptions, lecture marking/analytics, storage, and other approved functionality remain unchanged. -->
 <!-- V24.28.2: Lecture Wise Percentage includes an unmarked lecture as temporary In Progress from its scheduled start until its end. If still unmarked at end time it becomes Absent; explicit marks remain authoritative. In Progress is derived only and is never written to attendance storage. -->
 <!-- V24.28.3: Lecture Wise Percentage now transitions 10/13 → 10/14 at lecture start and 10/14 → 11/14 after an untracked lecture ends, counting the derived automatic Absent in the displayed numerator while keeping the graph red and Daily Timetable Not Tracked. No automatic status is saved; a later explicit user selection takes precedence without double-counting. -->
@@ -711,6 +713,43 @@
 <!-- V24.28.13: Lecture Wise Percentage now follows the currently effective timetable for untracked Adjustment Periods. The original slot keeps its linked Teacher Absent outcome, while the selected adjustment subject receives In Progress from scheduled start through end-time automatic Absent; adjustment-linked numerator credit remains consistent whether the target is tracked or untracked. Dashboard historical lecture analytics also attribute ended untracked adjustments to both linked outcomes. No stored data/schema or unrelated attendance rules changed. -->
 <!-- V24.28.14: Lecture Wise Percentage status bars visually double segments below 10% (with a 4% minimum) and proportionally redistribute remaining width, keeping the bar within 100%. Tooltips/accessibility labels and all attendance calculations retain exact values; display-only change, no storage/schema changes. -->
 <!-- V24.28.15: Lecture Wise Percentage now defaults to a combined performance order using both total lectures and displayed lectures attended (combined score = total + attended), descending; ties use total lectures, then attended, then subject name. The existing manual attendance-percentage sort toggle and close-to-A–Z reset behavior remain unchanged. Display-only; no attendance calculations, data, or storage schema changed. -->
+<!-- V24.28.16: Added a Subject filter to Dashboard → Lecture History. Options are built from the subject IDs in all semester subject catalogs plus legacy subjects found in history records; filtering uses semester + subject ID, so only the selected subject’s entries appear. Status/month filters and existing history records remain unchanged; read-only, no storage/schema changes. -->
+<!-- V24.28.17: Lecture History Subject, Status, and Month filters are arranged in a single three-column row. Layout-only change; filtering behavior and data remain unchanged. -->
+<!-- V24.28.18: Corrected filter layout scope: Attendance History retains its original two-column Status/Month layout; Lecture History alone uses Subject, Status, Month in one row. No filter logic or data changes. -->
+<!-- V24.28.19: Added reusable custom option menus for the five History filters; menus grow to content up to 400px, then scroll. Native select values/events remain the source of truth. -->
+<!-- V24.28.20: Reordered only the Lecture History filter row to Status, Subject, Month. Filter logic, custom dropdown behavior, Attendance History layout, data, and storage remain unchanged. -->
+<!-- V24.28.21: History systems now follow the selected semester. Semester 1 retains its current configured data; Semesters 2–6 display Not Configured in History until configured. Lecture History filters ordered Month, Status, Subject. -->
+<!-- V24.28.22: Reverted an unintended Semester tab main-content replacement from V24.28.21. Existing Semester tab layout/UX is preserved; requested history isolation and Lecture History filter order remain. -->
+<!-- V24.28.23: Fix Lecture Wise Percentage adjustment attribution for all subjects/semesters. Adjustment attendance is credited only to the adjustment subject; the original subject remains Teacher Absent and no longer receives adjustmentNumeratorCredit. Existing automatic-Absent grace numerator behavior is preserved. No storage/schema changes. -->
+<!-- V24.28.24: Add a read-only Lecture Wise Percentage integrity audit for all subjects/semesters. Independently rebuilds status buckets from resolved lecture rows, checks aggregates and validates graph-category totals/percentage arithmetic; displays a warning only when an inconsistency is detected. No saved data/schema changes; graph minimum-width styling remains display-only. -->
+<!-- V24.28.25: Attempted to reset Lecture History filters on close. -->
+<!-- V24.28.26: Reset events now synchronize the custom dropdown labels and selected-option states as well as native select values when Lecture History closes/reopens. -->
+<!-- V24.28.27: Added consistent, subtle transitions for common controls, cards, focus states, and existing modal/history motion. Honors reduced-motion preferences. Presentation-only; no app logic or stored data changed. -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -789,11 +828,12 @@
     shared engine already owns the concept.
   ============================================================================
 -->
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V24.28.15</title>
+<title>Invictus V24.28.27</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -1361,10 +1401,26 @@
    .history-toggle{padding:9px 13px;font-size:calc(13px * var(--invictus-font-scale));white-space:nowrap}
    .history-list{display:grid;gap:8px}
   /* V19.31 — Attendance History filter controls and accessibility polish. */
-  .attendance-history-filter-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin:0 0 12px}
+  .attendance-history-filter-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
+  /* V24.28.18: Three-column layout is scoped to Lecture History only. */
+  .attendance-history-filter-bar[aria-label="Lecture History filters"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .attendance-history-filter-bar[aria-label="Lecture History filters"] .lecture-history-subject-filter-label{grid-column:auto;min-width:0}
   .attendance-history-filter-bar label{display:grid;gap:5px;font-size:calc(12px * var(--invictus-font-scale));color:var(--muted)}
   .attendance-history-filter-bar select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #ddd;border-radius:12px;background:#fff;color:inherit;font:inherit;box-sizing:border-box}
   html[data-theme="dark"] .attendance-history-filter-bar select{background:#222;color:#eee;border-color:#444}
+
+  /* V24.28.19: bounded custom menus for History filters (works in browser and WebView). */
+  .history-custom-select{position:relative;width:100%;min-width:0}
+  .history-custom-select-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;left:-10000px!important}
+  .history-custom-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;min-height:42px;padding:8px 10px;border:1px solid #ddd;border-radius:12px;background:#fff;color:inherit;font:inherit;text-align:left;box-sizing:border-box;cursor:pointer}
+  html[data-theme="dark"] .history-custom-select-trigger,.history-custom-select-menu{background:#222;color:#eee;border-color:#444}
+  .history-custom-select-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .history-custom-select-menu{position:absolute;z-index:10050;left:0;right:0;top:calc(100% + 4px);max-height:min(400px,60vh);overflow-y:auto;overscroll-behavior:contain;border:1px solid #ddd;border-radius:12px;background:#fff;color:inherit;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:none}
+  .history-custom-select.open .history-custom-select-menu{display:block}
+  .history-custom-select-option{display:block;width:100%;padding:10px 9px;border:0;border-radius:8px;background:transparent;color:inherit;font:inherit;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+  .history-custom-select-option[aria-selected="true"]{background:rgba(109,74,202,.14);font-weight:600}
+  .history-custom-select-option:focus-visible{outline:2px solid rgba(109,74,202,.55);outline-offset:-2px}
+
   .attendance-history-filter-empty{padding:18px 8px;text-align:center;color:var(--muted)}
   button:focus-visible,[role="button"]:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid rgba(109,74,202,.35);outline-offset:2px}
 
@@ -2659,6 +2715,8 @@
     width:22px;height:22px;flex:0 0 22px;border-radius:6px;
     border:1px solid rgba(0,0,0,.08);
   }
+  .subject-percentage-integrity-warning{margin:8px 12px;padding:9px 11px;border:1px solid #c62828;border-radius:8px;background:#fff3f3;color:#8b0000;font-size:12px;line-height:1.4}
+  .subject-percentage-integrity-warning strong{display:block;margin-bottom:2px}
   .subject-percentage-table-wrap{overflow:hidden;border:1px solid #e5e5e5;border-radius:12px}
   .subject-percentage-table{
     width:100%;border-collapse:collapse;table-layout:fixed;font-size:calc(12px * var(--invictus-font-scale));
@@ -4030,6 +4088,76 @@ input, textarea, [contenteditable="true"]{
   -ms-user-select:text !important;
   user-select:text !important;
   -webkit-touch-callout:default !important;
+}
+
+
+/* V24.28.27 — app-wide smooth micro-interactions.
+   Presentation only: no event, storage, attendance, or calculation behavior changed. */
+:root{
+  --invictus-motion-fast: 140ms;
+  --invictus-motion: 220ms;
+  --invictus-motion-slow: 300ms;
+  --invictus-motion-ease: cubic-bezier(.2,.75,.25,1);
+}
+button, [role="button"], select, input, textarea,
+nav button, .card, .schedule-semester-card, .history-row,
+.attendance-calendar-day, .submitted-results-directory-sort-button,
+.cross-semester-resolver-button, .surprise-test-subject-button,
+.bulk-attendance-status button, .bulk-attendance-reasons button {
+  transition:
+    color var(--invictus-motion) var(--invictus-motion-ease),
+    background-color var(--invictus-motion) var(--invictus-motion-ease),
+    border-color var(--invictus-motion) var(--invictus-motion-ease),
+    box-shadow var(--invictus-motion) var(--invictus-motion-ease),
+    opacity var(--invictus-motion) var(--invictus-motion-ease);
+}
+button:not(:disabled), [role="button"], .schedule-semester-card,
+.attendance-calendar-day:not(:disabled), .history-row {
+  -webkit-tap-highlight-color: transparent;
+}
+button:not(:disabled):active, [role="button"]:active,
+.schedule-semester-card:active, .attendance-calendar-day:not(:disabled):active {
+  transition-duration: var(--invictus-motion-fast);
+}
+@media (hover:hover) and (pointer:fine) {
+  button:not(:disabled):hover, [role="button"]:hover {
+    filter: brightness(.985);
+  }
+  .card:hover {
+    box-shadow: 0 3px 14px rgba(0,0,0,.045);
+  }
+}
+input, select, textarea {
+  transition:
+    border-color var(--invictus-motion) var(--invictus-motion-ease),
+    box-shadow var(--invictus-motion) var(--invictus-motion-ease),
+    background-color var(--invictus-motion) var(--invictus-motion-ease);
+}
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 3px rgba(109,74,202,.10);
+}
+.modal-backdrop {
+  will-change: opacity;
+}
+.modal-backdrop.open .modal {
+  will-change: transform, opacity;
+}
+.history-list, .schedule-semester-content, .attendance-calendar,
+.sem-summary, .sem-status-menu, .submitted-results-directory-sort-menu {
+  transition: opacity var(--invictus-motion) var(--invictus-motion-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --invictus-motion-fast: 0ms;
+    --invictus-motion: 0ms;
+    --invictus-motion-slow: 0ms;
+  }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 </style>
@@ -7589,7 +7717,7 @@ let scheduleMonthlyReportExpanded=false;
 let scheduleSemesterLecturesStatusExpanded=false;
 let scheduleSemesterReportExpanded=false;
 let lectureHistoryModalScrollY=0;
-let lectureHistoryFilter={status:"all",month:"all"};
+let lectureHistoryFilter={status:"all",month:"all",subject:"all"};
 
 /* V15.2.1 — Editable semester counting ranges.
    Keep dates in DD/MM/YYYY so the semester boundaries can be changed later
@@ -8268,7 +8396,7 @@ function getDailyTimetableLectureStatuses(dateKey){
       const adjustedSubject=String(record.adjustmentSubject||"").trim();
       if(adjustedSubject && adjustedSubject!==c[2]){
         consumedAdjustmentKeys.add(recordKey);
-        rows.push({date:dateKey,subject:String(record.subject||c[2]),time:c[0],status:"ta",attendanceStatus:adjustmentOutcomeStatus(record),attendanceSubject:adjustedSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+        rows.push({date:dateKey,subject:String(record.subject||c[2]),time:c[0],status:"ta",attendanceStatus:adjustmentOutcomeStatus(record),attendanceSubject:adjustedSubject,adjustmentRecord:true});
       }else{
         rows.push({date:dateKey,subject:c[2],time:c[0],status:record.status,attendanceStatus:record.status==="att" ? "att" : record.status,attendanceSubject:c[2]});
       }
@@ -8280,7 +8408,7 @@ function getDailyTimetableLectureStatuses(dateKey){
     const storedAdjustment=findStoredAdjustmentForSlot(semState,dateKey,c[0],recordKey,consumedAdjustmentKeys);
     if(storedAdjustment){
       consumedAdjustmentKeys.add(storedAdjustment.recordKey);
-      rows.push({date:dateKey,subject:storedAdjustment.originalSubject,time:c[0],status:"ta",attendanceStatus:storedAdjustment.targetStatus,attendanceSubject:storedAdjustment.adjustmentSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+      rows.push({date:dateKey,subject:storedAdjustment.originalSubject,time:c[0],status:"ta",attendanceStatus:storedAdjustment.targetStatus,attendanceSubject:storedAdjustment.adjustmentSubject,adjustmentRecord:true});
       return;
     }
 
@@ -8294,9 +8422,9 @@ function getDailyTimetableLectureStatuses(dateKey){
       const endPassed=semLectureEndTimePassed(dateKey,c[1]);
       const startReached=isRegularPresent && semLectureStartTimeReached(dateKey,c[0]);
       if(endPassed){
-        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"abs",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true,adjustmentNumeratorCredit:true,automaticAbsent:true});
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"abs",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true,automaticAbsent:true});
       }else if(startReached){
-        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"pending",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"pending",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true});
       }
       return;
     }
@@ -8318,7 +8446,7 @@ function getDailyTimetableLectureStatuses(dateKey){
   // longer has a class at its stored time. It remains one original slot plus
   // its linked target outcome (the target is carried as row metadata).
   forEachUnconsumedStoredAdjustment(semState,dateKey,consumedAdjustmentKeys,adjustment=>{
-    rows.push({date:dateKey,subject:adjustment.originalSubject,time:adjustment.time,status:"ta",attendanceStatus:adjustment.targetStatus,attendanceSubject:adjustment.adjustmentSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+    rows.push({date:dateKey,subject:adjustment.originalSubject,time:adjustment.time,status:"ta",attendanceStatus:adjustment.targetStatus,attendanceSubject:adjustment.adjustmentSubject,adjustmentRecord:true});
   });
   return rows;
 }
@@ -11431,7 +11559,12 @@ function renderAttendanceHistoryModal(){
   const statusFilter=document.getElementById("attendanceHistoryStatusFilter");
   const monthFilter=document.getElementById("attendanceHistoryMonthFilter");
   if(!list||!statusFilter||!monthFilter)return;
-  const displayState=getAttendanceTabSourceState();
+  const displayState=invictusAttendanceStateFor(activeSemesterNumber);
+  if(activeSemesterNumber!==1){
+    list.innerHTML='<div class="attendance-history-filter-empty"><strong>Not Configured</strong><br>Attendance History for Semester '+activeSemesterNumber+' will be available when this semester is officially configured.</div>';
+    statusFilter.disabled=true;monthFilter.disabled=true;return;
+  }
+  statusFilter.disabled=false;monthFilter.disabled=false;
   statusFilter.value=INVICTUS_STATE.ui.attendanceHistory.status||"all";
   const months=getAttendanceHistoryMonths(displayState.records);
   const currentMonth=INVICTUS_STATE.ui.attendanceHistory.month||"all";
@@ -11534,7 +11667,9 @@ function lectureHistorySubjectFromClass(classRow,fallbackName=""){
 
 function getLectureHistoryEntries(){
   const entries=[];
-  for(let semester=1;semester<=6;semester++){
+  const selectedSemester=Number(activeSemesterNumber)||1;
+  if(selectedSemester!==1)return [];
+  for(let semester=selectedSemester;semester<=selectedSemester;semester++){
     const semesterState=(Number(activeSemesterNumber)===semester && typeof semState==="object")
       ? semState
       : invictusSemesterStateFor(semester);
@@ -11653,7 +11788,10 @@ function renderLectureHistoryRows(entries){
   if(!list)return;
   const statusFilter=lectureHistoryFilter.status||"all";
   const monthFilter=lectureHistoryFilter.month||"all";
-  const filtered=entries.filter(entry=>(statusFilter==="all"||entry.status.value===statusFilter)&&(monthFilter==="all"||entry.date.startsWith(monthFilter)));
+  const subjectFilter=lectureHistoryFilter.subject||"all";
+  const filtered=entries.filter(entry=>(statusFilter==="all"||entry.status.value===statusFilter)
+    &&(monthFilter==="all"||entry.date.startsWith(monthFilter))
+    &&(subjectFilter==="all"||`${entry.semester}|${entry.subject}`===subjectFilter));
   if(!filtered.length){
     list.innerHTML='<div class="attendance-history-filter-empty">No lecture history records match the selected filters.</div>';
     list.scrollTop=0;
@@ -11690,13 +11828,16 @@ function ensureLectureHistoryModal(){
         <button type="button" class="attendance-history-modal-close" id="lectureHistoryModalClose" aria-label="Close Lecture History">×</button>
       </div>
       <div class="attendance-history-filter-bar" role="group" aria-label="Lecture History filters">
+        <label for="lectureHistoryMonthFilter">Month
+          <select id="lectureHistoryMonthFilter" aria-label="Filter Lecture History by month"><option value="all">All months</option></select>
+        </label>
         <label for="lectureHistoryStatusFilter">Status
           <select id="lectureHistoryStatusFilter" aria-label="Filter Lecture History by status">
             ${LECTURE_HISTORY_STATUS_OPTIONS.map(option=>`<option value="${option.value}">${option.label}</option>`).join("")}
           </select>
         </label>
-        <label for="lectureHistoryMonthFilter">Month
-          <select id="lectureHistoryMonthFilter" aria-label="Filter Lecture History by month"><option value="all">All months</option></select>
+        <label for="lectureHistorySubjectFilter" class="lecture-history-subject-filter-label">Subject
+          <select id="lectureHistorySubjectFilter" aria-label="Filter Lecture History by subject"><option value="all">All subjects</option></select>
         </label>
       </div>
       <div class="attendance-history-modal-list lecture-history-modal-list" id="lectureHistoryModalList" tabindex="0" aria-live="polite"></div>
@@ -11711,13 +11852,24 @@ function ensureLectureHistoryModal(){
     lectureHistoryFilter.month=event.target.value||"all";
     renderLectureHistoryModal();
   });
+  document.getElementById("lectureHistorySubjectFilter")?.addEventListener("change",event=>{
+    lectureHistoryFilter.subject=event.target.value||"all";
+    renderLectureHistoryModal();
+  });
   back.addEventListener("click",event=>{if(event.target===back)closeLectureHistoryModal();});
 }
 
 function renderLectureHistoryModal(){
   const statusFilter=document.getElementById("lectureHistoryStatusFilter");
   const monthFilter=document.getElementById("lectureHistoryMonthFilter");
-  if(!statusFilter||!monthFilter)return;
+  const subjectFilter=document.getElementById("lectureHistorySubjectFilter");
+  if(!statusFilter||!monthFilter||!subjectFilter)return;
+  if(activeSemesterNumber!==1){
+    statusFilter.disabled=true;monthFilter.disabled=true;subjectFilter.disabled=true;
+    document.getElementById("lectureHistoryModalList").innerHTML='<div class="attendance-history-filter-empty"><strong>Not Configured</strong><br>Lecture History for Semester '+activeSemesterNumber+' will be available when this semester is officially configured.</div>';
+    return;
+  }
+  statusFilter.disabled=false;monthFilter.disabled=false;subjectFilter.disabled=false;
   const entries=getLectureHistoryEntries();
   statusFilter.value=lectureHistoryFilter.status||"all";
   const months=[...new Set(entries.map(entry=>entry.date.slice(0,7)))].sort().reverse();
@@ -11727,6 +11879,34 @@ function renderLectureHistoryModal(){
   }).join("");
   if(lectureHistoryFilter.month!=="all"&&!months.includes(lectureHistoryFilter.month))lectureHistoryFilter.month="all";
   monthFilter.value=lectureHistoryFilter.month||"all";
+
+  // Build the selector from every configured semester subject ID, then include
+  // legacy IDs found in saved history even if their catalog is no longer present.
+  const subjectOptions=new Map();
+  for(let semester=1;semester<=6;semester++){
+    invictusSemesterSubjectsFor(semester).forEach(subject=>{
+      const id=String(subject.id||"");
+      const name=String(subject.name||"").trim();
+      if(!id||!name)return;
+      subjectOptions.set(`${semester}|${id}`,{semester,id,name});
+    });
+  }
+  entries.forEach(entry=>{
+    const id=String(entry.subject||"");
+    if(!id)return;
+    const key=`${entry.semester}|${id}`;
+    if(!subjectOptions.has(key))subjectOptions.set(key,{semester:Number(entry.semester)||1,id,name:String(entry.displaySubject||id).trim()||id});
+  });
+  const options=[...subjectOptions.values()].sort((a,b)=>a.name.localeCompare(b.name)||a.semester-b.semester||a.id.localeCompare(b.id));
+  const nameCounts=new Map();
+  options.forEach(option=>nameCounts.set(option.name,(nameCounts.get(option.name)||0)+1));
+  subjectFilter.innerHTML='<option value="all">All subjects</option>'+options.map(option=>{
+    const value=`${option.semester}|${option.id}`;
+    const label=(nameCounts.get(option.name)>1)?`${option.name} (Semester ${option.semester})`:option.name;
+    return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+  }).join("");
+  if(lectureHistoryFilter.subject!=="all"&&!subjectOptions.has(lectureHistoryFilter.subject))lectureHistoryFilter.subject="all";
+  subjectFilter.value=lectureHistoryFilter.subject||"all";
   renderLectureHistoryRows(entries);
 }
 
@@ -11757,8 +11937,14 @@ function openLectureHistoryModal(){
   const back=document.getElementById("lectureHistoryBackdrop");
   const statusFilter=document.getElementById("lectureHistoryStatusFilter");
   if(!back||!statusFilter)return;
-  lectureHistoryFilter={status:"all",month:"all"};
+  lectureHistoryFilter={status:"all",month:"all",subject:"all"};
   renderLectureHistoryModal();
+  // Synchronize custom dropdown triggers after programmatic defaulting.
+  ["lectureHistoryMonthFilter","lectureHistoryStatusFilter","lectureHistorySubjectFilter"].forEach(id=>{
+    const filter=document.getElementById(id);
+    if(filter && filter.value!=="all")filter.value="all";
+    if(filter)filter.dispatchEvent(new Event("change",{bubbles:true}));
+  });
   lockLectureHistoryBackground();
   back.classList.add("open");
   back.setAttribute("aria-hidden","false");
@@ -11771,7 +11957,19 @@ function closeLectureHistoryModal(){
   if(list)list.scrollTop=0;
   if(back){back.classList.remove("open");back.setAttribute("aria-hidden","true");}
   unlockLectureHistoryBackground();
-  lectureHistoryFilter={status:"all",month:"all"};
+  lectureHistoryFilter={status:"all",month:"all",subject:"all"};
+  // Reset the actual controls too, not just the state, so all three filters
+  // visibly return to their defaults as soon as the dialog closes.
+  const monthFilter=document.getElementById("lectureHistoryMonthFilter");
+  const statusFilter=document.getElementById("lectureHistoryStatusFilter");
+  const subjectFilter=document.getElementById("lectureHistorySubjectFilter");
+  [monthFilter,statusFilter,subjectFilter].forEach(filter=>{
+    if(!filter)return;
+    filter.value="all";
+    // The history filters are wrapped in custom dropdowns. Updating only the
+    // native select value leaves the visible trigger label stale until sync runs.
+    filter.dispatchEvent(new Event("change",{bubbles:true}));
+  });
   document.getElementById("scheduleLectureHistoryDisclosure")?.focus({preventScroll:true});
 }
 
@@ -13344,7 +13542,7 @@ function semWeekDates(startKey){
 function semRecordKey(date, subject, time){return `${date}|${subject}|${time}`;}
 function semSubjectCounts(){
   const out={};
-  semesterSubjects.forEach(s=>out[s.id]={name:s.name,att:0,abs:0,ta:0,nc:0,adj:0,pending:0,automaticAbsent:0,adjustmentNumeratorCredit:0});
+  semesterSubjects.forEach(s=>out[s.id]={name:s.name,att:0,abs:0,ta:0,nc:0,adj:0,pending:0,automaticAbsent:0});
 
   /* V16.6 — Semester Card 1.1 consumes the same lecture-status source as
      Card 1.2. This prevents the Semester tab from silently counting lecture
@@ -13363,10 +13561,6 @@ function semSubjectCounts(){
 
       if(row.status==="ta" && row.attendanceSubject && row.attendanceSubject!==row.subject){
         original.ta++;
-        // An adjustment resolves the original scheduled slot independently
-        // of the target slot's tracking state. Preserve the established
-        // reached/numerator behavior for this linked original outcome.
-        if(row.adjustmentNumeratorCredit===true) original.adjustmentNumeratorCredit++;
         const adjusted=out[row.attendanceSubject];
         if(adjusted){
           if(row.attendanceStatus==="att") adjusted.adj++;
@@ -13393,6 +13587,53 @@ function semSubjectCounts(){
   });
 
   return out;
+}
+
+/* V24.28.24 — Lecture Wise Percentage integrity audit. Rebuilds the status
+   buckets independently from the resolved lecture rows, then compares them
+   with the shared aggregate used by the UI. This is read-only: it never edits
+   saved attendance or attempts to repair records automatically. */
+function auditSemSubjectCounts(displayCounts){
+  const expected={};
+  semesterSubjects.forEach(subject=>expected[subject.id]={att:0,abs:0,ta:0,nc:0,adj:0,pending:0,automaticAbsent:0});
+  Object.keys(state.records || {}).forEach(dateKey=>{
+    const rows=getDailyTimetableLectureStatuses(dateKey);
+    rows.forEach(row=>{
+      const original=expected[row.subject];
+      if(!original)return;
+      if(row.status==="ta" && row.attendanceSubject && row.attendanceSubject!==row.subject){
+        original.ta++;
+        const target=expected[row.attendanceSubject];
+        if(target){
+          if(row.attendanceStatus==="att")target.adj++;
+          else if(row.attendanceStatus==="abs"){target.abs++;if(row.automaticAbsent===true)target.automaticAbsent++;}
+          else if(row.attendanceStatus==="ta")target.ta++;
+          else if(row.attendanceStatus==="nc")target.nc++;
+          else if(row.attendanceStatus==="pending")target.pending++;
+        }
+        return;
+      }
+      if(row.status==="att")original.att++;
+      else if(row.status==="abs"){original.abs++;if(row.automaticAbsent===true)original.automaticAbsent++;}
+      else if(row.status==="ta")original.ta++;
+      else if(row.status==="nc")original.nc++;
+      else if(row.status==="pending")original.pending++;
+    });
+  });
+  const fields=["att","abs","ta","nc","adj","pending","automaticAbsent"];
+  const issues=[];
+  semesterSubjects.forEach(subject=>{
+    const actual=displayCounts[subject.id]||{};
+    const rebuilt=expected[subject.id]||{};
+    fields.forEach(field=>{
+      const a=Number(actual[field]||0), e=Number(rebuilt[field]||0);
+      if(a!==e)issues.push(`${subject.name}: ${field} count ${a}, expected ${e}`);
+    });
+    const total=rebuilt.att+rebuilt.adj+rebuilt.abs;
+    if(!Number.isFinite(total)||total<0)issues.push(`${subject.name}: invalid denominator`);
+    if(rebuilt.automaticAbsent>rebuilt.abs)issues.push(`${subject.name}: automatic Absent exceeds Absent count`);
+  });
+  return {ok:issues.length===0,issues};
 }
 // #endregion JS — ATTENDANCE RULES / SUBMISSION WINDOW
 // #region JS — SEMESTER / TIMETABLE / LECTURE LOGIC
@@ -15808,11 +16049,14 @@ function closeSubjectPercentage(){
    information legend are identical for every semester. All calculations read
    the currently active semester context (state + semesterSubjects), so isolated
    Semesters 2–6 never read Semester 1 attendance data. */
+function segmentsTotalForAudit(...values){return values.reduce((sum,value)=>sum+Number(value||0),0);}
+
 function renderSubjectPercentage(){
   const back=document.getElementById("subjectPercentageBackdrop");
   if(!back) return;
   const percentageSemester=Number(activeSemesterNumber)||1;
   const counts=semSubjectCounts();
+  const integrityAudit=auditSemSubjectCounts(counts);
   const items=semesterSubjects.slice().sort((a,b)=>a.name.localeCompare(b.name));
 
   /* V24.22/V24.25 — Keep Attendance % as the share of attendance-credit
@@ -15864,8 +16108,13 @@ function renderSubjectPercentage(){
     // V24.28.3 — An untracked lecture that has ended counts in the displayed
     // numerator for the grace-day transition, while remaining a red Absent
     // segment. This is derived only; no attendance record is saved.
-    const displayedNumerator=effectiveAttended+automaticAbsent+Math.max(0,c.adjustmentNumeratorCredit||0);
+    const displayedNumerator=effectiveAttended+automaticAbsent;
     const pct=total ? (displayedNumerator/total)*100 : null;
+    // Validate the exact values used for the count, percentage, and graph.
+    const graphCountTotal=segmentsTotalForAudit(attended,adjustmentAttended,classTest,surpriseTest,absent,teacherAbsent,noClasses,inProgress);
+    if(graphCountTotal!==total)integrityAudit.issues.push(`${s.name}: graph categories total ${graphCountTotal}, denominator ${total}`);
+    const expectedPct=total ? ((effectiveAttended+automaticAbsent)/total)*100 : null;
+    if((pct===null)!==(expectedPct===null) || (pct!==null && Math.abs(pct-expectedPct)>0.000001))integrityAudit.issues.push(`${s.name}: displayed percentage does not match counts`);
 
     const pctOf=value=>total ? (value/total)*100 : 0;
     const segments=[
@@ -15929,6 +16178,9 @@ function renderSubjectPercentage(){
     </tr>`;
   }).join("");
 
+  const integrityNotice=integrityAudit.issues.length
+    ? `<div class="subject-percentage-integrity-warning" role="alert" title="${escapeHtml(integrityAudit.issues.join("; "))}"><strong>Data integrity check failed.</strong> Some displayed attendance totals may be incorrect. Please review this semester's lecture records.</div>`
+    : "";
   back.innerHTML=`
     <div class="subject-percentage-modal" role="dialog" aria-modal="true" aria-labelledby="subjectPercentageTitle" data-semester="${percentageSemester}">
       <div class="subject-percentage-head">
@@ -15939,6 +16191,7 @@ function renderSubjectPercentage(){
           <button class="subject-percentage-close" id="subjectPercentageClose" aria-label="Close">×</button>
         </div>
       </div>
+      ${integrityNotice}
       <div class="subject-percentage-table-wrap">
         <table class="subject-percentage-table percentage-only">
           <thead><tr>
@@ -17863,7 +18116,7 @@ function resetMainTabUI(pageId){
     scheduleMonthlyReportExpanded=false;
     scheduleSemesterLecturesStatusExpanded=false;
     scheduleSemesterReportExpanded=false;
-    lectureHistoryFilter={status:"all",month:"all"};
+    lectureHistoryFilter={status:"all",month:"all",subject:"all"};
   }
 
   // Settings is rendered from scratch with its disclosure panels collapsed,
@@ -18857,6 +19110,36 @@ window.addEventListener("pageshow",()=>restorePersistentForcedUserGuide(true));
 
 setTimeout(()=>restorePersistentForcedUserGuide(false),0);
 
+</script>
+
+<script>
+/* V24.28.19 — History filter custom menus with a 400px content-aware cap. */
+(function(){
+  const ids=['attendanceHistoryStatusFilter','attendanceHistoryMonthFilter','lectureHistorySubjectFilter','lectureHistoryStatusFilter','lectureHistoryMonthFilter'];
+  function upgrade(select){
+    if(!select||select.dataset.customHistorySelect==='1')return;
+    select.dataset.customHistorySelect='1';
+    const wrap=document.createElement('div');wrap.className='history-custom-select';
+    select.parentNode.insertBefore(wrap,select);wrap.appendChild(select);select.classList.add('history-custom-select-native');
+    const trigger=document.createElement('button');trigger.type='button';trigger.className='history-custom-select-trigger';trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-label',select.getAttribute('aria-label')||'Choose an option');
+    const label=document.createElement('span');label.className='history-custom-select-trigger-label';const arrow=document.createElement('span');arrow.setAttribute('aria-hidden','true');arrow.textContent='▾';trigger.append(label,arrow);
+    const menu=document.createElement('div');menu.className='history-custom-select-menu';menu.setAttribute('role','listbox');wrap.append(trigger,menu);
+    function render(){menu.replaceChildren();Array.from(select.options).forEach((opt,i)=>{const b=document.createElement('button');b.type='button';b.className='history-custom-select-option';b.setAttribute('role','option');b.setAttribute('aria-selected',String(opt.value===select.value));b.textContent=opt.textContent;b.dataset.value=opt.value;b.addEventListener('click',()=>{select.value=opt.value;select.dispatchEvent(new Event('change',{bubbles:true}));close();sync();});menu.appendChild(b);});sync();}
+    function sync(){const opt=select.options[select.selectedIndex];label.textContent=opt?opt.textContent:'';menu.querySelectorAll('[role="option"]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.value===select.value)));}
+    function open(){document.querySelectorAll('.history-custom-select.open').forEach(w=>{if(w!==wrap){w.classList.remove('open');w.querySelector('button[aria-haspopup]')?.setAttribute('aria-expanded','false');}});render();wrap.classList.add('open');trigger.setAttribute('aria-expanded','true');}
+    function close(){wrap.classList.remove('open');trigger.setAttribute('aria-expanded','false');}
+    trigger.addEventListener('click',()=>wrap.classList.contains('open')?close():open());
+    trigger.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){e.preventDefault();open();menu.querySelector('[role="option"]')?.focus();}});
+    menu.addEventListener('keydown',e=>{const opts=[...menu.querySelectorAll('[role="option"]')];const i=opts.indexOf(document.activeElement);if(e.key==='Escape'){close();trigger.focus();}else if(e.key==='ArrowDown'){e.preventDefault();opts[Math.min(i+1,opts.length-1)]?.focus();}else if(e.key==='ArrowUp'){e.preventDefault();opts[Math.max(i-1,0)]?.focus();}else if(e.key==='Home'){e.preventDefault();opts[0]?.focus();}else if(e.key==='End'){e.preventDefault();opts.at(-1)?.focus();}});
+    select.addEventListener('change',sync);
+    new MutationObserver(render).observe(select,{childList:true,subtree:true,characterData:true});
+    document.addEventListener('click',e=>{if(!wrap.contains(e.target))close();});
+    render();
+  }
+  function scan(){ids.forEach(id=>upgrade(document.getElementById(id)));}
+  new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scan);else scan();
+})();
 </script>
 
 </body>
