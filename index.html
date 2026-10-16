@@ -637,6 +637,80 @@
 <!-- V24.2: Added a persistent Set Semester preference in Settings with Semester 1–6 and All options. A selected semester opens directly in Lecture Breakdown, All Submitted Results, and Weekly Timetable; All keeps the existing semester-selection list behavior. The preference is stored until changed and is included in reset/backup handling. -->
 <!-- V24.3: All Submitted Results → Subject now shows only subjects with at least one completed submitted result in that semester. Zero-result subjects are hidden and the Subject section automatically fits the remaining entries; counters and all existing result behavior remain unchanged. -->
 <!-- V24.4: Rewrote the in-app User Guide from the current V24.3 user-facing behavior for new users. Clarified daily attendance, lecture marking, Schedule Exception, Adjustment/Replacement, Set to Default, semester-aware results, hidden zero-result subjects, Set Semester, Dashboard, notifications, backup/reset, and the recommended daily workflow. Help content only; no application/data behavior changed. -->
+<!-- V24.6: Semester environments are isolated by semester. Semester 1 retains its locked historical data and working window; Semesters 2–6 use independent empty state/subject/timetable environments bounded by their own configured semester periods. -->
+<!-- V24.7: Removed the Settings → Set Semester "All" option completely. Semester preference is now always one specific semester (1–6); legacy saved "all" values are normalized to Semester 1 so they cannot reopen the old all-semester selection mode. No semester data/environment isolation behavior changed. -->
+<!-- V24.9: Dashboard reporting context is date-driven, not Default-Semester-driven. The four Dashboard cards resolve the semester from each report date and read that semester's isolated data. Settings → Set Semester does not control Dashboard reporting. -->
+<!-- V24.10: Restored the original getDailyTimetableLectureStatuses compatibility path required by the locked Semester 1 renderer; Dashboard keeps its separate date-driven pipeline. -->
+<!-- V24.11: Attendance Tab context is date-driven and independent of Settings → Set Semester; Semester Tab continues to use the saved default semester context. -->
+<!-- V24.12: Added a cross-semester attendance resolution gate before submitting today's attendance. The app scans all six isolated attendance stores for prior unresolved eligible dates, shows one Resolve button per affected semester, opens the existing missed-attendance/bulk flow inside that semester\'s isolated context, and returns to the target semester only after all other affected semesters are resolved. Existing attendance rules, storage keys, semester isolation, and report pipelines remain unchanged. -->
+<!-- V24.14: Unified college-joining-date attendance submission into one gate. Cross-semester unresolved attendance now routes directly into semester-scoped bulk submission, normal unresolved attendance uses the same bulk path, and the Attendance tab re-syncs from the active isolated store after bulk saves. -->
+<!-- V24.15: Attendance tab now reads a unified read-only view assembled from all six isolated attendance source stores, so resolved semester records immediately appear in Attendance History, Calendar, totals, and overall attendance. Normal unresolved attendance is scoped to today's semester, and completing semester-wise resolution returns to the Attendance tab without reopening a second bulk dialog automatically. Submission/edit mutations remain scoped to the active isolated semester store. -->
+<!-- V24.16: Replaced the global Semester-tab date-picker bounds with semester-wise bounds from SEMESTER_CONFIG. Month navigation now stops at the selected semester window, and dates outside that window are locked/inaccessible. No storage, attendance, timetable, or report logic changed. -->
+<!-- V24.17: Reordered the V24.4–V24.16 version history into chronological order. No application behavior, data, storage, or configuration was changed. -->
+<!-- V24.18: Removed the time-based semester START-date unlocking restriction from
+     Lecture Breakdown, All Submitted Results, and Weekly Timetable. Semesters 1–6
+     remain directly selectable through Set Semester and are no longer hidden based
+     on the current date. Semester date configuration, semester isolation, attendance,
+     result handling, timetable content, and all other application/data behavior remain unchanged. -->
+<!-- V24.19: Minor UI-only refinement — Semester 2–6 Lectures Breakdown now
+     starts collapsed by default, matching the existing Semester 1 default behavior.
+     Opening the Lectures Breakdown still reveals the selected semester's existing
+     breakdown content. No attendance, calculation, storage, semester-selection,
+     timetable, results, login, or data-contract behavior changed. -->
+<!-- V24.20: Fixed Semester 2–6 Lectures Breakdown expanded-card auto-scroll to use
+     the same existing Semester 1 visibility behavior. Opening an isolated semester's
+     Lectures Breakdown now automatically keeps the expanded card visible on screen.
+     No attendance, calculation, storage, semester-selection, timetable, results,
+     login, or data-contract behavior changed. -->
+<!-- V24.21: Semester 2–6 Lectures Breakdown now uses the same expanded
+     breakdown content and controls as Semester 1, using the active semester's
+     isolated data/state. The selected semester child can be opened independently,
+     while the existing top-level mutual exclusion keeps Lectures Breakdown and
+     All Sumbitted Results mutually exclusive so only one of those cards is open
+     at a time. No storage, attendance, results, login, or data contracts changed. -->
+<!-- V24.22: Upgraded Semester 1 Lecture Wise Percentage into an advanced full 100%
+     lecture-status distribution. Each Semester 1 subject now summarizes No Classes,
+     Absent, Teacher Absent, Surprise Test, Class Test, Attended, and Adjustment Attended
+     as proportional segments, while the displayed Attendance percentage remains
+     (Attended + Adjustment Attended) / all displayed lecture-status records × 100.
+     Semesters 2–6 retain their existing Lecture Wise Percentage behavior. -->
+<!-- V24.23: Minor UI refinement — Semester 1 Lecture Wise Percentage keeps the same
+     calculations and seven-category data, but the segmented bar is ordered as Attended,
+     Adjustment Attended, Surprise Test, Class Test, Teacher Absent, No Classes, Absent.
+     No storage, attendance calculation, semester isolation, results, login, or data
+     contracts changed. -->
+<!-- V24.24: Added an informational legend button to the Semester 1 Lecture Wise Percentage dialog.
+     Tapping the info button opens a secondary information dialog above the existing
+     percentage dialog, explaining the seven lecture-status categories with matching
+     color boxes. No attendance calculation, storage, semester, results, login, or
+     underlying lecture-status behavior changed. -->
+<!-- V24.25: Extended the complete V24.22–V24.24 Lecture Wise Percentage feature set
+     to all isolated semesters (2–6). The advanced seven-category distribution,
+     V24.23 segment ordering, and V24.24 informational legend now operate against
+     the active semester's isolated subjects/state, making Lecture Wise Percentage
+     behavior identical across Semesters 1–6. No cross-semester data sharing or
+     storage-contract changes were introduced. -->
+<!-- V24.26: Semester 1 Lecture Wise Percentage UI refinement — the Subject and Attendance
+     column labels and all Semester 1 subject names are now bold. This styling is scoped
+     to Semester 1 only; Semester 2–6 Lecture Wise Percentage styling remains unchanged. -->
+<!-- V24.27: Rewrote the in-app User Guide to match the current V24.26 user-facing behavior, including cross-semester attendance resolution, unified Attendance-tab read-only reporting, date-driven Dashboard reporting, fully selectable isolated Semesters 1–6, the seven-category Lecture Wise Percentage distribution and legend, and current result/notification/settings workflows. Help content and document metadata only; no application, attendance, storage, or data-contract behavior changed. -->
+<!-- V24.27.1: Fixed the current-lecture Daily Timetable border when the running lecture is the final lecture row. The generic last-child border removal no longer overrides the INVICTUS-purple current-lecture border, so all four sides remain continuously visible. No timetable data, progress calculation, attendance, storage, navigation, or unrelated UI behavior changed. -->
+<!-- V24.27.3: Improved the current-lecture shimmer/border presentation by keeping the animated shimmer and dedicated border overlay visually clear above the lecture content. No timetable data, progress calculation, attendance, storage, navigation, or unrelated functionality changed. -->
+<!-- V24.27.4: Added 02/10/2026 as the protected hardcoded Holiday "Gandhi-Jayanti", using the existing automatic protected-Holiday mechanism. No other functionality changed. -->
+<!-- V24.28.1: From 15/10/2026 onward, Semester 1 Daily Timetable uses the new Section A default schedule. Earlier dates retain their existing dated timetables and historical records. Dashboard → Weekly Timetable → Semester 1 is updated to the same schedule. Existing Schedule Exceptions, lecture marking/analytics, storage, and other approved functionality remain unchanged. -->
+<!-- V24.28.2: Lecture Wise Percentage includes an unmarked lecture as temporary In Progress from its scheduled start until its end. If still unmarked at end time it becomes Absent; explicit marks remain authoritative. In Progress is derived only and is never written to attendance storage. -->
+<!-- V24.28.3: Lecture Wise Percentage now transitions 10/13 → 10/14 at lecture start and 10/14 → 11/14 after an untracked lecture ends, counting the derived automatic Absent in the displayed numerator while keeping the graph red and Daily Timetable Not Tracked. No automatic status is saved; a later explicit user selection takes precedence without double-counting. -->
+<!-- V24.28.4: Added a temporary attendance-percentage descending sort toggle to Lecture Wise Percentage. Toggling restores fixed A–Z order; closing the dialog resets to A–Z. Display-only; no attendance data or underlying subject order is changed. -->
+<!-- V24.28.5: Added Dashboard Card 1.6, Lecture History, with its own lecture-tracking data pipeline and filters. Presentation mirrors Attendance History, but source records come only from semester lecture marks/assessment markers; date groups are newest-first and lectures stay in scheduled order. Read-only; no attendance records or lecture marks are changed. -->
+<!-- V24.28.6: Improved both history dialogs with clearly separated date groups and reset each dialog's internal scroll position to the top on close/reopen. Existing filters, ordering, and independent data sources remain unchanged. -->
+<!-- V24.28.8: Lecture History filters adjustment periods by their selected outcome (attended, absent, teacher absent, no classes, or assessment) instead of treating every adjustment as attended. -->
+<!-- V24.28.9: Dashboard Cards 2–5 center their expanded card in the available viewport so small portions of both neighboring cards remain visible for direct switching. Card 1 and Card 6 positioning remain unchanged. -->
+<!-- V24.28.10: Final production Dashboard card order is Lecture History, Monthly - Lectures Status, Monthly Report, Semester - Lectures Status, Semester Report, Weekly Timetable. DOM card blocks reordered only; card IDs, content, handlers, attendance calculations, and storage remain unchanged. -->
+<!-- V24.28.11: Align Lecture History adjustment entries with the scheduled slot-level status used by Semester Lecture Report, preventing adjustmentStatus from being counted as a second outcome. -->
+<!-- V24.28.12: Treat every Adjustment Period as two linked outcomes: the previous scheduled subject is Teacher Absent, and the selected adjustment subject receives its recorded outcome. Historical adjustment marks remain reportable if later timetable revisions changed the subject ID at that time. -->
+<!-- V24.28.13: Lecture Wise Percentage now follows the currently effective timetable for untracked Adjustment Periods. The original slot keeps its linked Teacher Absent outcome, while the selected adjustment subject receives In Progress from scheduled start through end-time automatic Absent; adjustment-linked numerator credit remains consistent whether the target is tracked or untracked. Dashboard historical lecture analytics also attribute ended untracked adjustments to both linked outcomes. No stored data/schema or unrelated attendance rules changed. -->
+<!-- V24.28.14: Lecture Wise Percentage status bars visually double segments below 10% (with a 4% minimum) and proportionally redistribute remaining width, keeping the bar within 100%. Tooltips/accessibility labels and all attendance calculations retain exact values; display-only change, no storage/schema changes. -->
+<!-- V24.28.15: Lecture Wise Percentage now defaults to a combined performance order using both total lectures and displayed lectures attended (combined score = total + attended), descending; ties use total lectures, then attended, then subject name. The existing manual attendance-percentage sort toggle and close-to-A–Z reset behavior remain unchanged. Display-only; no attendance calculations, data, or storage schema changed. -->
 
 <!-- EDITOR SPECIAL INSTRUCTION: For every new version implemented, add a short Version History comment describing what changed. Keep it concise but clear. -->
 
@@ -719,7 +793,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V24.4</title>
+<title>Invictus V24.28.15</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -1399,6 +1473,32 @@
       min-width:76px;
     }
   }
+  /* V24.28.5 — Lecture History shares Attendance History's presentation while
+     keeping its date/lecture rows and data source independent. */
+  /* V24.28.6 — Date headings now visibly own the rows beneath them in both history dialogs. */
+  .history-date-group,.lecture-history-date-group{display:grid;gap:7px;margin:0 0 13px}
+  .history-date-heading,.lecture-history-date{font-size:calc(16px * var(--invictus-font-scale));font-weight:800;padding:8px 4px 7px;border-bottom:2px solid var(--line);background:var(--card);border-radius:7px 7px 0 0}
+  .history-date-group .history-row{margin:0}
+  .lecture-history-row{gap:10px}
+  .lecture-history-row > span:first-child{flex:1;min-width:0}
+  .lecture-history-row .history-time{line-height:1.3;overflow-wrap:anywhere}
+  .lecture-history-status{flex:0 0 112px;text-align:right;white-space:normal;line-height:1.2}
+  .lecture-history-status.attended{color:#2e7d32}
+  .lecture-history-status.adjustment-attended{color:#66bb6a}
+  .lecture-history-status.absent{color:#c62828}
+  .lecture-history-status.teacher-absent{color:#b35a00}
+  .lecture-history-status.no-classes{color:#777}
+  .lecture-history-status.class-test{color:#ef9a9a}
+  .lecture-history-status.surprise-test{color:#b71c1c}
+  html[data-theme="dark"] .lecture-history-date,html[data-theme="dark"] .history-date-heading{border-bottom-color:#333;background:#181818}
+  html[data-theme="dark"] .lecture-history-status.attended{color:#7ed887}
+  html[data-theme="dark"] .lecture-history-status.adjustment-attended{color:#85d991}
+  html[data-theme="dark"] .lecture-history-status.absent{color:#ff8f8f}
+  html[data-theme="dark"] .lecture-history-status.teacher-absent{color:#f0b46b}
+  html[data-theme="dark"] .lecture-history-status.no-classes{color:#aaa}
+  html[data-theme="dark"] .lecture-history-status.class-test{color:#ffb0b0}
+  html[data-theme="dark"] .lecture-history-status.surprise-test{color:#ff8f8f}
+  @media(max-width:480px){.lecture-history-status{flex-basis:96px;font-size:calc(13px * var(--invictus-font-scale))}}
 
   .history-late-watermark{
     position:absolute;
@@ -1501,6 +1601,61 @@
   }
   html[data-theme="dark"] .late-submission-item{background:#202020;border-color:#333}
   html[data-theme="dark"] .late-submission-item:active{background:#292929}
+  .cross-semester-resolver-modal{
+    width:min(560px,100%);
+    max-height:min(620px,86vh);
+    overflow:hidden;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+  }
+  .cross-semester-resolver-intro{
+    margin:0 0 14px;
+    color:#666;
+    line-height:1.45;
+    font-size:calc(13px * var(--invictus-font-scale));
+  }
+  .cross-semester-resolver-list{
+    min-height:0;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    display:grid;
+    align-content:start;
+    gap:10px;
+    padding-right:2px;
+  }
+  .cross-semester-resolver-button{
+    width:100%;
+    min-height:64px;
+    padding:13px 15px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#fafafa;
+    color:inherit;
+    font:inherit;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    transition:background .15s ease,border-color .15s ease;
+  }
+  .cross-semester-resolver-button:active{background:#f1f1f1}
+  .cross-semester-resolver-button-main{font-weight:800;font-size:calc(16px * var(--invictus-font-scale));}
+  .cross-semester-resolver-button-sub{margin-top:3px;color:#777;font-size:calc(12px * var(--invictus-font-scale));}
+  .cross-semester-resolver-button-arrow{
+    flex:0 0 auto;
+    font-weight:900;
+    color:var(--purple);
+    font-size:calc(21px * var(--invictus-font-scale));
+    line-height:1;
+  }
+  html[data-theme="dark"] .cross-semester-resolver-button{background:#202020;border-color:#333}
+  html[data-theme="dark"] .cross-semester-resolver-button:active{background:#292929}
+  html[data-theme="dark"] .cross-semester-resolver-intro{color:#aaa}
+  html[data-theme="dark"] .cross-semester-resolver-button-sub{color:#aaa}
   .late-submission-bulk-button{
     width:100%;padding:12px 14px;border:1px solid var(--purple);border-radius:12px;
     background:#f0ebff;color:var(--purple);font:inherit;font-size:calc(14px * var(--invictus-font-scale));
@@ -2163,6 +2318,24 @@
     z-index:1;
   }
   .week-lecture:last-child{border-bottom:0}
+  /* V24.27.1 — Preserve the complete current-lecture border even when the
+     running lecture is the final row. The generic last-child rule must not
+     remove the purple bottom edge. */
+  .week-lecture.is-current-lecture:last-child{border-bottom:2px solid var(--purple)}
+  /* V24.27.3 — Dedicated top-layer border overlay. The existing current-lecture
+     border remains intact, while this overlay keeps the visible four-sided
+     boundary above child backgrounds, progress fills, and shimmer layers. */
+  .week-lecture-border-overlay{
+    position:absolute !important;
+    inset:0;
+    width:auto !important;
+    height:auto !important;
+    box-sizing:border-box;
+    border:3px solid var(--purple);
+    border-radius:inherit;
+    z-index:10 !important;
+    pointer-events:none;
+  }
   /* V23.9 — Dedicated Dark Appearance treatment for the live timetable. */
   html[data-theme="dark"] .week-lecture{
     background:#242424;
@@ -2449,6 +2622,43 @@
     width:36px;height:36px;border:0;border-radius:10px;background:#f4f4f4;
     color:#555;font-size:calc(24px * var(--invictus-font-scale));line-height:1;cursor:pointer;
   }
+  .subject-percentage-info{
+    width:36px;height:36px;border:0;border-radius:10px;background:#f4f4f4;
+    color:var(--purple);font-size:calc(20px * var(--invictus-font-scale));font-weight:900;
+    line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+    margin-left:auto;margin-right:2px;
+  }
+  .subject-percentage-sort{
+    width:36px;height:36px;border:0;border-radius:10px;background:#f4f4f4;
+    color:#555;font-size:calc(22px * var(--invictus-font-scale));font-weight:800;
+    line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  }
+  .subject-percentage-sort[aria-pressed="true"]{color:var(--purple);background:#f0ebff;}
+  .subject-percentage-head-actions{display:flex;align-items:center;gap:8px}
+  .subject-percentage-info-backdrop{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    padding:14px;z-index:2;background:rgba(0,0,0,.18);
+  }
+  .subject-percentage-info-backdrop.open{display:flex}
+  .subject-percentage-info-modal{
+    width:min(430px,100%);max-height:78vh;overflow:auto;background:#fff;color:#222;
+    border:1px solid #e4e4e4;border-radius:18px;padding:18px;
+    box-shadow:0 15px 50px rgba(0,0,0,.25);
+  }
+  .subject-percentage-info-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;
+  }
+  .subject-percentage-info-head h3{margin:0;font-size:18px}
+  .subject-percentage-info-close{
+    width:36px;height:36px;border:0;border-radius:10px;background:#f4f4f4;
+    color:#555;font-size:calc(24px * var(--invictus-font-scale));line-height:1;cursor:pointer;
+  }
+  .subject-percentage-legend{display:flex;flex-direction:column;gap:10px}
+  .subject-percentage-legend-item{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700}
+  .subject-percentage-legend-box{
+    width:22px;height:22px;flex:0 0 22px;border-radius:6px;
+    border:1px solid rgba(0,0,0,.08);
+  }
   .subject-percentage-table-wrap{overflow:hidden;border:1px solid #e5e5e5;border-radius:12px}
   .subject-percentage-table{
     width:100%;border-collapse:collapse;table-layout:fixed;font-size:calc(12px * var(--invictus-font-scale));
@@ -2461,6 +2671,10 @@
   .subject-percentage-table th:nth-child(2),.subject-percentage-table td:nth-child(2){width:20%}
   .subject-percentage-table th:nth-child(3),.subject-percentage-table td:nth-child(3){width:49%}
   .subject-percentage-table th{background:#fafafa;color:#666;font-weight:800}
+  /* V24.26 — Semester 1 only: emphasize the Subject/Attendance labels and subject names. */
+  .subject-percentage-modal[data-semester="1"] .subject-percentage-table thead th:nth-child(1),
+  .subject-percentage-modal[data-semester="1"] .subject-percentage-table thead th:nth-child(3),
+  .subject-percentage-modal[data-semester="1"] .subject-percentage-table tbody td:first-child{font-weight:800}
   .subject-percentage-table tr:last-child td{border-bottom:0}
   .subject-percentage-table .att{color:#2e7d32;font-weight:800}
   .subject-percentage-table .abs{color:#c62828;font-weight:800}
@@ -2475,9 +2689,14 @@
   .subject-percentage-segment{
     height:100%;flex:0 0 auto;min-width:0;
   }
-  .subject-percentage-segment.attended{background:#2e7d32}
-  .subject-percentage-segment.class-test{background:#ef9a9a}
+  .subject-percentage-segment.no-classes{background:#9e9e9e}
   .subject-percentage-segment.absent{background:#c62828}
+  .subject-percentage-segment.teacher-absent{background:#ef8c22}
+  .subject-percentage-segment.surprise-test{background:#8b0000}
+  .subject-percentage-segment.class-test{background:#ef9a9a}
+  .subject-percentage-segment.attended{background:#2e7d32}
+  .subject-percentage-segment.adjustment-attended{background:#66bb6a}
+  .subject-percentage-segment.in-progress{background:#607d8b}
   .subject-percentage-segment:first-child{border-radius:999px 0 0 999px}
   .subject-percentage-segment:last-child{border-radius:0 999px 999px 0}
   .subject-percentage-segment:only-child{border-radius:999px}
@@ -4998,6 +5217,17 @@ function getHardcodedSpecialDay(dateKey){
   </div>
 </div>
 
+<div class="modal-backdrop" id="crossSemesterAttendanceBackdrop" aria-hidden="true">
+  <div class="modal cross-semester-resolver-modal" role="dialog" aria-modal="true" aria-labelledby="crossSemesterAttendanceTitle">
+    <div class="late-submission-head">
+      <h2 id="crossSemesterAttendanceTitle">Attendance Needs Resolution</h2>
+      <button type="button" class="late-submission-close" id="crossSemesterAttendanceClose" aria-label="Close">×</button>
+    </div>
+    <p class="cross-semester-resolver-intro" id="crossSemesterAttendanceIntro">Attendance from other semesters must be resolved before today’s attendance can be submitted.</p>
+    <div id="crossSemesterAttendanceList" class="cross-semester-resolver-list"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="bulkAttendanceBackdrop" style="z-index:6000 !important;">
   <div class="modal bulk-attendance-modal">
     <div class="late-submission-head">
@@ -5392,7 +5622,7 @@ function getHardcodedSpecialDay(dateKey){
 
       <section class="user-guide-section">
         <h3>🚀 1. Getting Started</h3>
-        <p>After signing in, complete the basic information INVICTUS asks for, especially your <strong>College Joining Date</strong>. The main areas are <strong>Dashboard</strong>, <strong>Attendance</strong>, <strong>Semester</strong>, and <strong>Settings</strong>.</p>
+        <p>After signing in, complete the basic information INVICTUS requests, especially your <strong>College Joining Date</strong>. The main areas are <strong>Dashboard</strong>, <strong>Attendance</strong>, <strong>Semester</strong>, and <strong>Settings</strong>.</p>
         <div class="user-guide-action"><strong>Record a college day</strong><span>Attendance → Submit Your Attendance</span></div>
         <div class="user-guide-action"><strong>Mark individual lectures</strong><span>Semester → Daily Timetable</span></div>
         <div class="user-guide-action"><strong>Manage submitted results</strong><span>Semester → All Submitted Results</span></div>
@@ -5411,12 +5641,13 @@ function getHardcodedSpecialDay(dateKey){
         <p>Use <strong>Attendance → Submit Your Attendance</strong> to record the status of a college day.</p>
         <p>Select the available status for that date, such as <strong>Present</strong>, <strong>Absent</strong>, <strong>Holiday</strong>, or <strong>Blank</strong>, then complete the requested reason/details.</p>
         <p>For a normal college day, use <strong>Present → Regular College Day</strong>. The attendance window controls when a Present submission can be made; submitting after the window is recorded as a <strong>Late Submission</strong>.</p>
-        <p>After submission, use <strong>Attendance History</strong> to review the day. Daily attendance and individual lecture marking are separate.</p>
+        <p>Before today's attendance is submitted, INVICTUS checks the isolated attendance records for all six semesters for prior unresolved eligible dates. If unresolved dates exist, the app routes you through the affected semester-wise resolution flow and returns to the target semester after the required dates are resolved.</p>
+        <p>The Attendance tab itself presents a unified read-only view assembled from the six isolated attendance stores. Attendance submission and editing remain scoped to the active semester store.</p>
       </section>
 
       <section class="user-guide-section">
         <h3>📚 4. Daily Timetable</h3>
-        <p>Open <strong>Semester → Daily Timetable</strong> to see the lectures scheduled for a date. Use the date controls, calendar, or swipe to move between days.</p>
+        <p>Open <strong>Semester → Daily Timetable</strong> to see the lectures scheduled for the selected semester and date. Use the date controls, calendar, or swipe to move between days.</p>
         <p>Tap a lecture's <strong>3 dots</strong> to open its attendance actions:</p>
         <div class="user-guide-action"><strong>Attended</strong><span>Records the lecture as attended. If an Adjustment is configured, its rules are applied.</span></div>
         <div class="user-guide-action"><strong>Absent</strong><span>Records the lecture as absent.</span></div>
@@ -5455,7 +5686,17 @@ function getHardcodedSpecialDay(dateKey){
       <section class="user-guide-section">
         <h3>🔎 8. Attendance Review</h3>
         <p>Use <strong>Check Unmarked Lectures</strong> to find eligible lectures from previous dates that still need a mark. Today's unfinished lectures are not treated as previous-day unmarked lectures.</p>
-        <p>Use <strong>Lecture Wise Percentage</strong> and <strong>Lecture Breakdown</strong> to understand lecture-level attendance and the different recorded outcomes, including Adjustment Period attendance.</p>
+        <p><strong>Lecture Breakdown</strong> shows lecture-level breakdown for the active semester. The same expanded breakdown controls are available across <strong>Semesters 1–6</strong>, using each semester's isolated data.</p>
+        <p><strong>Lecture Wise Percentage</strong> summarizes lecture-status records for each subject. The distribution uses seven outcome categories and may temporarily show <strong>In Progress</strong> for an unmarked lecture from its scheduled start until its end time:</p>
+        <div class="user-guide-action"><strong>Attended</strong><span>Lecture marked as attended.</span></div>
+        <div class="user-guide-action"><strong>Adjustment Attended</strong><span>Attendance credited through an Adjustment.</span></div>
+        <div class="user-guide-action"><strong>Surprise Test</strong><span>Lecture/status recorded as a Surprise Test.</span></div>
+        <div class="user-guide-action"><strong>Class Test</strong><span>Lecture/status recorded as a Class Test.</span></div>
+        <div class="user-guide-action"><strong>Teacher Absent</strong><span>Teacher was absent for the scheduled lecture.</span></div>
+        <div class="user-guide-action"><strong>No Classes</strong><span>No class took place.</span></div>
+        <div class="user-guide-action"><strong>Absent</strong><span>Student was absent.</span></div>
+        <p>The segmented distribution is ordered as <strong>Attended → Adjustment Attended → Surprise Test → Class Test → Teacher Absent → No Classes → Absent</strong>. The displayed Attendance percentage is calculated as <strong>(Attended + Adjustment Attended) ÷ all displayed lecture-status records × 100</strong>.</p>
+        <p>Tap the <strong>information/legend</strong> control in the Lecture Wise Percentage dialog to view the seven outcome categories and the temporary In Progress state. An unmarked lecture counts as Absent only after its scheduled end time. This behavior is available for the isolated semester environments.</p>
       </section>
 
       <section class="user-guide-section">
@@ -5486,23 +5727,32 @@ function getHardcodedSpecialDay(dateKey){
         <h3>📈 12. Dashboard</h3>
         <p><strong>Dashboard</strong> is your progress overview. It lets you review information without changing your records.</p>
         <div class="user-guide-action"><strong>Weekly Timetable</strong><span>View the weekly schedule for the selected semester.</span></div>
-        <div class="user-guide-action"><strong>Monthly - Lectures Status</strong><span>Review lecture status for the month.</span></div>
+        <div class="user-guide-action"><strong>Monthly - Lectures Status</strong><span>Review lecture status for the selected month.</span></div>
         <div class="user-guide-action"><strong>Monthly Report</strong><span>Review monthly attendance.</span></div>
         <div class="user-guide-action"><strong>Semester - Lectures Status</strong><span>Review semester lecture progress.</span></div>
         <div class="user-guide-action"><strong>Semester Report</strong><span>Review semester attendance.</span></div>
+        <p>Dashboard reporting is <strong>date-driven</strong>. Each report resolves its semester from the report date and reads that semester's isolated data. The <strong>Settings → Set Semester</strong> preference does not change the Dashboard's reporting context.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>👤 13. Profile &amp; Account</h3>
+        <h3>🎓 13. Semester System</h3>
+        <p>INVICTUS maintains separate environments for <strong>Semesters 1–6</strong>. Each semester has its own working period, attendance/lecture data, subjects, timetable, percentage tracking, surprise tests, and exam results.</p>
+        <p>All six semesters remain directly selectable through <strong>Settings → Account → Set Semester</strong>. A semester is not hidden simply because its configured START date is in the future.</p>
+        <p>The selected semester is the active semester for semester-scoped areas such as <strong>Lecture Breakdown</strong>, <strong>All Submitted Results</strong>, and <strong>Weekly Timetable</strong>. Switching the selected semester does not merge or share the underlying semester data.</p>
+        <p><strong>Semester 1</strong> uses its configured <strong>08/08/2026–31/01/2027</strong> working period. The other semesters retain their own configured periods.</p>
+      </section>
+
+      <section class="user-guide-section">
+        <h3>👤 14. Profile &amp; Account</h3>
         <p>Open <strong>Settings → Account</strong> to manage your profile and account.</p>
         <p><strong>Profile Photo</strong> — Upload, view, or delete your photo. Deletion requires confirmation.</p>
         <p><strong>Change Name / Change Gmail</strong> — Update the corresponding account information.</p>
-        <p><strong>Set Semester</strong> — Choose <strong>Semester 1–6</strong> to open that semester directly in <strong>Lecture Breakdown</strong>, <strong>All Submitted Results</strong>, and <strong>Weekly Timetable</strong>. Choose <strong>All</strong> to show the semester-selection list each time.</p>
+        <p><strong>Set Semester</strong> — Select <strong>Semester 1–6</strong> as your active semester. The old <strong>All</strong> option is no longer available.</p>
         <p><strong>Log out</strong> — End the current session.</p>
       </section>
 
       <section class="user-guide-section">
-        <h3>⚙️ 14. Settings</h3>
+        <h3>⚙️ 15. Settings</h3>
         <p>Settings contains the app's account, app, notification, data, display, security, appearance, help, and information controls.</p>
         <div class="user-guide-action"><strong>Account</strong><span>Profile, account details, Set Semester, and Log out.</span></div>
         <div class="user-guide-action"><strong>App</strong><span>Available app refresh/update controls.</span></div>
@@ -5515,7 +5765,7 @@ function getHardcodedSpecialDay(dateKey){
       </section>
 
       <section class="user-guide-section">
-        <h3>🔔 15. Notification Centre</h3>
+        <h3>🔔 16. Notification Centre</h3>
         <p>Tap the <strong>bell</strong> to open the Notification Centre.</p>
         <p><strong>Submit Your Attendance</strong> can remind you when today's attendance has not been submitted during the applicable window.</p>
         <p><strong>Mark Your Today Lecture</strong> can remind you when an eligible lecture has ended and still needs to be marked.</p>
@@ -5523,28 +5773,30 @@ function getHardcodedSpecialDay(dateKey){
       </section>
 
       <section class="user-guide-section">
-        <h3>💾 16. Backup &amp; Reset</h3>
+        <h3>💾 17. Backup &amp; Reset</h3>
         <p><strong>Export Data</strong> creates a backup of your INVICTUS records. <strong>Import Data</strong> restores data from a compatible INVICTUS backup.</p>
         <p>Your saved <strong>Set Semester</strong> preference is included in the app's backup/reset handling.</p>
         <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your saved application records and College Joining Date, and resets saved app preferences. Use it only when you intentionally want to start again.</div>
       </section>
 
       <section class="user-guide-section">
-        <h3>💡 17. Quick Daily Routine</h3>
+        <h3>💡 18. Quick Daily Routine</h3>
         <p>1. Record the day's attendance in <strong>Submit Your Attendance</strong>.</p>
-        <p>2. Open <strong>Daily Timetable</strong> and mark each completed lecture.</p>
-        <p>3. Use <strong>Schedule Exception → Set Adjustment</strong> only when you attended a different subject during a scheduled period.</p>
-        <p>4. Use <strong>Schedule Exception → Set Replacement</strong> when the lecture occupying a slot actually changed.</p>
-        <p>5. Check the <strong>bell</strong> for reminders and pending results.</p>
-        <p>6. Review <strong>Dashboard</strong> and <strong>Lecture Breakdown</strong> to understand your progress.</p>
+        <p>2. If INVICTUS asks you to resolve previous unresolved attendance, complete the semester-wise resolution flow before continuing.</p>
+        <p>3. Open <strong>Daily Timetable</strong> and mark each completed lecture.</p>
+        <p>4. Use <strong>Schedule Exception → Set Adjustment</strong> only when you attended a different subject during a scheduled period.</p>
+        <p>5. Use <strong>Schedule Exception → Set Replacement</strong> when the lecture occupying a slot actually changed.</p>
+        <p>6. Check the <strong>bell</strong> for reminders and pending results.</p>
+        <p>7. Review <strong>Dashboard</strong>, <strong>Lecture Breakdown</strong>, and <strong>Lecture Wise Percentage</strong> to understand your progress.</p>
       </section>
 
       <section class="user-guide-section user-guide-last">
-        <h3>✅ 18. You're Ready to Use INVICTUS</h3>
-        <p><strong>Attendance</strong> records your college day, <strong>Semester</strong> handles your timetable and results, <strong>Dashboard</strong> shows your progress, and <strong>Settings</strong> manages your account and app preferences.</p>
-        <p>For the most accurate workflow, remember: <strong>daily attendance first → lecture marking → exceptions only when needed → check results and progress.</strong></p>
+        <h3>✅ 19. You're Ready to Use INVICTUS</h3>
+        <p><strong>Attendance</strong> records your college day, <strong>Semester</strong> handles your timetable and results, <strong>Dashboard</strong> shows date-driven progress reports, and <strong>Settings</strong> manages your account and app preferences.</p>
+        <p>For the most accurate workflow, remember: <strong>daily attendance → resolve previous pending attendance when requested → lecture marking → exceptions only when needed → check results and progress.</strong></p>
         <p>Whenever you need help, open <strong>Help → User Guide</strong> and return to the relevant section.</p>
       </section>
+
       <button class="primary user-guide-bottom-close" id="closeUserGuideBottom" type="button">Close</button>
     </div></div>
 
@@ -5711,7 +5963,7 @@ function getHardcodedSpecialDay(dateKey){
 const V16_SEMESTER_CONFIG_KEY="invictus_semester_config";
 
 const DEFAULT_SEMESTER_CONFIG={
-  1:{start:"01/08/2026",end:"31/01/2027"},
+  1:{start:"08/08/2026",end:"31/01/2027"},
   2:{start:"01/02/2027",end:"31/07/2027"},
   3:{start:"01/08/2027",end:"31/01/2028"},
   4:{start:"01/02/2028",end:"31/07/2028"},
@@ -5760,6 +6012,31 @@ const SEMESTER_CONFIG=v16LoadJsonOverride(
   DEFAULT_SEMESTER_CONFIG,
   v16ValidSemesterConfig
 );
+
+// V24.6: The actual Semester 1 working window begins on 08/08/2026.
+// Migrate only the previous untouched default (01/08/2026); never overwrite
+// a genuinely customized semester configuration.
+(function migrateV246Semester1WorkingStart(){
+  try{
+    const raw=localStorage.getItem(V16_SEMESTER_CONFIG_KEY);
+    if(!raw){ return; }
+    const parsed=JSON.parse(raw);
+    const oldDefaults={
+      1:{start:"01/08/2026",end:"31/01/2027"},
+      2:{start:"01/02/2027",end:"31/07/2027"},
+      3:{start:"01/08/2027",end:"31/01/2028"},
+      4:{start:"01/02/2028",end:"31/07/2028"},
+      5:{start:"01/08/2028",end:"31/01/2029"},
+      6:{start:"01/02/2029",end:"31/07/2029"}
+    };
+    const untouched=JSON.stringify(parsed)===JSON.stringify(oldDefaults);
+    if(untouched){
+      parsed[1].start="08/08/2026";
+      localStorage.setItem(V16_SEMESTER_CONFIG_KEY,JSON.stringify(parsed));
+      SEMESTER_CONFIG[1].start="08/08/2026";
+    }
+  }catch(e){}
+})();
 
 function getSemesterConfig(semester){
   const cfg=SEMESTER_CONFIG[Number(semester)];
@@ -5848,7 +6125,7 @@ const attendanceUnavailableDates = new Set([
   "2026-08-16"
 ]);
 
-const state = JSON.parse(localStorage.getItem("bcaAttendanceState") || '{"records":{},"edits":{}}');
+let state = JSON.parse(localStorage.getItem("bcaAttendanceState") || '{"records":{},"edits":{}}');
 state.submittedAt = state.submittedAt || {};
 state.editedAt = state.editedAt || {};
 state.holidayComments = state.holidayComments || {};
@@ -5867,6 +6144,9 @@ const DATA_BACKUP_VERSION = 3;
 const DATA_BACKUP_KEYS = [
   "bcaAttendanceState",
   "bcaSemester1State",
+  ...Array.from({length:6},(_,i)=>`bcaSemester${i+1}AttendanceState`),
+  ...Array.from({length:6},(_,i)=>`bcaSemester${i+1}State`),
+  ...Array.from({length:6},(_,i)=>`invictus_semester_subjects_${i+1}`),
   V16_SEMESTER_CONFIG_KEY,
   V16_SEMESTER_TIMETABLE_KEY
 ];
@@ -6262,6 +6542,7 @@ if(!localStorage.getItem("bcaPatch6TodayCleanup")){
   delete state.records["2026-08-20"];
   delete state.edits["2026-08-20"];
   localStorage.setItem("bcaAttendanceState", JSON.stringify(state));
+  localStorage.setItem("bcaSemester1AttendanceState", JSON.stringify(state));
   localStorage.setItem("bcaPatch6TodayCleanup","1");
 }
 
@@ -6281,10 +6562,20 @@ const profilePhotoDeleteConfirmYes = document.getElementById("profilePhotoDelete
 let profilePhotoAvailable = false;
 
 // [V22.03 CORE RUNTIME — shared state persistence bridge]
+function invictusActiveAttendanceStorageKey(){
+  return activeSemesterNumber===1 ? "bcaAttendanceState" : `bcaSemester${activeSemesterNumber}AttendanceState`;
+}
+function invictusActiveSemesterStorageKey(){
+  return `bcaSemester${activeSemesterNumber}State`;
+}
 function save(){
-  applyInvictusProtectedCollegeData(state,null);
+  if(activeSemesterNumber===1) applyInvictusProtectedCollegeData(state,null);
   invalidateAttendanceDerivedState();
-  v11PersistCore("bcaAttendanceState",state);
+  const key=invictusActiveAttendanceStorageKey();
+  v11PersistCore(key,state);
+  if(activeSemesterNumber===1){
+    try{localStorage.setItem("bcaAttendanceState",JSON.stringify(state));}catch(e){}
+  }
 }
 
 function iso(d){
@@ -6444,7 +6735,7 @@ photoInput.addEventListener("change", async e=>{
 });
 
 // [V22.08 ATTENDANCE ENGINE — attendance calculation API]
-function getAttendanceStats(){if(INVICTUS_STATE.cache.attendanceStats)return {...INVICTUS_STATE.cache.attendanceStats};const stats=calculateAttendanceStats(state.records);INVICTUS_STATE.cache.attendanceStats={...stats};return {...stats};}
+function getAttendanceStats(){if(INVICTUS_STATE.cache.attendanceStats)return {...INVICTUS_STATE.cache.attendanceStats};const stats=calculateAttendanceStats(getAttendanceTabSourceState().records);INVICTUS_STATE.cache.attendanceStats={...stats};return {...stats};}
 function totalAttendance(){return getAttendanceStats().attended;}
 function attendancePlannerText(stats){return calculateAttendancePlannerText(stats,.75);}
 
@@ -7297,6 +7588,8 @@ let scheduleLecturesStatusExpanded=false;
 let scheduleMonthlyReportExpanded=false;
 let scheduleSemesterLecturesStatusExpanded=false;
 let scheduleSemesterReportExpanded=false;
+let lectureHistoryModalScrollY=0;
+let lectureHistoryFilter={status:"all",month:"all"};
 
 /* V15.2.1 — Editable semester counting ranges.
    Keep dates in DD/MM/YYYY so the semester boundaries can be changed later
@@ -7430,10 +7723,11 @@ function scheduleDDMMYYYYToDate(value){
 }
 
 function scheduleSemesterRangeDates(index){
-  const range=scheduleSemesterRanges[index];
-  if(!range)return null;
-  const start=scheduleDDMMYYYYToDate(range.start);
-  const end=scheduleDDMMYYYYToDate(range.end);
+  const n=Number(index)+1;
+  const config=SEMESTER_CONFIG[n];
+  if(!config)return null;
+  const start=scheduleDDMMYYYYToDate(config.start);
+  const end=scheduleDDMMYYYYToDate(config.end);
   if(!start||!end||start>end)return null;
   return {start,end};
 }
@@ -7449,20 +7743,12 @@ function getSemesterLectureStatusCounts(index){
   const effectiveEnd=range.end<today?range.end:today;
   const counts={att:0,abs:0,ta:0,nc:0,total:0};
 
-  // 1.4 is intentionally an aggregation layer over 1.2's monthly data.
-  let cursor=scheduleMonthStart(range.start);
-  const lastMonth=scheduleMonthStart(effectiveEnd);
-
-  while(cursor<=lastMonth){
-    const monthly=getMonthlyLectureStatusCounts(cursor);
-    if(monthly){
-      counts.att+=monthly.att;
-      counts.abs+=monthly.abs;
-      counts.ta+=monthly.ta;
-      counts.nc+=monthly.nc;
-      counts.total+=monthly.total;
-    }
-    cursor=scheduleMonthShift(cursor,1);
+  // Card 1.4 aggregates the same date-resolved 1.2 source, but only inside
+  // this semester's configured working window. This prevents a month that
+  // crosses two semesters from leaking records across their boundaries.
+  for(let d=new Date(range.start);d<=effectiveEnd;d.setDate(d.getDate()+1)){
+    const key=iso(d);
+    getDashboardDailyTimetableLectureStatuses(key).forEach(row=>addDashboardLectureStatusCount(counts,row));
   }
 
   return counts;
@@ -7484,18 +7770,17 @@ function scheduleSemesterAttendanceCounts(index){
   const effectiveEnd=range.end<today?range.end:today;
   const counts={present:0,absent:0,holiday:0,total:0,classes:0};
 
-  // Reuse Card 1.3's exact day-level attendance counting system.
-  let cursor=scheduleMonthStart(range.start);
-  const lastMonth=scheduleMonthStart(effectiveEnd);
-
-  while(cursor<=lastMonth){
-    const monthly=scheduleMonthDayCounts(cursor);
-    if(monthly){
-      counts.present+=monthly.present;
-      counts.absent+=monthly.absent;
-      counts.holiday+=monthly.holiday;
-    }
-    cursor=scheduleMonthShift(cursor,1);
+  for(let d=new Date(range.start);d<=effectiveEnd;d.setDate(d.getDate()+1)){
+    const key=iso(d);
+    const semester=getDashboardSemesterForDate(key);
+    if(semester!==Number(index)+1)continue;
+    const dashboardState=invictusAttendanceStateFor(semester);
+    const status=dashboardState.records?.[key];
+    const joining=getCollegeJoiningDate();
+    if(joining && key<joining)continue;
+    if(status==="present")counts.present++;
+    else if(status==="absent")counts.absent++;
+    else if(status==="holiday")counts.holiday++;
   }
 
   counts.total=counts.present+counts.absent+counts.holiday;
@@ -7907,14 +8192,55 @@ function attachScheduleSemesterLecturesStatusSwipe(){
    even though the individual lecture marks live in semState.lectures.
 */
 // [V22.10 TIMETABLE ENGINE — shared lecture-status pipeline consumed by Dashboard]
+/* V24.10 REGRESSION FIX — retain the original Semester renderer lecture-status
+   pipeline. V24.9 introduced a Dashboard-specific date-resolved pipeline and
+   renamed the shared function; the locked Semester 1 renderer still calls the
+   original function name. Keep this compatibility path isolated from Dashboard
+   reporting so Dashboard remains date-driven and Default-Semester-independent. */
+/* V24.28.12 — Adjustment Period is a linked pair of outcomes. The saved
+   key identifies the previously scheduled teacher/subject; adjustmentSubject
+   identifies the subject covered during that same time slot. Older timetable
+   revisions may no longer list the saved original subject at that time, so
+   report builders must still find that stored adjustment by date + time. */
+function adjustmentOutcomeStatus(record){
+  const explicit=String(record?.adjustmentStatus||"").trim();
+  if(["att","abs","ta","nc"].includes(explicit))return explicit;
+  if(record?.status==="att")return "att"; // legacy Adjustment Period record
+  if(["abs","ta","nc"].includes(record?.status))return record.status;
+  return "ta";
+}
+function findStoredAdjustmentForSlot(semesterState,dateKey,time,excludeRecordKey="",consumedKeys=null){
+  const records=semesterState?.lectures||{};
+  for(const [key,record] of Object.entries(records)){
+    if(key===excludeRecordKey || consumedKeys?.has(key) || !record?.status || !record?.adjustmentSubject)continue;
+    const parts=String(key).split("|");
+    const recordDate=String(record.date||parts[0]||"").slice(0,10);
+    const recordTime=String(parts[2]||record.time||"");
+    const originalSubject=String(record.subject||parts[1]||"").trim();
+    const adjustmentSubject=String(record.adjustmentSubject||"").trim();
+    if(recordDate!==dateKey || recordTime!==String(time||"") || !originalSubject || !adjustmentSubject || originalSubject===adjustmentSubject)continue;
+    return {recordKey:key,record,originalSubject,adjustmentSubject,targetStatus:adjustmentOutcomeStatus(record),time:recordTime};
+  }
+  return null;
+}
+function forEachUnconsumedStoredAdjustment(semesterState,dateKey,consumedKeys,callback){
+  const records=semesterState?.lectures||{};
+  Object.entries(records).forEach(([key,record])=>{
+    if(consumedKeys?.has(key) || !record?.status || !record?.adjustmentSubject)return;
+    const parts=String(key).split("|");
+    const recordDate=String(record.date||parts[0]||"").slice(0,10);
+    const originalSubject=String(record.subject||parts[1]||"").trim();
+    const adjustmentSubject=String(record.adjustmentSubject||"").trim();
+    if(recordDate!==dateKey || !originalSubject || !adjustmentSubject || originalSubject===adjustmentSubject)return;
+    const time=String(parts[2]||record.time||"");
+    consumedKeys?.add(key);
+    callback({recordKey:key,record,originalSubject,adjustmentSubject,targetStatus:adjustmentOutcomeStatus(record),time});
+  });
+}
+
 function getDailyTimetableLectureStatuses(dateKey){
   const joining=getCollegeJoiningDate();
   if(joining && dateKey<joining)return [];
-  // V22.4 — Regular Present days continue to use the existing lecture
-  // participation gate. A day explicitly marked Absent is the one intentional
-  // exception: V22.3 has already materialized every scheduled, trackable
-  // lecture for that date as an explicit Absent record, so analytics must
-  // consume those records as well.
   const dayStatus=state.records?.[dateKey];
   const isRegularPresent=dayStatus==="present"
     && !state.presentComments?.[dateKey]?.trim();
@@ -7923,18 +8249,194 @@ function getDailyTimetableLectureStatuses(dateKey){
 
   const classes=semClassesForDate(dateKey);
   const rows=[];
+  const consumedAdjustmentKeys=new Set();
 
   classes.forEach(c=>{
-    // V20.29: MS Vaishali is a timetable-only exception. It remains fully
-    // markable through the normal lecture controls, but never enters the
-    // lecture analytics/counting source. A stored mark still prevents it
-    // from remaining permanently visible in Check Unmarked Lectures.
     const trackable=semesterSubjects.some(s=>s.id===c[2]);
     if(!trackable)return;
 
     const recordKey=semRecordKey(dateKey,c[2],c[0]);
     const record=semState.lectures[recordKey];
     const noClassException=semState.noClassExceptions?.[recordKey];
+
+    if(noClassException==="surprise" || noClassException==="surprise-new") {
+      rows.push({date:dateKey,subject:c[2],time:c[0],status:"att"});
+      return;
+    }
+
+    if(record?.status){
+      const adjustedSubject=String(record.adjustmentSubject||"").trim();
+      if(adjustedSubject && adjustedSubject!==c[2]){
+        consumedAdjustmentKeys.add(recordKey);
+        rows.push({date:dateKey,subject:String(record.subject||c[2]),time:c[0],status:"ta",attendanceStatus:adjustmentOutcomeStatus(record),attendanceSubject:adjustedSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+      }else{
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:record.status,attendanceStatus:record.status==="att" ? "att" : record.status,attendanceSubject:c[2]});
+      }
+      return;
+    }
+
+    // V24.28.12 — Resolve a saved adjustment by its original date/time before
+    // deriving an absent/pending mark for a later timetable subject at that slot.
+    const storedAdjustment=findStoredAdjustmentForSlot(semState,dateKey,c[0],recordKey,consumedAdjustmentKeys);
+    if(storedAdjustment){
+      consumedAdjustmentKeys.add(storedAdjustment.recordKey);
+      rows.push({date:dateKey,subject:storedAdjustment.originalSubject,time:c[0],status:"ta",attendanceStatus:storedAdjustment.targetStatus,attendanceSubject:storedAdjustment.adjustmentSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+      return;
+    }
+
+    // V24.28.13 — The Daily Timetable displays a configured Adjustment Period
+    // subject even though the slot's storage identity remains the subject that
+    // was scheduled before the adjustment. Resolve that effective subject here
+    // so an untracked adjustment contributes its two linked outcomes instead of
+    // incorrectly assigning In Progress/automatic Absent to the old subject.
+    const configuredAdjustment=getScheduleAdjustmentForLecture(dateKey,c);
+    if(configuredAdjustment && configuredAdjustment.subjectId!==c[2]){
+      const endPassed=semLectureEndTimePassed(dateKey,c[1]);
+      const startReached=isRegularPresent && semLectureStartTimeReached(dateKey,c[0]);
+      if(endPassed){
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"abs",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true,adjustmentNumeratorCredit:true,automaticAbsent:true});
+      }else if(startReached){
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"pending",attendanceSubject:configuredAdjustment.subjectId,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+      }
+      return;
+    }
+
+    // V24.28.2 — A regular-college-day lecture enters the percentage denominator
+    // at its scheduled START time. Before its END time, an unmarked lecture is
+    // only a derived In Progress row; after END it becomes automatic Absent.
+    // This state is never persisted, and explicit marks above remain authoritative.
+    if(semLectureEndTimePassed(dateKey,c[1])){
+      // V24.28.3 — Keep the Daily Timetable untracked, but identify this
+      // analytics-only Absent so Lecture Wise Percentage can apply its grace rule.
+      rows.push({date:dateKey,subject:c[2],time:c[0],status:"abs",automaticAbsent:true});
+    }else if(isRegularPresent && semLectureStartTimeReached(dateKey,c[0])){
+      rows.push({date:dateKey,subject:c[2],time:c[0],status:"pending"});
+    }
+  });
+
+  // Preserve an explicitly saved adjustment even if a timetable revision no
+  // longer has a class at its stored time. It remains one original slot plus
+  // its linked target outcome (the target is carried as row metadata).
+  forEachUnconsumedStoredAdjustment(semState,dateKey,consumedAdjustmentKeys,adjustment=>{
+    rows.push({date:dateKey,subject:adjustment.originalSubject,time:adjustment.time,status:"ta",attendanceStatus:adjustment.targetStatus,attendanceSubject:adjustment.adjustmentSubject,adjustmentRecord:true,adjustmentNumeratorCredit:true});
+  });
+  return rows;
+}
+
+function getDashboardSemesterForDate(dateKey){
+  if(!dateKey)return null;
+  const d=new Date(String(dateKey)+"T00:00:00");
+  if(Number.isNaN(d.getTime()))return null;
+  return getSemesterForDate(d);
+}
+function getDashboardSemester1State(){
+  return invictusAttendanceStateFor(1);
+}
+function getDashboardSemester1SemState(){
+  return invictusSemesterStateFor(1);
+}
+function getDashboardSemester1Subjects(){
+  return invictusSemesterSubjectsFor(1);
+}
+function getDashboardSemester1BaseClassesForDate(key){
+  const d=new Date(key+"T00:00:00");
+  const cfg=getSemesterConfig(1);
+  if(!cfg || Number.isNaN(d.getTime()) || d<cfg.start || d>cfg.end)return [];
+
+  const timetableStart=new Date("2026-08-08T00:00:00");
+  const timetableEnd=new Date("2027-01-31T23:59:59.999");
+  if(d<timetableStart || d>timetableEnd)return [];
+
+  if(key==="2026-08-12") return [
+    ["09:00 AM","09:50 AM","mfcs","MFCS-I (Mr. Rishi)"],
+    ["09:50 AM","10:40 AM","hindi","HINDI (MS KAUR)"],
+    ["10:40 AM","11:30 AM","vaishali","MS Vaishali"],
+    ["12:00 PM","01:00 PM","iks","IKS (VANDITA)"]
+  ];
+
+  if(key==="2026-08-14"){
+    return [
+      ["09:00 AM","09:50 AM","english","English-I"],
+      ["09:50 AM","10:40 AM","iks","IKS"],
+      ["10:40 AM","11:30 AM","pst","PST"],
+      ["12:10 PM","12:50 PM","mfcs","MFCS-I"],
+      ["12:50 PM","01:30 PM","webdev","Web Development (Ms Amrita)"],
+      ["01:30 PM","02:10 PM","mfcs","MFCS-I"]
+    ];
+  }
+
+  if(d<new Date("2026-08-12T00:00:00") || d.getDay()===0 || d.getDay()===6)return [];
+  // V24.28.1: New default Section A timetable starts 15/10/2026 inclusive.
+  // Earlier dates continue resolving through the previously approved timetable history.
+  if(key>="2026-10-15")return timetableFrom20261015[d.getDay()] || [];
+  if(key==="2026-09-17")return timetableException20260917;
+  if(key>="2026-09-17")return timetableFrom20260917[d.getDay()] || [];
+  if(key>="2026-08-17")return timetableFrom20260817[d.getDay()] || [];
+  return timetable[d.getDay()] || [];
+}
+function getDashboardClassesForDate(key){
+  const semester=getDashboardSemesterForDate(key);
+  if(!semester)return [];
+
+  // Dashboard is date-driven. The active Default Semester must never decide
+  // which semester owns a historical/current report date.
+  if(semester===1){
+    const baseClasses=getDashboardSemester1BaseClassesForDate(key);
+    const dashboardSemState=getDashboardSemester1SemState();
+    const exception=dashboardSemState.scheduleExceptions?.[key];
+    if(!exception || !Array.isArray(baseClasses) || !baseClasses.length)return baseClasses||[];
+    const replacements=exception.replacements && typeof exception.replacements==="object" ? exception.replacements : {};
+    return baseClasses.map((c,index)=>{
+      const replacement=replacements[String(index)];
+      if(!replacement || typeof replacement!=="object")return c;
+      const subjectId=String(replacement.subjectId||"").trim();
+      const storedSubjectName=String(replacement.subjectName||"").trim();
+      if(!subjectId || !storedSubjectName)return c;
+      const subjectName=subjectId==="pstlab" ? "PST LAB" : storedSubjectName;
+      return [c[0],c[1],subjectId,subjectName];
+    });
+  }
+
+  // Semesters 2–6 are isolated environments. Their dashboard dates already
+  // resolve correctly; their lecture classes will populate when each
+  // semester's own daily timetable is configured.
+  return [];
+}
+function getDashboardDailyTimetableLectureStatuses(dateKey){
+  const joining=getCollegeJoiningDate();
+  if(joining && dateKey<joining)return [];
+
+  const dashboardSemester=getDashboardSemesterForDate(dateKey);
+  if(!dashboardSemester)return [];
+  const dashboardState=invictusAttendanceStateFor(dashboardSemester);
+  const dashboardSemState=invictusSemesterStateFor(dashboardSemester);
+  const dashboardSubjects=invictusSemesterSubjectsFor(dashboardSemester);
+  const dayStatus=dashboardState.records?.[dateKey];
+  const isRegularPresent=dayStatus==="present"
+    && !dashboardState.presentComments?.[dateKey]?.trim();
+  const isDayLevelAbsent=dayStatus==="absent";
+  if(!isRegularPresent && !isDayLevelAbsent) return [];
+
+  const classes=getDashboardClassesForDate(dateKey);
+  const rows=[];
+  const consumedAdjustmentKeys=new Set();
+  // V22.4 — Regular Present days continue to use the existing lecture
+  // participation gate. A day explicitly marked Absent is the one intentional
+  // exception: V22.3 has already materialized every scheduled, trackable
+  // lecture for that date as an explicit Absent record, so analytics must
+  // consume those records as well.
+
+  classes.forEach(c=>{
+    // V20.29: MS Vaishali is a timetable-only exception. It remains fully
+    // markable through the normal lecture controls, but never enters the
+    // lecture analytics/counting source. A stored mark still prevents it
+    // from remaining permanently visible in Check Unmarked Lectures.
+    const trackable=dashboardSubjects.some(s=>s.id===c[2]);
+    if(!trackable)return;
+
+    const recordKey=semRecordKey(dateKey,c[2],c[0]);
+    const record=dashboardSemState.lectures?.[recordKey];
+    const noClassException=dashboardSemState.noClassExceptions?.[recordKey];
 
     // V17.4.2: Class Test / Surprise Test means the lecture time was
     // attended for participation purposes. If a legacy test exception is
@@ -7953,12 +8455,35 @@ function getDailyTimetableLectureStatuses(dateKey){
     // Explicit Daily Timetable mark is authoritative immediately.
     if(record?.status){
       const adjustedSubject=String(record.adjustmentSubject||"").trim();
-      const adjustmentStatus=String(record.adjustmentStatus||"").trim();
       if(adjustedSubject && adjustedSubject!==c[2]){
-        const targetStatus=adjustmentStatus || (record.status==="att" ? "att" : "");
-        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:targetStatus || "ta",attendanceSubject:adjustedSubject});
+        consumedAdjustmentKeys.add(recordKey);
+        rows.push({date:dateKey,subject:String(record.subject||c[2]),time:c[0],status:"ta",attendanceStatus:adjustmentOutcomeStatus(record),attendanceSubject:adjustedSubject,adjustmentRecord:true});
       }else{
         rows.push({date:dateKey,subject:c[2],time:c[0],status:record.status,attendanceStatus:record.status==="att" ? "att" : record.status,attendanceSubject:c[2]});
+      }
+      return;
+    }
+
+    // V24.28.12 — A saved historical adjustment owns its original time slot
+    // even if the current date-resolved timetable uses a different subject ID.
+    const storedAdjustment=findStoredAdjustmentForSlot(dashboardSemState,dateKey,c[0],recordKey,consumedAdjustmentKeys);
+    if(storedAdjustment){
+      consumedAdjustmentKeys.add(storedAdjustment.recordKey);
+      rows.push({date:dateKey,subject:storedAdjustment.originalSubject,time:c[0],status:"ta",attendanceStatus:storedAdjustment.targetStatus,attendanceSubject:storedAdjustment.adjustmentSubject,adjustmentRecord:true});
+      return;
+    }
+
+    // V24.28.13 — An untracked configured adjustment still represents a linked
+    // original Teacher Absent outcome plus the effective subject's outcome.
+    // Dashboard's monthly status graphs have no In Progress category, so the
+    // pair enters those summaries only after the effective slot has ended.
+    const configuredAdjustment=dashboardSemState.scheduleExceptions?.[dateKey]?.adjustments?.[String(c[0])];
+    const adjustedSubjectId=String(configuredAdjustment?.subjectId||"").trim();
+    if(dashboardSemState.scheduleExceptions?.[dateKey]?.mode==="lecture-replacements"
+       && adjustedSubjectId && adjustedSubjectId!==c[2]
+       && dashboardSubjects.some(subject=>subject.id===adjustedSubjectId)){
+      if(semLectureEndTimePassed(dateKey,c[1])){
+        rows.push({date:dateKey,subject:c[2],time:c[0],status:"ta",attendanceStatus:"abs",attendanceSubject:adjustedSubjectId,adjustmentRecord:true,automaticAbsent:true});
       }
       return;
     }
@@ -7975,7 +8500,33 @@ function getDailyTimetableLectureStatuses(dateKey){
     }
   });
 
+  forEachUnconsumedStoredAdjustment(dashboardSemState,dateKey,consumedAdjustmentKeys,adjustment=>{
+    rows.push({date:dateKey,subject:adjustment.originalSubject,time:adjustment.time,status:"ta",attendanceStatus:adjustment.targetStatus,attendanceSubject:adjustment.adjustmentSubject,adjustmentRecord:true});
+  });
   return rows;
+}
+
+function addDashboardLectureStatusCount(counts,row){
+  counts.total++;
+  if(row.status==="att")counts.att++;
+  else if(row.status==="ta")counts.ta++;
+  else if(row.status==="nc")counts.nc++;
+  else counts.abs++;
+
+  // Adjustment Period contributes both outcomes: the original teacher is
+  // absent, and the selected adjustment subject receives its chosen outcome.
+  // These four-status summaries roll Adjustment Attended into Attended; the
+  // subject-wise percentage graph continues to present it as a separate color.
+  if(row.adjustmentRecord===true && row.attendanceSubject && row.attendanceSubject!==row.subject){
+    const target=String(row.attendanceStatus||"");
+    if(["att","abs","ta","nc"].includes(target)){
+      counts.total++;
+      if(target==="att")counts.att++;
+      else if(target==="ta")counts.ta++;
+      else if(target==="nc")counts.nc++;
+      else counts.abs++;
+    }
+  }
 }
 
 function getMonthlyLectureStatusCounts(monthDate){
@@ -7997,13 +8548,7 @@ function getMonthlyLectureStatusCounts(monthDate){
 
   for(let d=new Date(firstDay);d<=endDay;d.setDate(d.getDate()+1)){
     const key=iso(d);
-    getDailyTimetableLectureStatuses(key).forEach(row=>{
-      counts.total++;
-      if(row.status==="att")counts.att++;
-      else if(row.status==="ta")counts.ta++;
-      else if(row.status==="nc")counts.nc++;
-      else counts.abs++;
-    });
+    getDashboardDailyTimetableLectureStatuses(key).forEach(row=>addDashboardLectureStatusCount(counts,row));
   }
 
   INVICTUS_STATE.cache.monthlyLectureStatus.set(cacheKey,{...counts});
@@ -8241,26 +8786,30 @@ function scheduleMonthDayCounts(monthDate){
   const selectedMonth=scheduleMonthStart(monthDate);
   const counts={present:0,absent:0,holiday:0,total:0,classes:0};
 
-  // Monthly Report uses DAY-level Attendance submissions.
-  // It is intentionally separate from the lecture-level graph.
-  Object.entries(state.records || {}).forEach(([key,status])=>{
-    const d=new Date(key+"T00:00:00");
-    if(Number.isNaN(d.getTime()))return;
+  // Monthly Report resolves each day to the semester owning that date.
+  // It deliberately ignores the active Set Semester preference.
+  const firstDay=new Date(selectedMonth);
+  const lastDay=new Date(selectedMonth.getFullYear(),selectedMonth.getMonth()+1,0);
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  const endDay=lastDay<today?lastDay:today;
+
+  for(let d=new Date(firstDay);d<=endDay;d.setDate(d.getDate()+1)){
+    const key=iso(d);
+    const semester=getDashboardSemesterForDate(key);
+    if(!semester)continue;
+    const dashboardState=invictusAttendanceStateFor(semester);
+    const status=dashboardState.records?.[key];
     const joining=getCollegeJoiningDate();
-    if(joining && key<joining)return;
-    if(d.getFullYear()!==selectedMonth.getFullYear() ||
-       d.getMonth()!==selectedMonth.getMonth())return;
+    if(joining && key<joining)continue;
 
     if(status==="present")counts.present++;
     else if(status==="absent")counts.absent++;
     else if(status==="holiday")counts.holiday++;
-  });
+  }
 
-  // The pie uses all attendance-day statuses as its 100% denominator.
-  // "Total Classes" intentionally excludes Holiday, per the final design.
   counts.total=counts.present+counts.absent+counts.holiday;
   counts.classes=counts.present+counts.absent;
-
   return counts;
 }
 
@@ -8652,12 +9201,6 @@ function attachScheduleAttendanceMonthSwipe(){
   track.onpointercancel=()=>finish();
 }
 
-function v16SemesterUnlocked(n){
-  const cfg=SEMESTER_CONFIG[Number(n)];
-  if(!cfg)return false;
-  return isSemesterUnlockedAt(cfg.start,new Date());
-}
-
 function v16ShortSemesterDateRange(n){
   const cfg=SEMESTER_CONFIG[n];
   if(!cfg)return "";
@@ -8669,13 +9212,13 @@ function v16ShortSemesterDateRange(n){
 }
 
 const SEMESTER_1_WEEKLY_TIMETABLE=[
-  ["9:00–9:50",  "C.A<br>(Mr. Manoj)",              "English-I<br>(Dr. Sunaina)",      "MFCS-I<br>(Mr. Rishi)",       "C.A<br>(Mr. Manoj)",              "English-I<br>(Dr. Sunaina)"],
-  ["9:50–10:40", "PST<br>(Ms. Pooja)",              "C.A<br>(Mr. Manoj)",              "PST<br>(Ms. Pooja)",           "PST<br>(Ms. Pooja)",              "IKS<br>(Ms. Vandita)"],
-  ["10:40–11:30","PDP<br>(Ms. Pinky)",              "French<br>(Mr. Nakul)",            "Hindi<br>(Ms. Kaur)",           "MFCS-I<br>(Mr. Rishi)",          "PST<br>(Ms. Pooja)"],
-  ["11:30–12:10","BREAK",                           "BREAK",                          "BREAK",                       "BREAK",                           "BREAK"],
-  ["12:10–12:50","MFCS-I<br>(Mr. Rishi)",          "EVS<br>(Ms. Vandna)",             "IKS<br>(Ms. Vandita)",         "EVS<br>(Ms. Vandna)",             "MFCS-I<br>(Mr. Rishi)"],
-  ["12:50–1:30", "EVS<br>(Ms. Vandna)",              "PST Lab 130<br>(Ms. Pooja)",      "French<br>(Mr. Nakul)",          "C.A Lab 130<br>(Ms. Rupa)",      "Web Development<br>(Ms. Amrita)"],
-  ["1:30–2:10",  "Web Development<br>(Ms. Amrita)", "PST Lab 130<br>(Ms. Pooja)",      "Mentor<br>(Ms. Vandita)",        "C.A Lab 130<br>(Ms. Rupa)",       "MFCS-I<br>(Mr. Rishi)"]
+  ["9:00–9:50",  "MFCS-I<br>(Mr. Rishi)",           "French<br>(Mr. Nakul)",            "C.A<br>(Mr. Manoj)",                "MFCS-I<br>(Mr. Rishi)",           "PST<br>(Ms. Pooja)"],
+  ["9:50–10:40", "C.A<br>(Mr. Manoj)",              "IKS<br>(Ms. Vandita)",             "Web Development<br>(Ms. Amrita)",  "French<br>(Mr. Nakul)",           "MFCS-I<br>(Mr. Rishi)"],
+  ["10:40–11:30","EVS<br>(Ms. Vandna)",             "Hindi<br>(Ms. Kaur)",              "PDP<br>(Ms. Pinky)",               "English-I<br>(Dr. Sunaina)",      "Web Development<br>(Ms. Amrita)"],
+  ["11:30–12:10","BREAK",                           "BREAK",                           "BREAK",                           "BREAK",                           "BREAK"],
+  ["12:10–12:50","Coordinator<br>(Ms. Punam)",      "PST<br>(Ms. Pooja)",               "PST<br>(Ms. Pooja)",               "Web Development<br>(Ms. Amrita)", "IKS<br>(Ms. Vandita)"],
+  ["12:50–1:30", "PST Lab 130<br>(Ms. Pooja)",      "English-I<br>(Dr. Sunaina)",       "IKS<br>(Ms. Vandita)",             "C.A Lab 130<br>(Ms. Rupa)",       "C.A<br>(Mr. Manoj)"],
+  ["1:30–2:10",  "PST Lab 130<br>(Ms. Pooja)",      "Mentor<br>(Ms. Punam)",            "MFCS-I<br>(Mr. Rishi)",            "C.A Lab 130<br>(Ms. Rupa)",       "EVS<br>(Ms. Vandna)"]
 ];
 
 // [V22.10 TIMETABLE ENGINE — weekly timetable renderer / native table]
@@ -8709,7 +9252,7 @@ function renderSemester1NativeTimetable(){
 function renderWeeklyTimetableSemesterList(){
   const semesterPreference=getInvictusSemesterPreference();
   const semesters=semesterPreference==="all"
-    ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+    ? Array.from({length:6},(_,i)=>i+1)
     : [Number(semesterPreference)];
   return semesters.map(n=>{
     const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
@@ -8724,29 +9267,26 @@ function renderWeeklyTimetableSemesterList(){
          id="scheduleWeeklyTimetableSemester${n}Content"
          ${defaultOpen ? "" : "hidden"}>
       <div class="schedule-semester-divider"></div>
-      ${n===1 ? renderSemester1NativeTimetable() : ""}
+      ${n===1 ? renderSemester1NativeTimetable() : `<div class="schedule-semester-empty">No weekly timetable configured for Semester ${n} yet.</div>`}
     </div>`;
   }).join("");
 }
 
 function renderTimetable(){
+  const dashboardCurrentSemester=getSemesterForDate(new Date()) || 1;
+  const dashboardCurrentConfig=SEMESTER_CONFIG[dashboardCurrentSemester] || {start:"",end:""};
+
   main.innerHTML = `
     <div class="schedule-page">
-      <!-- Card 1.1 -->
-      <div class="card schedule-collapsible-card${scheduleWeeklyTimetableExpanded ? " is-open" : ""}">
-        <button type="button" id="scheduleWeeklyTimetableDisclosure"
+      <!-- Card 1.6 — Lecture History opens its independent history dialog. -->
+      <div class="card schedule-collapsible-card schedule-lecture-history-card">
+        <button type="button" id="scheduleLectureHistoryDisclosure"
                 class="schedule-collapsible-disclosure"
-                aria-expanded="${scheduleWeeklyTimetableExpanded}"
-                aria-controls="invictusTimetableContent">
-          <span class="schedule-collapsible-title">Weekly Timetable</span>
+                aria-haspopup="dialog"
+                aria-controls="lectureHistoryBackdrop">
+          <span class="schedule-collapsible-title">Lecture History</span>
           <span class="schedule-collapsible-chevron" aria-hidden="true">›</span>
         </button>
-        
-<div id="invictusTimetableContent" class="schedule-collapsible-content" ${scheduleWeeklyTimetableExpanded ? "" : "hidden"}>
-          <div id="scheduleWeeklyTimetableSemesterList">
-            ${renderWeeklyTimetableSemesterList()}
-          </div>
-        </div>
       </div>
 
       <!-- Card 1.2 -->
@@ -8808,8 +9348,8 @@ function renderTimetable(){
              class="schedule-collapsible-content"
              ${scheduleSemesterLecturesStatusExpanded ? "" : "hidden"}>
           <div class="card schedule-month-card schedule-month-lectures-status-card-outer">
-            <h2 class="schedule-month-title" id="scheduleSemesterLecturesStatusTitle">Semester 1</h2>
-            <div class="schedule-month-subtitle" id="scheduleSemesterLecturesStatusSubtitle">01/08/2026 – 31/01/2027</div>
+            <h2 class="schedule-month-title" id="scheduleSemesterLecturesStatusTitle">Semester ${dashboardCurrentSemester}</h2>
+            <div class="schedule-month-subtitle" id="scheduleSemesterLecturesStatusSubtitle">${dashboardCurrentConfig.start} – ${dashboardCurrentConfig.end}</div>
 
             <div id="scheduleSemesterLecturesStatusView" class="schedule-month-view">
               <div id="scheduleSemesterLecturesStatusTrack" class="schedule-month-track"></div>
@@ -8836,8 +9376,8 @@ function renderTimetable(){
              class="schedule-collapsible-content"
              ${scheduleSemesterReportExpanded ? "" : "hidden"}>
           <div class="card schedule-month-card schedule-month-report-card-outer">
-            <h2 class="schedule-month-title" id="scheduleSemesterReportTitle">Semester 1</h2>
-            <div class="schedule-month-subtitle" id="scheduleSemesterReportSubtitle">01/08/2026 – 31/01/2027</div>
+            <h2 class="schedule-month-title" id="scheduleSemesterReportTitle">Semester ${dashboardCurrentSemester}</h2>
+            <div class="schedule-month-subtitle" id="scheduleSemesterReportSubtitle">${dashboardCurrentConfig.start} – ${dashboardCurrentConfig.end}</div>
 
             <div id="scheduleSemesterReportView" class="schedule-month-view">
               <div id="scheduleSemesterReportTrack" class="schedule-month-track"></div>
@@ -8846,6 +9386,23 @@ function renderTimetable(){
             <div class="schedule-semester-report-pin">
               ${scheduleSemesterReportTable(scheduleSemesterReportSelected)}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 1.1 -->
+      <div class="card schedule-collapsible-card${scheduleWeeklyTimetableExpanded ? " is-open" : ""}">
+        <button type="button" id="scheduleWeeklyTimetableDisclosure"
+                class="schedule-collapsible-disclosure"
+                aria-expanded="${scheduleWeeklyTimetableExpanded}"
+                aria-controls="invictusTimetableContent">
+          <span class="schedule-collapsible-title">Weekly Timetable</span>
+          <span class="schedule-collapsible-chevron" aria-hidden="true">›</span>
+        </button>
+        
+<div id="invictusTimetableContent" class="schedule-collapsible-content" ${scheduleWeeklyTimetableExpanded ? "" : "hidden"}>
+          <div id="scheduleWeeklyTimetableSemesterList">
+            ${renderWeeklyTimetableSemesterList()}
           </div>
         </div>
       </div>
@@ -8983,6 +9540,15 @@ function renderTimetable(){
     });
   };
 
+  // Card 1.6 uses the familiar Dashboard card styling and scroll positioning,
+  // then opens a separate dialog backed only by lecture-tracking records.
+  const lectureHistoryDisclosure=document.getElementById("scheduleLectureHistoryDisclosure");
+  lectureHistoryDisclosure?.addEventListener("click",()=>{
+    collapseOtherScheduleParents("lectureHistory");
+    ensureSemesterExpandedContentVisible(lectureHistoryDisclosure.closest(".schedule-collapsible-card"));
+    requestAnimationFrame(()=>requestAnimationFrame(()=>openLectureHistoryModal()));
+  });
+
   const lecturesDisclosure=document.getElementById("scheduleLecturesStatusDisclosure");
   const lecturesContent=document.getElementById("scheduleLecturesStatusContent");
   lecturesDisclosure?.addEventListener("click",()=>{
@@ -8995,7 +9561,7 @@ function renderTimetable(){
     if(scheduleLecturesStatusExpanded){
       lecturesContent?.removeAttribute("hidden");
       attachScheduleMonthSwipe();
-      ensureSemesterExpandedContentVisible(lecturesDisclosure?.closest(".schedule-collapsible-card"));
+      ensureDashboardNeighborCardsVisible(lecturesDisclosure?.closest(".schedule-collapsible-card"));
     }else{
       resetScheduleLecturesStatusState();
       lecturesContent?.setAttribute("hidden","");
@@ -9014,7 +9580,7 @@ function renderTimetable(){
     if(scheduleSemesterLecturesStatusExpanded){
       semesterLecturesContent?.removeAttribute("hidden");
       attachScheduleSemesterLecturesStatusSwipe();
-      ensureSemesterExpandedContentVisible(semesterLecturesDisclosure?.closest(".schedule-collapsible-card"));
+      ensureDashboardNeighborCardsVisible(semesterLecturesDisclosure?.closest(".schedule-collapsible-card"));
     }else{
       resetScheduleSemesterLecturesStatusState();
       semesterLecturesContent?.setAttribute("hidden","");
@@ -9033,7 +9599,7 @@ function renderTimetable(){
     if(scheduleMonthlyReportExpanded){
       reportContent?.removeAttribute("hidden");
       attachScheduleAttendanceMonthSwipe();
-      ensureSemesterExpandedContentVisible(reportDisclosure?.closest(".schedule-collapsible-card"));
+      ensureDashboardNeighborCardsVisible(reportDisclosure?.closest(".schedule-collapsible-card"));
     }else{
       resetScheduleMonthlyReportState();
       reportContent?.setAttribute("hidden","");
@@ -9052,7 +9618,7 @@ function renderTimetable(){
     if(scheduleSemesterReportExpanded){
       semesterReportContent?.removeAttribute("hidden");
       attachScheduleSemesterReportSwipe();
-      ensureSemesterExpandedContentVisible(semesterReportDisclosure?.closest(".schedule-collapsible-card"));
+      ensureDashboardNeighborCardsVisible(semesterReportDisclosure?.closest(".schedule-collapsible-card"));
     }else{
       resetScheduleSemesterReportState();
       semesterReportContent?.setAttribute("hidden","");
@@ -9551,27 +10117,144 @@ function v20InitNotifications(){
 const V24_2_SEMESTER_PREFERENCE_KEY="invictus_default_semester_preference";
 function getInvictusSemesterPreference(){
   try{
-    const raw=String(localStorage.getItem(V24_2_SEMESTER_PREFERENCE_KEY)||"all").trim().toLowerCase();
-    if(raw==="all")return "all";
+    const raw=String(localStorage.getItem(V24_2_SEMESTER_PREFERENCE_KEY)||"1").trim().toLowerCase();
+    // V24.7: the old "all" preference is no longer a valid user-facing mode.
+    // Normalize any legacy value to Semester 1 so old installations cannot reopen it.
     const n=Number(raw);
-    return Number.isInteger(n) && n>=1 && n<=6 ? String(n) : "all";
+    return Number.isInteger(n) && n>=1 && n<=6 ? String(n) : "1";
   }catch(e){
-    return "all";
+    return "1";
   }
 }
 function getInvictusSemesterPreferenceLabel(value=getInvictusSemesterPreference()){
-  return value==="all" ? "All (choose every time)" : `Semester ${value}`;
+  return `Semester ${value}`;
 }
 function setInvictusSemesterPreference(value){
-  const normalized=String(value||"").toLowerCase()==="all" ? "all" : String(Number(value));
-  if(normalized!=="all" && !/^[1-6]$/.test(normalized))return false;
+  const normalized=String(Number(value));
+  if(!/^[1-6]$/.test(normalized))return false;
   try{
     localStorage.setItem(V24_2_SEMESTER_PREFERENCE_KEY,normalized);
-    return getInvictusSemesterPreference()===normalized;
+    const ok=getInvictusSemesterPreference()===normalized;
+    if(ok && typeof activateSemesterContext==="function") activateSemesterContext(normalized);
+    return ok;
   }catch(e){
     return false;
   }
 }
+
+/* V24.6 — ISOLATED SEMESTER ENVIRONMENT
+   Each semester has its own attendance state, lecture/results state and
+   subject registry. Semester 1 transparently migrates from the locked legacy
+   keys; Semesters 2–6 start as clean environments. */
+let activeSemesterNumber=1;
+
+function invictusNormalizeAttendanceState(raw){
+  const obj=(raw && typeof raw==="object") ? raw : {};
+  obj.records=obj.records||{}; obj.edits=obj.edits||{};
+  obj.submittedAt=obj.submittedAt||{}; obj.editedAt=obj.editedAt||{};
+  obj.holidayComments=obj.holidayComments||{}; obj.absentComments=obj.absentComments||{};
+  obj.presentComments=obj.presentComments||{}; obj.lateSubmissions=obj.lateSubmissions||{};
+  obj.blankReasons=obj.blankReasons||{};
+  return obj;
+}
+function invictusNormalizeSemesterState(raw){
+  const obj=(raw && typeof raw==="object") ? raw : {};
+  obj.lectures=obj.lectures||{}; obj.surpriseTests=obj.surpriseTests||{};
+  obj.surpriseTestRecords=obj.surpriseTestRecords||{}; obj.examResults=obj.examResults||{};
+  obj.noClassExceptions=obj.noClassExceptions||{}; obj.scheduleExceptions=obj.scheduleExceptions||{};
+  return obj;
+}
+function invictusLoadJson(key,fallback){
+  try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback;}catch(e){return fallback;}
+}
+function invictusSemesterSubjectsFor(n){
+  if(Number(n)===1) return SEMESTER_1_SUBJECTS.map(x=>({...x})).sort((a,b)=>a.name.localeCompare(b.name));
+  const raw=invictusLoadJson(`${V24_6_SEMESTER_SUBJECTS_PREFIX}${Number(n)}`,[]);
+  return Array.isArray(raw) ? raw.filter(x=>x&&x.id&&x.name&&x.type).map(x=>({id:String(x.id),name:String(x.name),type:String(x.type)})).sort((a,b)=>a.name.localeCompare(b.name)) : [];
+}
+function invictusSemesterStateFor(n){
+  const num=Number(n);
+  if(num===1){
+    const migrated=invictusLoadJson("bcaSemester1State",null);
+    return invictusNormalizeSemesterState(migrated || semState);
+  }
+  return invictusNormalizeSemesterState(invictusLoadJson(`bcaSemester${num}State`,{}));
+}
+function invictusAttendanceStateFor(n){
+  const num=Number(n);
+  if(num===1){
+    // Semester 1 keeps its original canonical attendance store. The resolver
+    // must read the same store that the normal Semester 1 save() path writes.
+    return invictusNormalizeAttendanceState(invictusLoadJson("bcaAttendanceState",{}));
+  }
+  return invictusNormalizeAttendanceState(invictusLoadJson(`bcaSemester${num}AttendanceState`,{}));
+}
+/* V24.15 — Attendance tab source-of-truth bridge.
+   The Attendance tab is a cross-semester chronological view, so its display
+   state is assembled from the six isolated semester attendance stores.
+   This is read-only UI state; submit/edit mutations continue to use the
+   currently active semester's isolated `state` object. */
+function getAttendanceTabSourceState(){
+  const merged=invictusNormalizeAttendanceState({});
+  for(let n=1;n<=6;n++){
+    const source=invictusAttendanceStateFor(n);
+    Object.keys(source.records||{}).forEach(date=>{
+      if(source.records[date]===undefined)return;
+      merged.records[date]=source.records[date];
+      if(source.submittedAt?.[date]!==undefined)merged.submittedAt[date]=source.submittedAt[date];
+      if(source.editedAt?.[date]!==undefined)merged.editedAt[date]=source.editedAt[date];
+      if(source.edits?.[date]!==undefined)merged.edits[date]=source.edits[date];
+      if(source.lateSubmissions?.[date]!==undefined)merged.lateSubmissions[date]=source.lateSubmissions[date];
+      if(source.holidayComments?.[date]!==undefined)merged.holidayComments[date]=source.holidayComments[date];
+      if(source.absentComments?.[date]!==undefined)merged.absentComments[date]=source.absentComments[date];
+      if(source.presentComments?.[date]!==undefined)merged.presentComments[date]=source.presentComments[date];
+      if(source.blankReasons?.[date]!==undefined)merged.blankReasons[date]=source.blankReasons[date];
+    });
+  }
+  return merged;
+}
+
+function invictusResolveActiveSemester(value){
+  if(value!=="all")return Number(value);
+  const current=getSemesterForDate(new Date());
+  return current || 1;
+}
+function activateSemesterContext(value=getInvictusSemesterPreference()){
+  const next=invictusResolveActiveSemester(value);
+  if(!Number.isInteger(next)||next<1||next>6)return false;
+  activeSemesterNumber=next;
+  state=invictusAttendanceStateFor(next);
+  semState=invictusSemesterStateFor(next);
+  semesterSubjects=invictusSemesterSubjectsFor(next);
+  if(next===1){
+    applyInvictusProtectedCollegeData(state,semState);
+  }
+  const cfg=getSemesterConfig(next);
+  const today=new Date();
+  if(cfg && today>=cfg.start && today<=cfg.end) semSelectedDate=iso(today);
+  else if(cfg) semSelectedDate=iso(cfg.start);
+  semCalDate=cfg ? new Date(cfg.start.getFullYear(),cfg.start.getMonth(),1) : new Date();
+  attendanceCalDate=cfg ? new Date(cfg.start.getFullYear(),cfg.start.getMonth(),1) : new Date();
+  if(window.INVICTUS_STATE){
+    window.INVICTUS_STATE.attendance=state;
+    window.INVICTUS_STATE.semester=semState;
+    if(window.INVICTUS_STATE.cache){
+      window.INVICTUS_STATE.cache.attendanceStats=null;
+      window.INVICTUS_STATE.cache.attendanceHistoryDates=null;
+      window.INVICTUS_STATE.cache.totalHolidays=null;
+      window.INVICTUS_STATE.cache.monthlyLectureStatus?.clear?.();
+    }
+  }
+  return true;
+}
+
+/* V24.11 — Attendance is always tied to the semester containing today's date.
+   Settings → Set Semester controls the Semester tab, not Attendance. */
+function activateDateDrivenAttendanceContext(date=new Date()){
+  const semester=getSemesterForDate(date)||1;
+  return activateSemesterContext(semester);
+}
+
 function closeInvictusSemesterPreferenceDialog(){
   const back=document.getElementById("semesterPreferenceBackdrop");
   if(back)back.remove();
@@ -9587,7 +10270,7 @@ function openInvictusSemesterPreferenceDialog(){
   back.setAttribute("role","dialog");
   back.setAttribute("aria-modal","true");
   back.setAttribute("aria-labelledby","semesterPreferenceTitle");
-  const options=[1,2,3,4,5,6,"all"];
+  const options=[1,2,3,4,5,6];
   back.innerHTML=`<div class="semester-preference-modal">
     <div class="semester-preference-head">
       <h2 id="semesterPreferenceTitle">Set Semester</h2>
@@ -9596,7 +10279,7 @@ function openInvictusSemesterPreferenceDialog(){
     <div class="semester-preference-options">
       ${options.map(value=>{
         const key=String(value);
-        const label=value==="all" ? "All" : `Semester ${value} (${v16ShortSemesterDateRange(value)})`;
+        const label=`Semester ${value} (${v16ShortSemesterDateRange(value)})`;
         return `<button type="button" class="semester-preference-option ${current===key?"selected":""}" data-semester-preference="${key}"><span>${label}</span><span class="semester-preference-option-mark">✓</span></button>`;
       }).join("")}
     </div>
@@ -10023,7 +10706,9 @@ function renderAttendance(){
 function updateTotalHolidayCount(){
   const el=document.getElementById("totalHolidayCount");
   if(!el)return;
-  if(INVICTUS_STATE.cache.totalHolidays===null)INVICTUS_STATE.cache.totalHolidays=calculateTotalHolidayCount(state.records);
+  if(INVICTUS_STATE.cache.totalHolidays===null){
+    INVICTUS_STATE.cache.totalHolidays=calculateTotalHolidayCount(getAttendanceTabSourceState().records);
+  }
   el.textContent=INVICTUS_STATE.cache.totalHolidays;
 }
 
@@ -10096,9 +10781,15 @@ function closeCollegeJoiningDateDialog(){
 }
 
 function continueAfterCollegeJoiningDate(action,lectureContext=null){
-  if(action==="submit" || action==="edit"){
+  if(action==="submit"){
+    // The joining-date dialog is the entry point into the same unified
+    // submission gate used by the Submit Attendance button.
+    routeAttendanceSubmissionAfterJoiningDate();
+    return;
+  }
+  if(action==="edit"){
     const missing=getUnmarkedAttendanceDates();
-    if(missing.length) openLateSubmissionDialog();
+    if(missing.length) openBulkAttendanceDialog();
     else openModal(action);
     return;
   }
@@ -10141,36 +10832,189 @@ function requireDataTransferReady(){
    the date the user is trying to submit now. Weekends remain excluded except
    explicitly eligible special days such as Orientation Day. */
 function getUnmarkedAttendanceDates(){
-  const todayKey=iso(new Date());
-  const startKey=getCollegeJoiningDate() || "2026-08-08";
-  const endDate=new Date(todayKey+"T00:00:00");
-  endDate.setDate(endDate.getDate()-1);
-  const finalDate=new Date(Math.min(ATTENDANCE_END.getTime(),endDate.getTime()));
-  const startDate=new Date(startKey+"T00:00:00");
+  // Normal attendance backfill is scoped to the semester containing today.
+  // Historical semesters are resolved independently by the semester-wise gate.
+  const currentSemester=getSemesterForDate(new Date()) || activeSemesterNumber || 1;
+  return getUnmarkedAttendanceDatesForSemester(currentSemester);
+}
+
+
+/* V24.12 — Cross-semester attendance resolution. This helper applies the
+   existing attendance eligibility rules inside the configured working window
+   of one isolated semester, without changing the active UI context. */
+function getUnmarkedAttendanceDatesForSemester(semester,today=new Date()){
+  const n=Number(semester);
+  if(!Number.isInteger(n)||n<1||n>6)return [];
+  const cfg=getSemesterConfig(n);
+  if(!cfg)return [];
+
+  const attendanceState=invictusAttendanceStateFor(n);
+  if(n===1){
+    // Protected Semester 1 holidays are genuine stored attendance records.
+    applyInvictusProtectedCollegeData(attendanceState,null);
+  }
+
+  const joining=getCollegeJoiningDate();
+  const startDate=new Date(cfg.start);
+  if(joining){
+    const joiningDate=new Date(joining+"T00:00:00");
+    if(joiningDate>startDate)startDate.setTime(joiningDate.getTime());
+  }
+
+  const finalDate=new Date(today);
+  finalDate.setHours(0,0,0,0);
+  finalDate.setDate(finalDate.getDate()-1);
+  if(finalDate>cfg.end)finalDate.setTime(cfg.end.getTime());
+  const attendanceEnd=new Date(ATTENDANCE_END);
+  attendanceEnd.setHours(23,59,59,999);
+  if(finalDate>attendanceEnd)finalDate.setTime(attendanceEnd.getTime());
+
+  if(startDate>finalDate)return [];
+
   const missing=[];
-
-  for(let d=new Date(startDate); d<=finalDate; d.setDate(d.getDate()+1)){
+  for(let d=new Date(startDate);d<=finalDate;d.setDate(d.getDate()+1)){
     const key=iso(d);
-    if(state.records?.[key]) continue;
-
+    if(attendanceState.records?.[key])continue;
     const weekday=d.getDay();
     const eligibleSpecial=attendanceEligibleSpecialDays.has(key);
     const unavailable=attendanceUnavailableDates.has(key);
-    if(unavailable) continue;
-    if(!eligibleSpecial && (weekday===0 || weekday===6)) continue;
-
+    if(unavailable)continue;
+    if(!eligibleSpecial && (weekday===0 || weekday===6))continue;
     missing.push(key);
   }
   return missing;
 }
 
+function getLateSubmissionMissingDates(){
+  if(lateSubmissionScopeSemester!==null){
+    return getUnmarkedAttendanceDatesForSemester(lateSubmissionScopeSemester);
+  }
+  return getUnmarkedAttendanceDates();
+}
+
+function getCrossSemesterAttendanceIssues(targetSemester){
+  const target=Number(targetSemester);
+  const issues=[];
+  for(let n=1;n<=6;n++){
+    if(n===target)continue;
+    const dates=getUnmarkedAttendanceDatesForSemester(n);
+    if(dates.length)issues.push({semester:n,dates});
+  }
+  return issues;
+}
+
+function closeCrossSemesterAttendanceResolver(){
+  const back=document.getElementById("crossSemesterAttendanceBackdrop");
+  if(back){back.classList.remove("open");back.setAttribute("aria-hidden","true");}
+}
+
+function renderCrossSemesterAttendanceResolver(targetSemester){
+  const back=document.getElementById("crossSemesterAttendanceBackdrop");
+  const list=document.getElementById("crossSemesterAttendanceList");
+  const intro=document.getElementById("crossSemesterAttendanceIntro");
+  if(!back||!list)return false;
+
+  const issues=getCrossSemesterAttendanceIssues(targetSemester);
+  if(!issues.length){
+    closeCrossSemesterAttendanceResolver();
+    return false;
+  }
+
+  if(intro){
+    intro.textContent=`Resolve attendance from the affected semesters before submitting attendance for Semester ${targetSemester}.`;
+  }
+  list.innerHTML=issues.map(({semester,dates})=>`
+    <button type="button" class="cross-semester-resolver-button" data-cross-semester="${semester}">
+      <span>
+        <span class="cross-semester-resolver-button-main">Semester ${semester} — Resolve</span>
+        <span class="cross-semester-resolver-button-sub">${dates.length} unresolved attendance date${dates.length===1?"":"s"}</span>
+      </span>
+      <span class="cross-semester-resolver-button-arrow" aria-hidden="true">›</span>
+    </button>`).join("");
+
+  list.querySelectorAll("[data-cross-semester]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const semester=Number(button.dataset.crossSemester);
+      beginCrossSemesterAttendanceResolution(semester,targetSemester);
+    });
+  });
+
+  back.classList.add("open");
+  back.setAttribute("aria-hidden","false");
+  return true;
+}
+
+function beginCrossSemesterAttendanceResolution(semester,targetSemester){
+  crossSemesterAttendanceTargetSemester=Number(targetSemester);
+  crossSemesterAttendanceResolverActive=true;
+  lateSubmissionScopeSemester=Number(semester);
+  closeCrossSemesterAttendanceResolver();
+  if(!activateSemesterContext(Number(semester)))return;
+  if(typeof renderAttendance==="function")renderAttendance();
+  // Semester-wise unresolved attendance now enters the same bulk-submission
+  // pipeline as normal unresolved attendance, with the active semester used
+  // as the isolated storage scope.
+  openBulkAttendanceDialog();
+}
+
+function resumeAfterCrossSemesterAttendanceResolution(){
+  const target=Number(crossSemesterAttendanceTargetSemester);
+  lateSubmissionScopeSemester=null;
+
+  if(!Number.isInteger(target)||target<1||target>6){
+    crossSemesterAttendanceResolverActive=false;
+    crossSemesterAttendanceTargetSemester=null;
+    activateDateDrivenAttendanceContext(new Date());
+    if(typeof renderAttendance==="function")renderAttendance();
+    return;
+  }
+
+  activateSemesterContext(target);
+  const issues=getCrossSemesterAttendanceIssues(target);
+  if(issues.length){
+    closeCrossSemesterAttendanceResolver();
+    renderCrossSemesterAttendanceResolver(target);
+    return;
+  }
+
+  crossSemesterAttendanceResolverActive=false;
+  crossSemesterAttendanceTargetSemester=null;
+
+  // All semester-wise unresolved work has now been resolved. Keep the user on
+  // the Attendance tab, which now reads directly from all six isolated source
+  // stores. Do not immediately reopen a second bulk dialog.
+  if(typeof renderAttendance==="function")renderAttendance();
+}
+
+
 function closeLateSubmissionDialog(){
   const back=document.getElementById("lateSubmissionBackdrop");
-  if(back) back.classList.remove("open");
+  if(back){
+    back.classList.remove("open");
+    back.setAttribute("aria-hidden","true");
+  }
   lateSubmissionEditingDate=null;
 }
 
-document.getElementById("lateSubmissionClose")?.addEventListener("click",closeLateSubmissionDialog);
+function handleLateSubmissionClose(){
+  closeLateSubmissionDialog();
+  if(crossSemesterAttendanceResolverActive && lateSubmissionScopeSemester!==null){
+    renderCrossSemesterAttendanceResolver(crossSemesterAttendanceTargetSemester);
+  }
+}
+
+document.getElementById("lateSubmissionClose")?.addEventListener("click",handleLateSubmissionClose);
+document.getElementById("crossSemesterAttendanceClose")?.addEventListener("click",()=>{
+  closeCrossSemesterAttendanceResolver();
+  crossSemesterAttendanceResolverActive=false;
+  lateSubmissionScopeSemester=null;
+  const target=Number(crossSemesterAttendanceTargetSemester);
+  crossSemesterAttendanceTargetSemester=null;
+  if(Number.isInteger(target)&&target>=1&&target<=6){
+    activateSemesterContext(target);
+    if(typeof renderAttendance==="function")renderAttendance();
+  }
+});
 
 document.getElementById("collegeJoiningDateClose")?.addEventListener("click",closeCollegeJoiningDateDialog);
 document.getElementById("collegeJoiningDateCancel")?.addEventListener("click",closeCollegeJoiningDateDialog);
@@ -10199,15 +11043,29 @@ document.getElementById("collegeJoiningDateSave")?.addEventListener("click",()=>
   continueAfterCollegeJoiningDate(action,lectureContext);
 });
 
+let lateSubmissionScopeSemester=null;
+let crossSemesterAttendanceTargetSemester=null;
+let crossSemesterAttendanceResolverActive=false;
+
 function openLateSubmissionDialog(){
   const back=document.getElementById("lateSubmissionBackdrop");
   const list=document.getElementById("lateSubmissionList");
   if(!back || !list) return false;
 
-  const missing=getUnmarkedAttendanceDates();
+  const missing=getLateSubmissionMissingDates();
   if(!missing.length){
     closeLateSubmissionDialog();
+    if(crossSemesterAttendanceResolverActive && lateSubmissionScopeSemester!==null){
+      resumeAfterCrossSemesterAttendanceResolution();
+    }
     return false;
+  }
+
+  const intro=back.querySelector(".late-submission-intro");
+  if(intro){
+    intro.textContent=lateSubmissionScopeSemester!==null
+      ? `Please resolve the following missed attendance dates for Semester ${lateSubmissionScopeSemester} before returning to today’s attendance submission.`
+      : "Please mark the following missed attendance dates from your college joining date before submitting today’s attendance.";
   }
 
   list.innerHTML=missing.map(date=>`
@@ -10249,7 +11107,7 @@ let bulkAttendanceReason=null;
 function resetBulkAttendanceDialog(){
   bulkAttendanceStatus=null;
   bulkAttendanceReason=null;
-  const missing=getUnmarkedAttendanceDates();
+  const missing=getLateSubmissionMissingDates();
   const start=document.getElementById("bulkAttendanceStart");
   const end=document.getElementById("bulkAttendanceEnd");
   const msg=document.getElementById("bulkAttendanceMessage");
@@ -10275,7 +11133,7 @@ function getBulkAttendanceDates(){
   const start=document.getElementById("bulkAttendanceStart")?.value||"";
   const end=document.getElementById("bulkAttendanceEnd")?.value||"";
   if(!start || !end || start>end) return [];
-  const missing=new Set(getUnmarkedAttendanceDates());
+  const missing=new Set(getLateSubmissionMissingDates());
   return Array.from(missing).filter(date=>date>=start && date<=end).sort();
 }
 
@@ -10358,13 +11216,26 @@ function applyBulkAttendance(){
 
   save();
   v20RunNotificationChecks();
+
+  // Re-read the isolated store after every bulk submission so the Attendance
+  // tab and all derived UI use the same persisted semester state that was just
+  // updated. This is especially important when resolving another semester.
+  const savedSemester=activeSemesterNumber;
+  activateSemesterContext(savedSemester);
   closeBulkAttendanceDialog();
-  renderAttendance();
+  if(typeof renderAttendance==="function")renderAttendance();
   if(typeof semSelectedDate!=="undefined" && typeof renderSemesterDayView==="function") renderSemesterDayView(new Date(semSelectedDate+"T00:00:00"));
   setTimeout(()=>{
-    const remaining=getUnmarkedAttendanceDates();
-    if(remaining.length) openLateSubmissionDialog();
-    else closeLateSubmissionDialog();
+    const remaining=getLateSubmissionMissingDates();
+    if(remaining.length){
+      // Stay inside the same unified bulk-submission flow instead of handing
+      // control to a second independent unresolved-date checker.
+      openBulkAttendanceDialog();
+    }else if(crossSemesterAttendanceResolverActive && lateSubmissionScopeSemester!==null){
+      resumeAfterCrossSemesterAttendanceResolution();
+    }else{
+      closeLateSubmissionDialog();
+    }
   },0);
 }
 
@@ -10441,15 +11312,39 @@ function markScheduledLecturesAbsentForDay(dateKey){
   });
 }
 
+function routeAttendanceSubmissionAfterJoiningDate(){
+  const targetSemester=getSemesterForDate(new Date()) || activeSemesterNumber || 1;
+  if(activeSemesterNumber!==targetSemester) activateSemesterContext(targetSemester);
+  crossSemesterAttendanceTargetSemester=targetSemester;
+
+  // One submission gate: first inspect every isolated semester. If another
+  // semester is unresolved, enter the semester-wise bulk flow; otherwise use
+  // the normal current-semester bulk flow.
+  const crossIssues=getCrossSemesterAttendanceIssues(targetSemester);
+  if(crossIssues.length){
+    crossSemesterAttendanceResolverActive=true;
+    renderCrossSemesterAttendanceResolver(targetSemester);
+    return;
+  }
+
+  const missing=getUnmarkedAttendanceDates();
+  if(missing.length){
+    lateSubmissionScopeSemester=null;
+    crossSemesterAttendanceResolverActive=false;
+    openBulkAttendanceDialog();
+    return;
+  }
+
+  crossSemesterAttendanceResolverActive=false;
+  crossSemesterAttendanceTargetSemester=null;
+  lateSubmissionScopeSemester=null;
+  openModal("submit");
+}
+
 function requestSubmitAttendance(){
   hideSubmitAttendanceWindowMessage();
   if(!requireCollegeJoiningDate("submit")) return;
-  const missing=getUnmarkedAttendanceDates();
-  if(missing.length){
-    openLateSubmissionDialog();
-    return;
-  }
-  openModal("submit");
+  routeAttendanceSubmissionAfterJoiningDate();
 }
 
 let attendanceHistoryModalScrollY=0;
@@ -10476,20 +11371,21 @@ function unlockAttendanceHistoryBackground(){
   window.scrollTo(0,attendanceHistoryModalScrollY);
 }
 
-function attendanceHistoryRowsHtml(dates=filterAttendanceHistoryEntries(state.records,INVICTUS_STATE.ui.attendanceHistory)){
+function attendanceHistoryRowsHtml(dates=filterAttendanceHistoryEntries(getAttendanceTabSourceState().records,INVICTUS_STATE.ui.attendanceHistory)){
+  const displayState=getAttendanceTabSourceState();
   if(!dates.length)return '<div class="attendance-history-filter-empty">No attendance records match the selected filters.</div>';
   return dates.map(d=>{
-    const s=state.records[d];
-    const edited=(s!=="holiday"&&s!=="blank"&&state.edits[d])?" · Edited":"";
-    const late=shouldShowLateSubmissionWatermark(state.lateSubmissions,d);
-    const time=isInvictusProtectedHoliday(d)?"Automatic":fmtTime(state.submittedAt[d]);
+    const s=displayState.records[d];
+    const edited=(s!=="holiday"&&s!=="blank"&&displayState.edits[d])?" · Edited":"";
+    const late=shouldShowLateSubmissionWatermark(displayState.lateSubmissions,d);
+    const time=isInvictusProtectedHoliday(d)?"Automatic":fmtTime(displayState.submittedAt[d]);
     const label=s==="present"?"Present":s==="absent"?"Absent":s==="holiday"?"Holiday":s==="blank"?"Blank":s;
     let comment="";
-    if(s==="holiday"&&state.holidayComments?.[d])comment=`<small class="history-reason">Reason: ${escapeHtml(state.holidayComments[d])}</small>`;
-    else if(s==="absent"&&state.absentComments?.[d])comment=`<small class="history-reason">Reason: ${escapeHtml(state.absentComments[d])}</small>`;
-    else if(s==="present"&&state.presentComments?.[d] && state.presentComments[d]!=="Regular College Day")comment=`<small class="history-reason">Reason: ${escapeHtml(state.presentComments[d])}</small>`;
+    if(s==="holiday"&&displayState.holidayComments?.[d])comment=`<small class="history-reason">Reason: ${escapeHtml(displayState.holidayComments[d])}</small>`;
+    else if(s==="absent"&&displayState.absentComments?.[d])comment=`<small class="history-reason">Reason: ${escapeHtml(displayState.absentComments[d])}</small>`;
+    else if(s==="present"&&displayState.presentComments?.[d] && displayState.presentComments[d]!=="Regular College Day")comment=`<small class="history-reason">Reason: ${escapeHtml(displayState.presentComments[d])}</small>`;
     const lateWatermark=late?'<span class="history-late-watermark">Late Submission</span>':"";
-    return `<div class="history-row"><span><strong>${fmt(d)}</strong><small class="history-time">${time}${edited}</small>${comment}</span><span class="status ${s}" aria-label="Status: ${label}">${label}</span>${lateWatermark}</div>`;
+    return `<section class="history-date-group"><div class="history-date-heading">${fmt(d)}</div><div class="history-row"><span><small class="history-time">${time}${edited}</small>${comment}</span><span class="status ${s}" aria-label="Status: ${label}">${label}</span>${lateWatermark}</div></section>`;
   }).join("");
 }
 
@@ -10535,13 +11431,14 @@ function renderAttendanceHistoryModal(){
   const statusFilter=document.getElementById("attendanceHistoryStatusFilter");
   const monthFilter=document.getElementById("attendanceHistoryMonthFilter");
   if(!list||!statusFilter||!monthFilter)return;
+  const displayState=getAttendanceTabSourceState();
   statusFilter.value=INVICTUS_STATE.ui.attendanceHistory.status||"all";
-  const months=getAttendanceHistoryMonths(state.records);
+  const months=getAttendanceHistoryMonths(displayState.records);
   const currentMonth=INVICTUS_STATE.ui.attendanceHistory.month||"all";
   monthFilter.innerHTML='<option value="all">All months</option>'+months.map(m=>{const label=new Date(m+"-01T00:00:00").toLocaleDateString("en-IN",{month:"long",year:"numeric"});return `<option value="${m}">${label}</option>`;}).join("");
   monthFilter.value=months.includes(currentMonth)?currentMonth:"all";
   INVICTUS_STATE.ui.attendanceHistory.month=monthFilter.value;
-  list.innerHTML=attendanceHistoryRowsHtml(filterAttendanceHistoryEntries(state.records,INVICTUS_STATE.ui.attendanceHistory));
+  list.innerHTML=attendanceHistoryRowsHtml(filterAttendanceHistoryEntries(displayState.records,INVICTUS_STATE.ui.attendanceHistory));
   list.scrollTop=0;
 }
 function openAttendanceHistoryModal(){
@@ -10558,16 +11455,332 @@ function openAttendanceHistoryModal(){
 
 function closeAttendanceHistoryModal(){
   const back=document.getElementById("attendanceHistoryBackdrop");
+  const list=document.getElementById("attendanceHistoryModalList");
+  if(list)list.scrollTop=0;
   if(back){back.classList.remove("open");back.setAttribute("aria-hidden","true");}
   unlockAttendanceHistoryBackground();
   document.getElementById("historyToggle")?.focus({preventScroll:true});
+}
+
+/* V24.28.5 — Lecture History sister system.
+   It intentionally reads semester lecture-marking state, not Attendance History's
+   day-level attendance submission records. The UI/filter pattern is shared, but
+   no Attendance History source data or state is reused. */
+const LECTURE_HISTORY_STATUS_OPTIONS=[
+  {value:"all",label:"All statuses"},
+  {value:"no-classes",label:"No Classes"},
+  {value:"absent",label:"Absent"},
+  {value:"teacher-absent",label:"Teacher Absent"},
+  {value:"surprise-test",label:"Surprise Test"},
+  {value:"class-test",label:"Class Test"},
+  {value:"attended",label:"Attended"},
+  {value:"adjustment-attended",label:"Adjustment Attended"}
+];
+
+function lectureHistoryTimeMinutes(value){
+  const m=String(value||"").trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if(!m)return Number.MAX_SAFE_INTEGER;
+  let hour=Number(m[1]);
+  if(hour===12)hour=0;
+  if(m[3].toUpperCase()==="PM")hour+=12;
+  return hour*60+Number(m[2]);
+}
+
+function lectureHistoryStatusForRecord(semesterState,recordKey,record,date,subject,time){
+  const exception=semesterState.noClassExceptions?.[recordKey];
+  const sameLecture=entry=>entry && String(entry.date||"")===date
+    && String(entry.subject||"")===subject
+    && String(entry.time||"")===time;
+  const isClassTest=Object.values(semesterState.surpriseTests||{}).some(sameLecture);
+  const isSurpriseTest=Object.values(semesterState.surpriseTestRecords||{}).some(sameLecture);
+
+  // V24.28.12: Valid Adjustment Period records are expanded into linked
+  // original-slot and selected-subject outcomes by getLectureHistoryEntries()
+  // before reaching this resolver. Keep this slot-level fallback for unusual
+  // legacy records where the selected subject is the same as the stored one.
+  if(record?.adjustmentSubject){
+    if(record.status==="abs")return {value:"absent",label:"Absent"};
+    if(record.status==="ta")return {value:"teacher-absent",label:"Teacher Absent"};
+    if(record.status==="nc" && exception!=="surprise" && exception!=="surprise-new")return {value:"no-classes",label:"No Classes"};
+    if(exception==="surprise-new" || isSurpriseTest)return {value:"surprise-test",label:"Surprise Test"};
+    if(exception==="surprise" || isClassTest)return {value:"class-test",label:"Class Test"};
+    if(exception==="free" || record.status==="nc")return {value:"no-classes",label:"No Classes"};
+    if(record.status==="att")return {value:"attended",label:"Attended"};
+    return null;
+  }
+  if(record?.status==="abs")return {value:"absent",label:"Absent"};
+  if(record?.status==="ta")return {value:"teacher-absent",label:"Teacher Absent"};
+  if(record?.status==="nc" && exception!=="surprise" && exception!=="surprise-new"){
+    return {value:"no-classes",label:"No Classes"};
+  }
+  if(exception==="surprise-new" || isSurpriseTest)return {value:"surprise-test",label:"Surprise Test"};
+  if(exception==="surprise" || isClassTest)return {value:"class-test",label:"Class Test"};
+  if(exception==="free" || record?.status==="nc")return {value:"no-classes",label:"No Classes"};
+  if(record?.status==="att")return {value:"attended",label:"Attended"};
+  return null;
+}
+
+function lectureHistoryTeacherFromClass(classRow){
+  if(!Array.isArray(classRow))return "";
+  const full=String(classRow[3]||"").trim();
+  const match=full.match(/\(([^()]*)\)\s*$/);
+  return match ? match[1].trim() : "";
+}
+
+function lectureHistorySubjectFromClass(classRow,fallbackName=""){
+  if(!Array.isArray(classRow))return String(fallbackName||"");
+  return String(classRow[3]||fallbackName||"").replace(/\s*\([^()]*\)\s*$/," ").trim();
+}
+
+function getLectureHistoryEntries(){
+  const entries=[];
+  for(let semester=1;semester<=6;semester++){
+    const semesterState=(Number(activeSemesterNumber)===semester && typeof semState==="object")
+      ? semState
+      : invictusSemesterStateFor(semester);
+    const subjectCatalog=invictusSemesterSubjectsFor(semester);
+    const subjectNameById=new Map(subjectCatalog.map(subject=>[String(subject.id),String(subject.name)]));
+    const lectureRecords=semesterState.lectures||{};
+    const exceptions=semesterState.noClassExceptions||{};
+    const keys=new Set([...Object.keys(lectureRecords),...Object.keys(exceptions)]);
+    Object.values(semesterState.surpriseTests||{}).forEach(rec=>{
+      if(rec?.date&&rec?.subject&&rec?.time)keys.add(semRecordKey(String(rec.date),String(rec.subject),String(rec.time)));
+    });
+    Object.values(semesterState.surpriseTestRecords||{}).forEach(rec=>{
+      if(rec?.date&&rec?.subject&&rec?.time)keys.add(semRecordKey(String(rec.date),String(rec.subject),String(rec.time)));
+    });
+
+    const baseRows=[];
+    keys.forEach(recordKey=>{
+      const parts=String(recordKey).split("|");
+      const record=lectureRecords[recordKey]||null;
+      const date=String(record?.date||parts[0]||"").slice(0,10);
+      const subject=String(record?.subject||parts[1]||"");
+      const time=String(parts[2]||record?.time||"");
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!subject||!time)return;
+
+      const hasRecordStatus=!!record?.status;
+      const exception=exceptions[recordKey];
+      const hasAssessment=Object.values(semesterState.surpriseTests||{}).some(x=>x&&String(x.date)===date&&String(x.subject)===subject&&String(x.time)===time)
+        ||Object.values(semesterState.surpriseTestRecords||{}).some(x=>x&&String(x.date)===date&&String(x.subject)===subject&&String(x.time)===time);
+      if(!hasRecordStatus && !exception && !hasAssessment)return;
+
+      let classes=[];
+      try{classes=getDashboardClassesForDate(date)||[];}catch(e){classes=[];}
+      const startMinutes=lectureHistoryTimeMinutes(time);
+      let slotIndex=classes.findIndex(c=>String(c?.[0]||"")===time);
+      if(slotIndex<0)slotIndex=classes.findIndex(c=>lectureHistoryTimeMinutes(c?.[0])===startMinutes);
+      const slotClass=slotIndex>=0 ? classes[slotIndex] : null;
+      const adjustmentSubject=String(record?.adjustmentSubject||"").trim();
+      const isAdjustment=!!adjustmentSubject && adjustmentSubject!==subject;
+
+      if(isAdjustment){
+        // One saved adjustment yields two history outcomes: the original slot's
+        // teacher was absent, and the selected subject receives the chosen mark.
+        const originalClass=classes.find(c=>String(c?.[2]||"")===subject)||null;
+        const adjustedClass=classes.find(c=>String(c?.[2]||"")===adjustmentSubject)||null;
+        const originalDisplay=lectureHistorySubjectFromClass(originalClass,subjectNameById.get(subject)||subject);
+        const adjustedDisplay=lectureHistorySubjectFromClass(adjustedClass,subjectNameById.get(adjustmentSubject)||adjustmentSubject);
+        const originalTeacher=lectureHistoryTeacherFromClass(originalClass)||String(record?.teacherName||record?.teacher||"").trim();
+        const adjustedTeacher=lectureHistoryTeacherFromClass(adjustedClass)||"";
+        const number=slotIndex>=0 ? slotIndex+1 : null;
+        const targetRaw=adjustmentOutcomeStatus(record);
+        const targetStatus=targetRaw==="att"
+          ? {value:"adjustment-attended",label:"Adjustment Attended"}
+          : targetRaw==="abs" ? {value:"absent",label:"Absent"}
+          : targetRaw==="ta" ? {value:"teacher-absent",label:"Teacher Absent"}
+          : {value:"no-classes",label:"No Classes"};
+        baseRows.push({
+          semester,date,subject,time,recordKey,
+          status:{value:"teacher-absent",label:"Teacher Absent"},
+          timeMinutes:startMinutes,lectureNumber:number,displaySubject:originalDisplay,teacher:originalTeacher,
+          adjustmentNote:"Adjustment Period · Original slot",displayTitle:number==null?"Original slot":`Lecture ${number} · Original slot`,historyOrder:0
+        });
+        baseRows.push({
+          semester,date,subject:adjustmentSubject,time,recordKey,
+          status:targetStatus,
+          timeMinutes:startMinutes,lectureNumber:number,displaySubject:adjustedDisplay,teacher:adjustedTeacher,
+          adjustmentNote:"Adjustment Period · Selected subject",displayTitle:number==null?"Adjustment Period":`Lecture ${number} · Adjustment`,historyOrder:1
+        });
+        return;
+      }
+
+      const status=lectureHistoryStatusForRecord(semesterState,recordKey,record,date,subject,time);
+      if(!status)return; // Unmarked/derived automatic Absent is not a saved lecture mark.
+      const displaySubject=lectureHistorySubjectFromClass(slotClass,subjectNameById.get(subject)||subject);
+      const teacher=lectureHistoryTeacherFromClass(slotClass)||String(record?.teacherName||record?.teacher||"").trim();
+      baseRows.push({
+        semester,date,subject,time,recordKey,status,
+        timeMinutes:startMinutes,
+        lectureNumber:slotIndex>=0 ? slotIndex+1 : null,
+        displaySubject,teacher,
+        adjustmentNote:"",displayTitle:null,historyOrder:0
+      });
+    });
+
+    // Some future isolated semesters may have marks before their timetable is
+    // configured. Preserve chronological slot ordering for those records.
+    const byDate=new Map();
+    baseRows.forEach(row=>{
+      if(!byDate.has(row.date))byDate.set(row.date,[]);
+      byDate.get(row.date).push(row);
+    });
+    byDate.forEach(rows=>{
+      rows.sort((a,b)=>a.timeMinutes-b.timeMinutes||String(a.time).localeCompare(String(b.time))||(a.historyOrder||0)-(b.historyOrder||0));
+      let nextNumber=1;
+      const numberByRecordKey=new Map();
+      rows.forEach(row=>{
+        const pairKey=row.recordKey;
+        if(row.lectureNumber==null){
+          if(numberByRecordKey.has(pairKey))row.lectureNumber=numberByRecordKey.get(pairKey);
+          else{row.lectureNumber=nextNumber;numberByRecordKey.set(pairKey,row.lectureNumber);nextNumber++;}
+        }else{
+          if(numberByRecordKey.has(pairKey))row.lectureNumber=numberByRecordKey.get(pairKey);
+          else numberByRecordKey.set(pairKey,row.lectureNumber);
+          nextNumber=Math.max(nextNumber,row.lectureNumber+1);
+        }
+      });
+    });
+    entries.push(...baseRows);
+  }
+
+  entries.sort((a,b)=>b.date.localeCompare(a.date)||a.lectureNumber-b.lectureNumber||a.timeMinutes-b.timeMinutes||a.semester-b.semester);
+  return entries;
+}
+
+function renderLectureHistoryRows(entries){
+  const list=document.getElementById("lectureHistoryModalList");
+  if(!list)return;
+  const statusFilter=lectureHistoryFilter.status||"all";
+  const monthFilter=lectureHistoryFilter.month||"all";
+  const filtered=entries.filter(entry=>(statusFilter==="all"||entry.status.value===statusFilter)&&(monthFilter==="all"||entry.date.startsWith(monthFilter)));
+  if(!filtered.length){
+    list.innerHTML='<div class="attendance-history-filter-empty">No lecture history records match the selected filters.</div>';
+    list.scrollTop=0;
+    return;
+  }
+  const groups=new Map();
+  filtered.forEach(entry=>{
+    if(!groups.has(entry.date))groups.set(entry.date,[]);
+    groups.get(entry.date).push(entry);
+  });
+  list.innerHTML=[...groups.entries()].map(([date,rows])=>{
+    const rowHtml=rows.map(entry=>{
+      const meta=[entry.displaySubject,entry.teacher,entry.time].filter(Boolean).map(escapeHtml).join(" · ");
+      const title=entry.displayTitle || `Lecture ${entry.lectureNumber}`;
+      return `<div class="history-row lecture-history-row"><span><strong>${escapeHtml(title)}</strong><small class="history-time">${meta||"Lecture details unavailable"}</small></span><span class="status lecture-history-status ${entry.status.value}">${escapeHtml(entry.status.label)}</span></div>`;
+    }).join("");
+    return `<section class="lecture-history-date-group"><div class="lecture-history-date">${escapeHtml(fmt(date))}</div>${rowHtml}</section>`;
+  }).join("");
+  list.scrollTop=0;
+}
+
+function ensureLectureHistoryModal(){
+  if(document.getElementById("lectureHistoryBackdrop"))return;
+  const back=document.createElement("div");
+  back.id="lectureHistoryBackdrop";
+  back.className="attendance-history-backdrop lecture-history-backdrop";
+  back.setAttribute("role","dialog");
+  back.setAttribute("aria-modal","true");
+  back.setAttribute("aria-labelledby","lectureHistoryModalTitle");
+  back.innerHTML=`
+    <div class="attendance-history-modal lecture-history-modal">
+      <div class="attendance-history-modal-head">
+        <h2 id="lectureHistoryModalTitle">Lecture History</h2>
+        <button type="button" class="attendance-history-modal-close" id="lectureHistoryModalClose" aria-label="Close Lecture History">×</button>
+      </div>
+      <div class="attendance-history-filter-bar" role="group" aria-label="Lecture History filters">
+        <label for="lectureHistoryStatusFilter">Status
+          <select id="lectureHistoryStatusFilter" aria-label="Filter Lecture History by status">
+            ${LECTURE_HISTORY_STATUS_OPTIONS.map(option=>`<option value="${option.value}">${option.label}</option>`).join("")}
+          </select>
+        </label>
+        <label for="lectureHistoryMonthFilter">Month
+          <select id="lectureHistoryMonthFilter" aria-label="Filter Lecture History by month"><option value="all">All months</option></select>
+        </label>
+      </div>
+      <div class="attendance-history-modal-list lecture-history-modal-list" id="lectureHistoryModalList" tabindex="0" aria-live="polite"></div>
+    </div>`;
+  document.body.appendChild(back);
+  document.getElementById("lectureHistoryModalClose")?.addEventListener("click",closeLectureHistoryModal);
+  document.getElementById("lectureHistoryStatusFilter")?.addEventListener("change",event=>{
+    lectureHistoryFilter.status=event.target.value||"all";
+    renderLectureHistoryModal();
+  });
+  document.getElementById("lectureHistoryMonthFilter")?.addEventListener("change",event=>{
+    lectureHistoryFilter.month=event.target.value||"all";
+    renderLectureHistoryModal();
+  });
+  back.addEventListener("click",event=>{if(event.target===back)closeLectureHistoryModal();});
+}
+
+function renderLectureHistoryModal(){
+  const statusFilter=document.getElementById("lectureHistoryStatusFilter");
+  const monthFilter=document.getElementById("lectureHistoryMonthFilter");
+  if(!statusFilter||!monthFilter)return;
+  const entries=getLectureHistoryEntries();
+  statusFilter.value=lectureHistoryFilter.status||"all";
+  const months=[...new Set(entries.map(entry=>entry.date.slice(0,7)))].sort().reverse();
+  monthFilter.innerHTML='<option value="all">All months</option>'+months.map(month=>{
+    const label=new Date(month+"-01T00:00:00").toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+    return `<option value="${month}">${escapeHtml(label)}</option>`;
+  }).join("");
+  if(lectureHistoryFilter.month!=="all"&&!months.includes(lectureHistoryFilter.month))lectureHistoryFilter.month="all";
+  monthFilter.value=lectureHistoryFilter.month||"all";
+  renderLectureHistoryRows(entries);
+}
+
+function lockLectureHistoryBackground(){
+  lectureHistoryModalScrollY=window.scrollY||window.pageYOffset||0;
+  document.documentElement.classList.add("attendance-history-locked");
+  document.body.classList.add("attendance-history-locked");
+  document.body.style.position="fixed";
+  document.body.style.top=`-${lectureHistoryModalScrollY}px`;
+  document.body.style.left="0";
+  document.body.style.right="0";
+  document.body.style.width="100%";
+}
+
+function unlockLectureHistoryBackground(){
+  document.documentElement.classList.remove("attendance-history-locked");
+  document.body.classList.remove("attendance-history-locked");
+  document.body.style.position="";
+  document.body.style.top="";
+  document.body.style.left="";
+  document.body.style.right="";
+  document.body.style.width="";
+  window.scrollTo(0,lectureHistoryModalScrollY);
+}
+
+function openLectureHistoryModal(){
+  ensureLectureHistoryModal();
+  const back=document.getElementById("lectureHistoryBackdrop");
+  const statusFilter=document.getElementById("lectureHistoryStatusFilter");
+  if(!back||!statusFilter)return;
+  lectureHistoryFilter={status:"all",month:"all"};
+  renderLectureHistoryModal();
+  lockLectureHistoryBackground();
+  back.classList.add("open");
+  back.setAttribute("aria-hidden","false");
+  requestAnimationFrame(()=>statusFilter.focus({preventScroll:true}));
+}
+
+function closeLectureHistoryModal(){
+  const back=document.getElementById("lectureHistoryBackdrop");
+  const list=document.getElementById("lectureHistoryModalList");
+  if(list)list.scrollTop=0;
+  if(back){back.classList.remove("open");back.setAttribute("aria-hidden","true");}
+  unlockLectureHistoryBackground();
+  lectureHistoryFilter={status:"all",month:"all"};
+  document.getElementById("scheduleLectureHistoryDisclosure")?.focus({preventScroll:true});
 }
 
 function renderHistory(){
    const list=document.getElementById("historyList");
    const toggle=document.getElementById("historyToggle");
    const loadMore=document.getElementById("historyLoadMore");
-   const dates=getAttendanceHistoryDates(state.records);
+   const displayState=getAttendanceTabSourceState();
+   const dates=getAttendanceHistoryDates(displayState.records);
 
    // Keep pagination UI state local to this page view. The attendance data
    // itself remains unchanged in the existing state/localStorage contract.
@@ -10586,20 +11799,20 @@ function renderHistory(){
      const visibleDates=dates.slice(0,window.attendanceHistoryVisibleCount);
 
      list.innerHTML=visibleDates.map(d=>{
-       const s=state.records[d];
+       const s=displayState.records[d];
        // Only attendance records that were changed through Edit Attendance
        // to Present/Absent receive the explicit "Edited" marker.
        // Normal Submit Attendance records remain clean, with no marker.
-       const edited=(s!=="holiday" && s!=="blank" && state.edits[d]) ? " · Edited" : "";
-       const late=!!state.lateSubmissions?.[d];
-       const time=isInvictusProtectedHoliday(d) ? "Automatic" : fmtTime(state.submittedAt[d]);
+       const edited=(s!=="holiday" && s!=="blank" && displayState.edits[d]) ? " · Edited" : "";
+       const late=!!displayState.lateSubmissions?.[d];
+       const time=isInvictusProtectedHoliday(d) ? "Automatic" : fmtTime(displayState.submittedAt[d]);
        const label = s === "present" ? "Present" : s === "absent" ? "Absent" : s === "holiday" ? "Holiday" : s === "blank" ? "Blank" : s;
        let comment="";
-       if(s==="holiday" && state.holidayComments?.[d]){
+       if(s==="holiday" && displayState.holidayComments?.[d]){
          comment=`<small class="history-reason">Reason: ${escapeHtml(state.holidayComments[d])}</small>`;
-       }else if(s==="absent" && state.absentComments?.[d]){
+       }else if(s==="absent" && displayState.absentComments?.[d]){
          comment=`<small class="history-reason">Reason: ${escapeHtml(state.absentComments[d])}</small>`;
-       }else if(s==="present" && state.presentComments?.[d]){
+       }else if(s==="present" && displayState.presentComments?.[d]){
          comment=`<small class="history-reason">Reason: ${escapeHtml(state.presentComments[d])}</small>`;
        }
        const lateWatermark=late ? `<span class="history-late-watermark" aria-hidden="true">Late Submission</span>` : "";
@@ -10630,6 +11843,7 @@ function renderHistory(){
    toggle.onclick=()=>openAttendanceHistoryModal();
  } function renderCalendars(){
   const strip=document.getElementById("calendarStrip");
+  const displayState=getAttendanceTabSourceState();
   strip.innerHTML="";
   const months=[];
   // Attendance Calendar display range: Aug 2026 through Jul 2029.
@@ -10672,8 +11886,8 @@ function renderHistory(){
         (date.getDay() === 0 || date.getDay() === 6) &&
         !attendanceEligibleSpecialDays.has(key);
 
-      if(state.records[key]) {
-        el.classList.add(state.records[key]);
+      if(displayState.records[key]) {
+        el.classList.add(displayState.records[key]);
       } else if(holidays.has(key)) {
         el.classList.add("holiday");
       } else if(isWeekend) {
@@ -11145,6 +12359,16 @@ if(attendanceCalendar){
 
 function openModal(which){
   if((which==="submit" || which==="edit") && !requireCollegeJoiningDate(which)) return;
+  if(which==="submit" && !crossSemesterAttendanceResolverActive){
+    const targetSemester=getSemesterForDate(new Date()) || activeSemesterNumber || 1;
+    const crossIssues=getCrossSemesterAttendanceIssues(targetSemester);
+    if(crossIssues.length){
+      crossSemesterAttendanceTargetSemester=targetSemester;
+      crossSemesterAttendanceResolverActive=true;
+      renderCrossSemesterAttendanceResolver(targetSemester);
+      return;
+    }
+  }
   if(which==="submit" && getUnmarkedAttendanceDates().length){
     openLateSubmissionDialog();
     return;
@@ -11473,9 +12697,11 @@ document.getElementById("submitBtn").onclick=()=>{
      backfill. Once all missing dates are resolved, return to today's normal
      Submit Attendance modal. */
   if(completedLateSubmission){
-    const remainingLateDates=getUnmarkedAttendanceDates();
+    const remainingLateDates=getLateSubmissionMissingDates();
     if(remainingLateDates.length){
       setTimeout(openLateSubmissionDialog,0);
+    }else if(crossSemesterAttendanceResolverActive && lateSubmissionScopeSemester!==null){
+      setTimeout(resumeAfterCrossSemesterAttendanceResolution,0);
     }else{
       setTimeout(()=>{
         if(!state.records[iso(new Date())]) openModal("submit");
@@ -11484,7 +12710,7 @@ document.getElementById("submitBtn").onclick=()=>{
   }
 };
 
-const semesterSubjects = [
+const SEMESTER_1_SUBJECTS = [
   {id:"ca",name:"C.A",type:"subject"},
   {id:"calab",name:"CA LAB",type:"lab"},
   {id:"english",name:"English-I",type:"subject"},
@@ -11501,9 +12727,12 @@ const semesterSubjects = [
   {id:"pstlab",name:"PST LAB",type:"lab"}
 ];
 
-// Category update: French is a subject; Personality Development is an Other.
-// Existing IDs are intentionally preserved so existing attendance records keep counting.
+// V24.6 — Each semester owns an independent subject environment.
+// Semester 1 keeps the locked historical subject registry; future semesters
+// start empty and can be configured independently when their term begins.
+let semesterSubjects = SEMESTER_1_SUBJECTS.map(x=>({...x}));
 semesterSubjects.sort((a,b)=>a.name.localeCompare(b.name));
+const V24_6_SEMESTER_SUBJECTS_PREFIX="invictus_semester_subjects_";
 
 // Future timetable changes can be introduced as dated versions without changing historical records.
 const timetable = {
@@ -11648,7 +12877,54 @@ const timetableFrom20260917 = {
   ]
 };
 
-const semState = JSON.parse(localStorage.getItem("bcaSemester1State") || '{"lectures":{},"surpriseTests":{}}');
+// V24.28.1 — New default Section A timetable, effective 15/10/2026 inclusive.
+// Subject IDs remain the existing Semester 1 IDs so attendance and analytics
+// keep using the established data pipeline. Dates before this boundary continue
+// resolving against the earlier dated timetable definitions above.
+const timetableFrom20261015 = {
+  1:[
+    ["09:00 AM","09:50 AM","mfcs","MFCS-I (Mr. Rishi)"],
+    ["09:50 AM","10:40 AM","ca","C.A (Mr. Manoj)"],
+    ["10:40 AM","11:30 AM","evs","EVS (Ms. Vandna)"],
+    ["12:10 PM","12:50 PM","coordinator","Coordinator (Ms. Punam)"],
+    ["12:50 PM","01:30 PM","pstlab","PST Lab 130 (Ms. Pooja)"],
+    ["01:30 PM","02:10 PM","pstlab","PST Lab 130 (Ms. Pooja)"]
+  ],
+  2:[
+    ["09:00 AM","09:50 AM","new","French (Mr. Nakul)"],
+    ["09:50 AM","10:40 AM","iks","IKS (Ms. Vandita)"],
+    ["10:40 AM","11:30 AM","hindi","Hindi (Ms. Kaur)"],
+    ["12:10 PM","12:50 PM","pst","PST (Ms. Pooja)"],
+    ["12:50 PM","01:30 PM","english","English-I (Dr. Sunaina)"],
+    ["01:30 PM","02:10 PM","mentor","Mentor (Ms. Punam)"]
+  ],
+  3:[
+    ["09:00 AM","09:50 AM","ca","C.A (Mr. Manoj)"],
+    ["09:50 AM","10:40 AM","webdev","Web Development (Ms. Amrita)"],
+    ["10:40 AM","11:30 AM","pdp","PDP (Ms. Pinky)"],
+    ["12:10 PM","12:50 PM","pst","PST (Ms. Pooja)"],
+    ["12:50 PM","01:30 PM","iks","IKS (Ms. Vandita)"],
+    ["01:30 PM","02:10 PM","mfcs","MFCS-I (Mr. Rishi)"]
+  ],
+  4:[
+    ["09:00 AM","09:50 AM","mfcs","MFCS-I (Mr. Rishi)"],
+    ["09:50 AM","10:40 AM","new","French (Mr. Nakul)"],
+    ["10:40 AM","11:30 AM","english","English-I (Dr. Sunaina)"],
+    ["12:10 PM","12:50 PM","webdev","Web Development (Ms. Amrita)"],
+    ["12:50 PM","01:30 PM","calab","C.A Lab 130 (Ms. Rupa)"],
+    ["01:30 PM","02:10 PM","calab","C.A Lab 130 (Ms. Rupa)"]
+  ],
+  5:[
+    ["09:00 AM","09:50 AM","pst","PST (Ms. Pooja)"],
+    ["09:50 AM","10:40 AM","mfcs","MFCS-I (Mr. Rishi)"],
+    ["10:40 AM","11:30 AM","webdev","Web Development (Ms. Amrita)"],
+    ["12:10 PM","12:50 PM","iks","IKS (Ms. Vandita)"],
+    ["12:50 PM","01:30 PM","ca","C.A (Mr. Manoj)"],
+    ["01:30 PM","02:10 PM","evs","EVS (Ms. Vandna)"]
+  ]
+};
+
+let semState = JSON.parse(localStorage.getItem("bcaSemester1State") || '{"lectures":{},"surpriseTests":{}}');
 semState.lectures = semState.lectures || {};
 semState.surpriseTests = semState.surpriseTests || {};
 semState.surpriseTestRecords = semState.surpriseTestRecords || {};
@@ -11688,8 +12964,17 @@ function parseClockMinutes(value){const m=String(value||"").trim().match(/^(\d{1
 function isLectureTimeReachedAt(dateKey,startTime,now){const todayKey=iso(now);if(dateKey<todayKey)return true;if(dateKey>todayKey)return false;const minutes=parseClockMinutes(startTime);return minutes===null?false:now.getHours()*60+now.getMinutes()>=minutes;}
 function isLectureEndTimePassedAt(dateKey,endTime,now){const todayKey=iso(now);if(dateKey<todayKey)return true;if(dateKey>todayKey)return false;const minutes=parseClockMinutes(endTime);return minutes===null?false:now.getHours()*60+now.getMinutes()>=minutes;}
 function getPresentSubmissionTiming(now){const start=new Date(now);start.setHours(8,30,0,0);const end=new Date(now);end.setHours(9,30,0,0);return {beforeWindow:now<start,onTime:now>=start&&now<=end,late:now>end};}
-function isAttendanceDateEligibleAt(date,eligibleSpecialDays,unavailableDates){if(!date||date<"2026-08-08"||date>iso(ATTENDANCE_END))return false;if(unavailableDates?.has(date))return false;if(eligibleSpecialDays?.has(date))return true;const day=new Date(date+"T00:00:00").getDay();return day!==0&&day!==6;}
-function isSemesterUnlockedAt(startValue,today){const start=v16ParseDDMMYYYY(startValue);if(!start)return false;start.setHours(0,0,0,0);const current=new Date(today);current.setHours(0,0,0,0);return current>=start;}
+function isAttendanceDateEligibleAt(date,eligibleSpecialDays,unavailableDates){
+  if(!date)return false;
+  const cfg=getSemesterConfig(activeSemesterNumber);
+  if(cfg){
+    const key=String(date).slice(0,10);
+    if(key<iso(cfg.start)||key>iso(cfg.end))return false;
+  }else if(date<"2026-08-08"||date>iso(ATTENDANCE_END))return false;
+  if(unavailableDates?.has(date))return false;
+  if(eligibleSpecialDays?.has(date))return true;
+  const day=new Date(date+"T00:00:00").getDay();return day!==0&&day!==6;
+}
 function shouldShowLateSubmissionWatermark(lateSubmissions,date){return !!lateSubmissions?.[date];}
 function calculateTotalHolidayCount(records){return Object.values(getAnalyticsAttendanceRecords(records)).filter(v=>v==="holiday").length;}
 function scheduleInvictusRender(renderFn){
@@ -11718,7 +13003,8 @@ const INVICTUS_PROTECTED_HOLIDAYS = Object.freeze({
   "2026-09-04":"Krishna-Janamashtmi",
   "2026-09-11":"18th-\"BRICS\"",
   "2026-09-14":"Ganesh-Chaturthi",
-  "2026-09-23":"Shaheed-Diwas"
+  "2026-09-23":"Shaheed-Diwas",
+  "2026-10-02":"Gandhi-Jayanti"
 });
 
 const INVICTUS_PROTECTED_TEACHER_ABSENT = Object.freeze([
@@ -11823,9 +13109,13 @@ Object.keys(semState.lectures || {}).forEach(k=>{
 
 function saveSem(){
   syncAssessmentLecturesAsAttended(semState);
-  applyInvictusProtectedCollegeData(null,semState);
+  if(activeSemesterNumber===1) applyInvictusProtectedCollegeData(null,semState);
   invalidateSemesterDerivedState();
-  v11PersistCore("bcaSemester1State",semState);
+  const key=invictusActiveSemesterStorageKey();
+  v11PersistCore(key,semState);
+  if(activeSemesterNumber===1){
+    try{localStorage.setItem("bcaSemester1State",JSON.stringify(semState));}catch(e){}
+  }
 }
 
 // V6 Patch 1: From 17/08/2026 onward, MS OFFICE attendance is Web Development.
@@ -11900,6 +13190,13 @@ function semSpecialDay(key){
 }
 function semDefaultClassesForDate(key){
   const d=new Date(key+"T00:00:00");
+  const activeConfig=getSemesterConfig(activeSemesterNumber);
+  if(!activeConfig || d<activeConfig.start || d>activeConfig.end) return [];
+
+  // V24.6 — Only Semester 1 currently has an implemented timetable.
+  // Semesters 2–6 are isolated environments and remain empty until their
+  // own timetable/subjects are configured for their own working period.
+  if(activeSemesterNumber!==1) return [];
 
   // V16.4 — Semester 1 scheduled classes exist only in the active
   // Semester 1 class window: 08/08/2026 through 31/01/2027.
@@ -11933,6 +13230,9 @@ function semDefaultClassesForDate(key){
   }
 
   if(d<new Date("2026-08-12T00:00:00") || d.getDay()===0 || d.getDay()===6) return [];
+  // V24.28.1: New default Section A timetable starts 15/10/2026 inclusive.
+  // Older dates deliberately retain their existing dated timetable history.
+  if(key>="2026-10-15") return timetableFrom20261015[d.getDay()] || [];
   if(key==="2026-09-17") return timetableException20260917;
   if(key>="2026-09-17") return timetableFrom20260917[d.getDay()] || [];
   if(key>="2026-08-17") return timetableFrom20260817[d.getDay()] || [];
@@ -12044,7 +13344,7 @@ function semWeekDates(startKey){
 function semRecordKey(date, subject, time){return `${date}|${subject}|${time}`;}
 function semSubjectCounts(){
   const out={};
-  semesterSubjects.forEach(s=>out[s.id]={name:s.name,att:0,abs:0,ta:0,nc:0,adj:0});
+  semesterSubjects.forEach(s=>out[s.id]={name:s.name,att:0,abs:0,ta:0,nc:0,adj:0,pending:0,automaticAbsent:0,adjustmentNumeratorCredit:0});
 
   /* V16.6 — Semester Card 1.1 consumes the same lecture-status source as
      Card 1.2. This prevents the Semester tab from silently counting lecture
@@ -12063,20 +13363,32 @@ function semSubjectCounts(){
 
       if(row.status==="ta" && row.attendanceSubject && row.attendanceSubject!==row.subject){
         original.ta++;
+        // An adjustment resolves the original scheduled slot independently
+        // of the target slot's tracking state. Preserve the established
+        // reached/numerator behavior for this linked original outcome.
+        if(row.adjustmentNumeratorCredit===true) original.adjustmentNumeratorCredit++;
         const adjusted=out[row.attendanceSubject];
         if(adjusted){
           if(row.attendanceStatus==="att") adjusted.adj++;
-          else if(row.attendanceStatus==="abs") adjusted.abs++;
+          else if(row.attendanceStatus==="abs"){
+            adjusted.abs++;
+            if(row.automaticAbsent===true) adjusted.automaticAbsent++;
+          }
           else if(row.attendanceStatus==="ta") adjusted.ta++;
           else if(row.attendanceStatus==="nc") adjusted.nc++;
+          else if(row.attendanceStatus==="pending") adjusted.pending++;
         }
         return;
       }
 
       if(row.status==="att")original.att++;
-      else if(row.status==="abs")original.abs++;
+      else if(row.status==="abs"){
+        original.abs++;
+        if(row.automaticAbsent===true)original.automaticAbsent++;
+      }
       else if(row.status==="ta")original.ta++;
       else if(row.status==="nc")original.nc++;
+      else if(row.status==="pending")original.pending++;
     });
   });
 
@@ -13000,7 +14312,7 @@ function renderSurpriseTestCard(){
 
   const semesterPreference=getInvictusSemesterPreference();
   const visibleSemesters=semesterPreference==="all"
-    ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+    ? Array.from({length:6},(_,i)=>i+1)
     : [Number(semesterPreference)];
   const semesterCards=visibleSemesters.map(n=>{
     const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
@@ -13972,6 +15284,42 @@ function ensureSemesterExpandedContentVisible(el){
   }));
 }
 
+
+/* V24.28.9 — Dashboard Cards 2–5 use a dedicated viewport position.
+   Center the expanded card within the visible area where possible. This leaves
+   a small portion of both adjacent cards visible for direct switching. Cards 1
+   and 6 continue using their existing positioning behavior. */
+function ensureDashboardNeighborCardsVisible(el){
+  if(!el || el.hidden) return;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(el.hidden) return;
+
+    const card=el.closest('.schedule-collapsible-card') || el.closest('.card') || el;
+    const rect=card.getBoundingClientRect();
+    const viewportHeight=window.innerHeight || document.documentElement.clientHeight;
+    const stickyMirror=document.querySelector('.invictus-sticky-nav');
+    const mirrorVisible=stickyMirror && getComputedStyle(stickyMirror).display!=='none';
+    const nav=document.querySelector('nav');
+    const navRect=nav?.getBoundingClientRect();
+    const navInset=mirrorVisible
+      ? stickyMirror.getBoundingClientRect().bottom
+      : (navRect && navRect.top<=1 ? navRect.bottom : 0);
+    const topInset=Math.max(8,Math.min(navInset+8,viewportHeight*0.35));
+    const bottomInset=12;
+    const availableHeight=Math.max(0,viewportHeight-topInset-bottomInset);
+    let targetTop=topInset;
+
+    // When the expanded card fits, center it to expose neighboring cards on
+    // both sides. If it is taller than the available viewport, keep its top
+    // anchored rather than introducing an unrelated scroll position.
+    if(rect.height<=availableHeight){
+      targetTop=topInset+Math.max(0,(availableHeight-rect.height)/2);
+    }
+    const delta=rect.top-targetTop;
+    if(Math.abs(delta)>1) window.scrollBy({top:delta,behavior:'smooth'});
+  }));
+}
+
 // [V22.09 SEMESTER / ACADEMIC ENGINE — Semester page/UI orchestration]
 function renderSemester(){
   const counts=semSubjectCounts();
@@ -14007,13 +15355,12 @@ function renderSemester(){
             ${(()=>{
               const semesterPreference=getInvictusSemesterPreference();
               const semesters=semesterPreference==="all"
-                ? Array.from({length:6},(_,i)=>i+1).filter(n=>v16SemesterUnlocked(n))
+                ? Array.from({length:6},(_,i)=>i+1)
                 : [Number(semesterPreference)];
               return semesters.map(n=>{
               const defaultOpen=semesterPreference!=="all" && Number(semesterPreference)===n;
-              if(n===1){
-                return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="1" aria-expanded="${defaultOpen}" aria-controls="semesterBreakdownSem1Content">
-                  <span class="semester-breakdown-item-label">Semester 1 (${v16ShortSemesterDateRange(1)})</span>
+                return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="${n}" aria-expanded="${defaultOpen}" aria-controls="semesterBreakdownSem1Content">
+                  <span class="semester-breakdown-item-label">Semester ${n} (${v16ShortSemesterDateRange(n)})</span>
                   <span class="semester-breakdown-item-chevron" aria-hidden="true">›</span>
                 </button>
                 <div class="semester-breakdown-sem1-content" id="semesterBreakdownSem1Content" ${defaultOpen ? "" : "hidden"}>
@@ -14060,12 +15407,7 @@ function renderSemester(){
                     </div>
                   </div>
                 </div>`;
-              }
-              return `<button type="button" class="semester-breakdown-item" data-semester-breakdown="${n}" aria-expanded="${defaultOpen}">
-                <span class="semester-breakdown-item-label">Semester ${n} (${v16ShortSemesterDateRange(n)})</span>
-                <span class="semester-breakdown-item-chevron" aria-hidden="true">›</span>
-              </button>`;
-              }).join("");
+                            }).join("");
             })()}
           </div>
         </div>
@@ -14127,7 +15469,6 @@ function renderSemester(){
   });
   semesterBreakdownItems.forEach(item=>{
     item.addEventListener("click",()=>{
-      if(item.dataset.semesterBreakdown!=="1") return;
       const open=item.getAttribute("aria-expanded")!=="true";
       semesterBreakdownItems.forEach(other=>other.setAttribute("aria-expanded","false"));
       semesterBreakdownSem1?.setAttribute("hidden","");
@@ -14261,6 +15602,104 @@ function renderSemester(){
   ensureSemCalendar();
 }
 
+/* V24.6 — Future-semester renderer. Semester 1 keeps the locked renderer above;
+   Semesters 2–6 use the same UI shell but read only their own isolated context. */
+function renderIsolatedSemesterEnvironment(){
+  const counts=semSubjectCounts();
+  const attendedBreakdown=semAttendedBreakdown();
+  const selected=new Date(semSelectedDate+"T00:00:00");
+  const n=activeSemesterNumber;
+  const range=v16ShortSemesterDateRange(n);
+  main.innerHTML=`
+    <div class="semester-page-table">
+      <div class="card sem-week-card">
+        <div class="sem-week-head"><div><h3>Daily Timetable</h3><div class="week-range">Swipe left/right to move between days</div></div></div>
+        <div class="sem-day-view" id="semDayView"><div class="sem-day-track" id="semDayTrack"></div></div>
+        <div class="sem-calendar-inline"><button class="sem-calendar-toggle" id="semCalendarBtn" aria-label="Choose date">📅</button><span class="sem-calendar-caption">Tap the calendar to switch to other dates</span></div>
+        <button class="secondary" id="subjectPercentageBtn" style="margin-top:13px">Lecture Wise Percentage</button>
+        <button class="secondary lecture-mismatch-check" id="presentLectureCheckBtn" type="button">Check Unmarked Lectures</button>
+      </div>
+      <div class="card semester-breakdown-card" id="semesterBreakdownCard">
+        <button type="button" class="semester-breakdown-head" id="semesterBreakdownHead" aria-expanded="false" aria-controls="semesterBreakdownContent">
+          <span class="semester-breakdown-head-left"><span class="semester-breakdown-title">Lectures breakdown</span></span>
+          <span class="semester-breakdown-chevron" aria-hidden="true">›</span>
+        </button>
+        <div class="semester-breakdown-content" id="semesterBreakdownContent" hidden>
+          <div class="semester-breakdown-list">
+            <button type="button" class="semester-breakdown-item" data-semester-breakdown="${n}" aria-expanded="true" aria-controls="semesterBreakdownSemActiveContent">
+              <span class="semester-breakdown-item-label">Semester ${n} (${range})</span><span class="semester-breakdown-item-chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="semester-breakdown-sem1-content" id="semesterBreakdownSemActiveContent">
+              <div class="card sem-total">
+                <div class="sem-total-head"><div><div class="sem-total-title">Total Lectures Attended</div></div>
+                  <div class="sem-total-equation-card" aria-label="${attendedBreakdown.attended} attended plus ${attendedBreakdown.adjustment} adjustment equals ${attendedBreakdown.total}">
+                    <span class="sem-total-equation-attended">${attendedBreakdown.attended}</span><span class="sem-total-equation-plus">+</span><span class="sem-total-equation-adjustment">${attendedBreakdown.adjustment}</span><span class="sem-total-equation-equals">=</span><span class="sem-total-equation-total">${attendedBreakdown.total}</span>
+                  </div>
+                </div>
+                <div class="sem-summary open" id="semSummary">
+                  <div class="sem-summary-head"><div class="sem-summary-left"><span class="sem-summary-title" id="semCategoryTitle">Subjects</span>
+                    <div class="sem-category-picker" id="semCategoryPicker"><button type="button" class="sem-category-button" id="semCategoryButton" aria-haspopup="true" aria-expanded="false"><span id="semCategoryLabel">Subjects</span><span class="sem-status-chevron">▾</span></button>
+                      <div class="sem-status-menu sem-category-menu" id="semCategoryMenu"><button type="button" class="sem-status-option active" data-category="subjects">Subjects</button><button type="button" class="sem-status-option" data-category="lab">Lab</button><button type="button" class="sem-status-option" data-category="others">Others</button></div>
+                    </div></div>
+                    <div class="sem-status-picker" id="semStatusPicker"><button type="button" class="sem-status-button" id="semStatusButton" aria-haspopup="true" aria-expanded="false"><span class="sem-status-dot att"></span><span id="semStatusLabel">Attended</span><span class="sem-status-chevron">▾</span></button>
+                      <div class="sem-status-menu" id="semStatusMenu"><button type="button" class="sem-status-option active" data-status="att"><span class="sem-status-dot att"></span>Attended</button><button type="button" class="sem-status-option" data-status="abs"><span class="sem-status-dot abs"></span>Absent</button><button type="button" class="sem-status-option" data-status="ta"><span class="sem-status-dot ta"></span>Teacher Absent</button><button type="button" class="sem-status-option" data-status="nc"><span class="sem-status-dot nc"></span>No Classes</button><button type="button" class="sem-status-option" data-status="adj"><span class="sem-status-dot adj"></span>Adjustment Period</button></div>
+                    </div>
+                  </div><div id="semSummaryRows"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${renderSurpriseTestCard()}
+      <div class="sem-calendar-backdrop lecture-mismatch-backdrop" id="presentLectureCheckBackdrop" role="dialog" aria-modal="true" aria-labelledby="presentLectureCheckTitle"><div class="lecture-mismatch-modal"><div class="lecture-mismatch-head"><h2 id="presentLectureCheckTitle">Unmarked Lectures</h2><button type="button" class="lecture-mismatch-close" id="presentLectureCheckClose" aria-label="Close">×</button></div><div id="presentLectureCheckList"></div></div></div>
+    </div>`;
+
+  const bd=document.getElementById("presentLectureCheckBackdrop"); if(bd) document.body.appendChild(bd);
+  const head=document.getElementById("semesterBreakdownHead"), content=document.getElementById("semesterBreakdownContent");
+  head?.addEventListener("click",()=>{
+    const open=head.getAttribute("aria-expanded")!=="true";
+    head.setAttribute("aria-expanded",String(open));
+    document.getElementById("semesterBreakdownCard")?.classList.toggle("is-open",open);
+    content.hidden=!open;
+    if(open) ensureSemesterExpandedContentVisible(content);
+  });
+
+  const semSummaryRows=document.getElementById("semSummaryRows"), semStatusPicker=document.getElementById("semStatusPicker"), semStatusButton=document.getElementById("semStatusButton"), semStatusMenu=document.getElementById("semStatusMenu"), semStatusLabel=document.getElementById("semStatusLabel"), semCategoryPicker=document.getElementById("semCategoryPicker"), semCategoryButton=document.getElementById("semCategoryButton"), semCategoryMenu=document.getElementById("semCategoryMenu"), semCategoryLabel=document.getElementById("semCategoryLabel"), semCategoryTitle=document.getElementById("semCategoryTitle");
+  let selectedCategory="subjects", selectedStatus="att";
+  const statusLabels={att:"Attended",abs:"Absent",ta:"Teacher Absent",nc:"No Classes",adj:"Adjustment Period"};
+  const renderSemSummary=()=>{
+    const items=semesterSubjects.filter(s=>selectedCategory==="subjects"?s.type==="subject":selectedCategory==="lab"?s.type==="lab":s.type==="other").sort((a,b)=>a.name.localeCompare(b.name));
+    semSummaryRows.innerHTML=items.map(s=>`<div class="sem-summary-row"><span class="sem-summary-name">${escapeHtml(s.name)}</span><span class="sem-count-single ${selectedStatus}">${counts[s.id]?.[selectedStatus]||0}</span></div>`).join("") || '<div class="sem-summary-row"><span class="sem-summary-name" style="opacity:.6">No subjects configured for this semester yet.</span><span class="sem-count-single nc">0</span></div>';
+    semStatusLabel.textContent=statusLabels[selectedStatus]; semStatusButton.querySelector(".sem-status-dot").className="sem-status-dot "+selectedStatus;
+    semStatusMenu.querySelectorAll(".sem-status-option").forEach(o=>o.classList.toggle("active",o.dataset.status===selectedStatus));
+    const label=selectedCategory==="subjects"?"Subjects":selectedCategory==="lab"?"Lab":"Others"; semCategoryLabel.textContent=label; semCategoryTitle.textContent=label;
+    semCategoryMenu.querySelectorAll(".sem-status-option").forEach(o=>o.classList.toggle("active",o.dataset.category===selectedCategory));
+    semStatusMenu.classList.remove("open"); semCategoryMenu.classList.remove("open"); semStatusButton.setAttribute("aria-expanded","false"); semCategoryButton.setAttribute("aria-expanded","false");
+  };
+  renderSemSummary();
+  bindSurpriseTestCard();
+  semStatusButton.onclick=e=>{e.stopPropagation();semCategoryMenu.classList.remove("open");semCategoryButton.setAttribute("aria-expanded","false");const open=semStatusMenu.classList.toggle("open");semStatusButton.setAttribute("aria-expanded",String(open));};
+  semStatusMenu.querySelectorAll(".sem-status-option").forEach(o=>o.onclick=e=>{e.stopPropagation();selectedStatus=o.dataset.status;renderSemSummary();});
+  semCategoryButton.onclick=e=>{e.stopPropagation();semStatusMenu.classList.remove("open");semStatusButton.setAttribute("aria-expanded","false");const open=semCategoryMenu.classList.toggle("open");semCategoryButton.setAttribute("aria-expanded",String(open));};
+  semCategoryMenu.querySelectorAll(".sem-status-option").forEach(o=>o.onclick=e=>{e.stopPropagation();selectedCategory=o.dataset.category;renderSemSummary();ensureSemesterExpandedContentVisible(document.getElementById("semesterBreakdownSemActiveContent"));});
+  if(window._semOutsideClickHandler)document.removeEventListener("click",window._semOutsideClickHandler);
+  window._semOutsideClickHandler=e=>{if(!semStatusPicker.contains(e.target)){semStatusMenu.classList.remove("open");semStatusButton.setAttribute("aria-expanded","false");}if(!semCategoryPicker.contains(e.target)){semCategoryMenu.classList.remove("open");semCategoryButton.setAttribute("aria-expanded","false");}};
+  document.addEventListener("click",window._semOutsideClickHandler);
+  document.getElementById("semCalendarBtn").onclick=()=>{const b=document.getElementById("semCalendarBackdrop");if(b&&b.classList.contains("open"))closeSemCalendar();else openSemCalendar();};
+  document.getElementById("subjectPercentageBtn").onclick=openSubjectPercentage;
+  document.getElementById("presentLectureCheckBtn").onclick=openPresentLectureCheck;
+  document.getElementById("presentLectureCheckClose").onclick=closePresentLectureCheck;
+  document.getElementById("presentLectureCheckBackdrop").onclick=e=>{if(e.target===document.getElementById("presentLectureCheckBackdrop"))closePresentLectureCheck();};
+  renderSemesterDayView(selected); ensureSemCalendar();
+}
+
+const invictusLockedRenderSemester=renderSemester;
+renderSemester=function(){
+  if(activeSemesterNumber!==1) return renderIsolatedSemesterEnvironment();
+  return invictusLockedRenderSemester();
+};
+
 let subjectPercentageScrollY = 0;
 
 function lockSubjectPercentageBackground(){
@@ -14297,13 +15736,53 @@ function unlockSubjectPercentageBackground(){
   window.scrollTo(0, subjectPercentageScrollY);
 }
 
+let subjectPercentageTimingTimer=null;
+function clearSubjectPercentageTimingRefresh(){
+  if(subjectPercentageTimingTimer){
+    clearTimeout(subjectPercentageTimingTimer);
+    subjectPercentageTimingTimer=null;
+  }
+}
+function scheduleSubjectPercentageTimingRefresh(){
+  clearSubjectPercentageTimingRefresh();
+  const back=document.getElementById("subjectPercentageBackdrop");
+  if(!back || !back.classList.contains("open"))return;
+
+  const now=new Date();
+  const todayKey=iso(now);
+  const classes=semClassesForDate(todayKey);
+  let nextBoundary=Infinity;
+  classes.forEach(c=>{
+    [c[0],c[1]].forEach(clock=>{
+      const minutes=parseClockMinutes(clock);
+      if(minutes===null)return;
+      const boundary=new Date(now);
+      boundary.setHours(Math.floor(minutes/60),minutes%60,0,0);
+      const timestamp=boundary.getTime();
+      if(timestamp>now.getTime() && timestamp<nextBoundary)nextBoundary=timestamp;
+    });
+  });
+
+  if(nextBoundary!==Infinity){
+    subjectPercentageTimingTimer=setTimeout(()=>{
+      subjectPercentageTimingTimer=null;
+      const liveBack=document.getElementById("subjectPercentageBackdrop");
+      if(!liveBack || !liveBack.classList.contains("open"))return;
+      renderSubjectPercentage();
+      scheduleSubjectPercentageTimingRefresh();
+    },Math.max(50,nextBoundary-Date.now()+50));
+  }
+}
+
 function openSubjectPercentage(){
   const back=document.getElementById("subjectPercentageBackdrop");
   if(!back) return;
 
+  subjectPercentageSortedByAttendance=false;
   renderSubjectPercentage();
   lockSubjectPercentageBackground();
   back.classList.add("open");
+  scheduleSubjectPercentageTimingRefresh();
 
   // Keep keyboard focus inside the modal by focusing the only close control.
   requestAnimationFrame(()=>{
@@ -14311,70 +15790,154 @@ function openSubjectPercentage(){
   });
 }
 
+let subjectPercentageSortedByAttendance=false;
+
 function closeSubjectPercentage(){
   const back=document.getElementById("subjectPercentageBackdrop");
   if(!back || !back.classList.contains("open")) return;
 
+  // Sorting is temporary for this dialog session; always return to A–Z.
+  subjectPercentageSortedByAttendance=false;
+  clearSubjectPercentageTimingRefresh();
   back.classList.remove("open");
   unlockSubjectPercentageBackground();
 }
 
+/* V24.25 — Unified Lecture Wise Percentage renderer for Semesters 1–6.
+   The V24.22 advanced distribution, V24.23 segment ordering, and V24.24
+   information legend are identical for every semester. All calculations read
+   the currently active semester context (state + semesterSubjects), so isolated
+   Semesters 2–6 never read Semester 1 attendance data. */
 function renderSubjectPercentage(){
   const back=document.getElementById("subjectPercentageBackdrop");
   if(!back) return;
+  const percentageSemester=Number(activeSemesterNumber)||1;
   const counts=semSubjectCounts();
   const items=semesterSubjects.slice().sort((a,b)=>a.name.localeCompare(b.name));
 
-  // V22.5 — Build the segmented bar from the same Daily Lecture Marking
-  // source used by the lecture analytics pipeline. Class Test remains Attended
-  // for percentage calculations, but receives its own visual segment.
-  const classTestCountBySubject={};
+  /* V24.22/V24.25 — Keep Attendance % as the share of attendance-credit
+     lectures (Attended + Adjustment Attended + Class Test + Surprise Test),
+     while the bar exposes the complete lecture-status distribution across 100%.
+     The source objects below are the active semester's isolated state and subjects.
+     percentageSemester is intentionally read from activeSemesterNumber so this
+     renderer follows the selected semester without creating another data source. */
+  const assessmentCountBySubject={};
+  const assessmentRowsBySubject={};
   Object.keys(state.records || {}).forEach(dateKey=>{
     getDailyTimetableLectureStatuses(dateKey).forEach(row=>{
       if(row.status!=="att")return;
       const recordKey=semRecordKey(dateKey,row.subject,row.time);
-      if(assessmentAttendanceClass(recordKey)==="att-class-test"){
-        classTestCountBySubject[row.subject]=(classTestCountBySubject[row.subject]||0)+1;
-      }
+      const assessmentClass=assessmentAttendanceClass(recordKey);
+      if(assessmentClass!=="att-class-test" && assessmentClass!=="att-surprise-test")return;
+      assessmentRowsBySubject[row.subject]=assessmentRowsBySubject[row.subject] || [];
+      assessmentRowsBySubject[row.subject].push({recordKey,assessmentClass});
     });
   });
 
-  // Progressive attendance: only lectures that have actually been held
-  // and produced an Attended/Absent outcome count in the denominator.
+  Object.keys(assessmentRowsBySubject).forEach(subjectId=>{
+    const list=assessmentRowsBySubject[subjectId];
+    assessmentCountBySubject[subjectId]={classTest:0,surpriseTest:0};
+    list.forEach(x=>{
+      if(x.assessmentClass==="att-class-test")assessmentCountBySubject[subjectId].classTest++;
+      else if(x.assessmentClass==="att-surprise-test")assessmentCountBySubject[subjectId].surpriseTest++;
+    });
+  });
+
   const rows=items.map(s=>{
-    const c=counts[s.id];
-    const effectiveAttended=c.att+c.adj;
-    const held=effectiveAttended+c.abs;
-    const classTest=Math.min(c.att,classTestCountBySubject[s.id]||0);
-    const normalAttended=Math.max(0,effectiveAttended-classTest);
-    const pct=held ? (effectiveAttended/held)*100 : null;
-    const normalPct=held ? (normalAttended/held)*100 : 0;
-    const classTestPct=held ? (classTest/held)*100 : 0;
-    const absentPct=held ? (c.abs/held)*100 : 0;
+    const c=counts[s.id] || {att:0,abs:0,ta:0,nc:0,adj:0};
+    const assessment=assessmentCountBySubject[s.id] || {classTest:0,surpriseTest:0};
 
-    const ariaLabel=pct===null
-      ? "No lectures held"
-      : `${normalAttended} normal attended, ${classTest} Class Test attended, ${c.abs} absent out of ${held} lectures held`;
+    // Adjustment Period is already isolated into c.adj by semSubjectCounts().
+    // Assessment lectures remain part of Attended, but receive dedicated colors.
+    const classTest=Math.min(c.att,assessment.classTest);
+    const surpriseTest=Math.min(Math.max(0,c.att-classTest),assessment.surpriseTest);
+    const attended=Math.max(0,c.att-classTest-surpriseTest);
+    const adjustmentAttended=Math.max(0,c.adj);
+    const absent=Math.max(0,c.abs);
+    const teacherAbsent=Math.max(0,c.ta);
+    const noClasses=Math.max(0,c.nc);
+    const inProgress=Math.max(0,c.pending||0);
+    const automaticAbsent=Math.min(absent,Math.max(0,c.automaticAbsent||0));
 
-    return `<tr>
+    const total=attended+adjustmentAttended+classTest+surpriseTest+absent+teacherAbsent+noClasses+inProgress;
+    const effectiveAttended=attended+adjustmentAttended+classTest+surpriseTest;
+    // V24.28.3 — An untracked lecture that has ended counts in the displayed
+    // numerator for the grace-day transition, while remaining a red Absent
+    // segment. This is derived only; no attendance record is saved.
+    const displayedNumerator=effectiveAttended+automaticAbsent+Math.max(0,c.adjustmentNumeratorCredit||0);
+    const pct=total ? (displayedNumerator/total)*100 : null;
+
+    const pctOf=value=>total ? (value/total)*100 : 0;
+    const segments=[
+      ["attended",attended,"Attended"],
+      ["adjustment-attended",adjustmentAttended,"Adjustment Attended"],
+      ["surprise-test",surpriseTest,"Surprise Test"],
+      ["class-test",classTest,"Class Test"],
+      ["teacher-absent",teacherAbsent,"Teacher Absent"],
+      ["no-classes",noClasses,"No Classes"],
+      ["absent",absent,"Absent"],
+      ["in-progress",inProgress,"In Progress"]
+    ];
+
+    const ariaLabel=total
+      ? segments.map(([key,count,label])=>`${label}: ${count} (${pctOf(count).toFixed(1)}%)`).join(", ")
+      : "No lecture-status records";
+
+    /* V24.28.14 — Display-only segment visibility enhancement.
+       Segments under 10% are visually doubled (with a 4% minimum), while
+       larger segments proportionally share the remaining width. The total
+       always remains exactly 100%; if many small segments would consume too
+       much space, their combined allocation is capped at 80% so larger
+       categories remain visible too. Actual counts, attendance percentage,
+       titles and accessibility labels continue to use the unmodified data. */
+    const visibleSegments=segments
+      .filter(([,count])=>count>0 && total>0)
+      .map(([key,count,label])=>({key,count,label,actualPct:pctOf(count),visualPct:0}));
+    const visualMinPct=Math.min(4, visibleSegments.length ? 100/visibleSegments.length : 0);
+    const tinySegments=visibleSegments.filter(segment=>segment.actualPct<10);
+    const regularSegments=visibleSegments.filter(segment=>segment.actualPct>=10);
+    if(visibleSegments.length){
+      if(!regularSegments.length){
+        const evenPct=100/visibleSegments.length;
+        visibleSegments.forEach(segment=>segment.visualPct=evenPct);
+      }else{
+        tinySegments.forEach(segment=>segment.visualPct=Math.max(visualMinPct,segment.actualPct*2));
+        const requestedTinyTotal=tinySegments.reduce((sum,segment)=>sum+segment.visualPct,0);
+        const tinyScale=requestedTinyTotal>80 ? 80/requestedTinyTotal : 1;
+        tinySegments.forEach(segment=>segment.visualPct*=tinyScale);
+        const reservedPct=tinySegments.reduce((sum,segment)=>sum+segment.visualPct,0);
+        const regularActualTotal=regularSegments.reduce((sum,segment)=>sum+segment.actualPct,0);
+        const remainingPct=Math.max(0,100-reservedPct);
+        regularSegments.forEach(segment=>{
+          segment.visualPct=regularActualTotal
+            ? remainingPct*(segment.actualPct/regularActualTotal)
+            : remainingPct/regularSegments.length;
+        });
+      }
+    }
+    const segmentHtml=visibleSegments.map(({key,count,label,actualPct,visualPct})=>{
+      return `<div class="subject-percentage-segment ${key}" style="width:${visualPct}%" title="${label}: ${count} (${actualPct.toFixed(1)}%)" aria-label="${label}: ${count} (${actualPct.toFixed(1)}%)"></div>`;
+    }).join("");
+
+    return `<tr data-performance-score="${total+displayedNumerator}" data-total-lectures="${total}" data-attended-lectures="${displayedNumerator}">
       <td>${escapeHtml(s.name)}</td>
-      <td class="subject-percentage-count">${held?`${effectiveAttended}/${held}`:"—"}</td>
+      <td class="subject-percentage-count">${total?`${displayedNumerator}/${total}`:"—"}</td>
       <td>
         <span class="subject-percentage-pct">${pct===null?"—":pct.toFixed(1)+"%"}</span>
-        <div class="subject-percentage-bar" aria-label="${ariaLabel}">
-          ${normalPct>0?`<div class="subject-percentage-segment attended" style="width:${normalPct}%"></div>`:""}
-          ${classTestPct>0?`<div class="subject-percentage-segment class-test" style="width:${classTestPct}%"></div>`:""}
-          ${absentPct>0?`<div class="subject-percentage-segment absent" style="width:${absentPct}%"></div>`:""}
-        </div>
+        <div class="subject-percentage-bar" aria-label="${escapeHtml(ariaLabel)}">${segmentHtml}</div>
       </td>
     </tr>`;
   }).join("");
 
   back.innerHTML=`
-    <div class="subject-percentage-modal" role="dialog" aria-modal="true" aria-labelledby="subjectPercentageTitle">
+    <div class="subject-percentage-modal" role="dialog" aria-modal="true" aria-labelledby="subjectPercentageTitle" data-semester="${percentageSemester}">
       <div class="subject-percentage-head">
         <h2 id="subjectPercentageTitle">Lecture Wise Percentage</h2>
-        <button class="subject-percentage-close" id="subjectPercentageClose" aria-label="Close">×</button>
+        <div class="subject-percentage-head-actions">
+          <button class="subject-percentage-sort" id="subjectPercentageSort" aria-label="Sort subjects by attendance percentage" title="Sort by percentage" aria-pressed="${subjectPercentageSortedByAttendance}">↕</button>
+          <button class="subject-percentage-info" id="subjectPercentageInfo" aria-label="Lecture Wise Percentage information" title="Information">ⓘ</button>
+          <button class="subject-percentage-close" id="subjectPercentageClose" aria-label="Close">×</button>
+        </div>
       </div>
       <div class="subject-percentage-table-wrap">
         <table class="subject-percentage-table percentage-only">
@@ -14384,16 +15947,81 @@ function renderSubjectPercentage(){
           <tbody>${rows}</tbody>
         </table>
       </div>
+    </div>
+    <div class="subject-percentage-info-backdrop" id="subjectPercentageInfoBackdrop" aria-hidden="true">
+      <div class="subject-percentage-info-modal" role="dialog" aria-modal="true" aria-labelledby="subjectPercentageInfoTitle">
+        <div class="subject-percentage-info-head">
+          <h3 id="subjectPercentageInfoTitle">Lecture Status Information</h3>
+          <button class="subject-percentage-info-close" id="subjectPercentageInfoClose" aria-label="Close information">×</button>
+        </div>
+        <div class="subject-percentage-legend" role="list" aria-label="Lecture status legend">
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#9e9e9e"></span><span>No Classes</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#c62828"></span><span>Absent</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#ef8c22"></span><span>Teacher Absent</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#8b0000"></span><span>Surprise Test</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#ef9a9a"></span><span>Class Test</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#2e7d32"></span><span>Attended</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#66bb6a"></span><span>Adjustment Attended</span></div>
+          <div class="subject-percentage-legend-item" role="listitem"><span class="subject-percentage-legend-box" style="background:#607d8b"></span><span>In Progress</span></div>
+        </div>
+      </div>
     </div>`;
 
-  // IMPORTANT: Only the X button closes this modal.
-  // Tapping the dark backdrop does nothing.
+  // Sorting is presentation-only. The underlying subject list and attendance data stay untouched.
+  const sortButton=document.getElementById("subjectPercentageSort");
+  const applyPercentageOrder=()=>{
+    const tbody=back.querySelector(".subject-percentage-table tbody");
+    if(!tbody)return;
+    const rows=Array.from(tbody.querySelectorAll("tr"));
+    rows.sort((a,b)=>{
+      if(subjectPercentageSortedByAttendance){
+        const readPct=row=>{
+          const raw=row.querySelector(".subject-percentage-pct")?.textContent?.trim()||"";
+          const value=parseFloat(raw.replace("%",""));
+          return Number.isFinite(value)?value:-1;
+        };
+        const difference=readPct(b)-readPct(a);
+        if(difference!==0)return difference;
+      }else{
+        const scoreDifference=(Number(b.dataset.performanceScore)||0)-(Number(a.dataset.performanceScore)||0);
+        if(scoreDifference!==0)return scoreDifference;
+        const totalDifference=(Number(b.dataset.totalLectures)||0)-(Number(a.dataset.totalLectures)||0);
+        if(totalDifference!==0)return totalDifference;
+        const attendedDifference=(Number(b.dataset.attendedLectures)||0)-(Number(a.dataset.attendedLectures)||0);
+        if(attendedDifference!==0)return attendedDifference;
+      }
+      return (a.cells[0]?.textContent||"").localeCompare(b.cells[0]?.textContent||"");
+    });
+    rows.forEach(row=>tbody.appendChild(row));
+  };
+  applyPercentageOrder();
+  sortButton.onclick=()=>{
+    subjectPercentageSortedByAttendance=!subjectPercentageSortedByAttendance;
+    renderSubjectPercentage();
+  };
+
+  // IMPORTANT: Only the X button closes the main percentage modal.
+  // Tapping the dark backdrop does nothing. The info dialog has its own close button.
   document.getElementById("subjectPercentageClose").onclick=closeSubjectPercentage;
+  const infoBackdrop=document.getElementById("subjectPercentageInfoBackdrop");
+  const infoButton=document.getElementById("subjectPercentageInfo");
+  const infoClose=document.getElementById("subjectPercentageInfoClose");
+  infoButton.onclick=()=>{
+    infoBackdrop.classList.add("open");
+    infoBackdrop.setAttribute("aria-hidden","false");
+    requestAnimationFrame(()=>infoClose?.focus());
+  };
+  infoClose.onclick=()=>{
+    infoBackdrop.classList.remove("open");
+    infoBackdrop.setAttribute("aria-hidden","true");
+    requestAnimationFrame(()=>infoButton?.focus());
+  };
 }
 
 function clampSemDate(d){
-  const min=new Date(2026,7,8);
-  const max=new Date(2029,6,31);
+  const cfg=getSemesterConfig(activeSemesterNumber);
+  if(!cfg)return d;
+  const min=new Date(cfg.start), max=new Date(cfg.end);
   if(d<min)return min;
   if(d>max)return max;
   return d;
@@ -15216,8 +16844,9 @@ function renderSemesterDayView(selectedDate){
   const view=document.getElementById("semDayView");
   if(!track||!view)return;
 
-  const min=new Date(2026,7,8);
-  const max=new Date(2029,6,31);
+  const activeConfig=getSemesterConfig(activeSemesterNumber);
+  const min=activeConfig ? new Date(activeConfig.start) : new Date(2026,7,8);
+  const max=activeConfig ? new Date(activeConfig.end) : new Date(2029,6,31);
   const minKey=iso(min);
   const maxKey=iso(max);
   let selectedKey=iso(clampSemDate(selectedDate));
@@ -15486,7 +17115,7 @@ function renderSemDaySlide(d){
 
     const progress=lectureProgressPercent(key,c[0],c[1]);
     const currentLectureClass=(progress>0 && progress<100) ? " is-current-lecture" : "";
-    return `<div class="week-lecture${currentLectureClass}" data-progress-date="${key}" data-start="${escapeHtml(c[0])}" data-end="${escapeHtml(c[1])}" style="--lecture-progress:${progress}%"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(displaySubjectName)}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${displayStatus}${displayStatus==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(displayStatus)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div></div>`;
+    return `<div class="week-lecture${currentLectureClass}" data-progress-date="${key}" data-start="${escapeHtml(c[0])}" data-end="${escapeHtml(c[1])}" style="--lecture-progress:${progress}%"><div class="week-lecture-main"><div class="week-lecture-time">${c[0]} – ${c[1]}</div><div class="week-lecture-subject">${escapeHtml(displaySubjectName)}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="week-status ${displayStatus}${displayStatus==="nc"&&ncReasonClass?` ${ncReasonClass}`:""}${assessmentAttendedClass?` ${assessmentAttendedClass}`:""}">${semStatusLabel(displayStatus)}</span><button class="week-dots${startGateClass}" type="button" ${startGateDisabled} data-date="${key}" data-start="${escapeHtml(c[0])}" data-key="${escapeHtml(recordKey)}" data-subject="${escapeHtml(c[2])}" aria-label="${startGateLabel}" title="${startGateLabel}">⋮</button></div>${progress>0 && progress<100 ? '<span class="week-lecture-border-overlay" aria-hidden="true"></span>' : ''}</div>`;
   }).join("")}</div></div>`;
 }
 
@@ -16031,28 +17660,64 @@ function closeSemCalendar(){
   document.documentElement.classList.remove("sem-calendar-locked");
   document.body.classList.remove("sem-calendar-locked");
 }
+/* V24.16 — Semester date picker is fully semester-scoped.
+   SEMESTER_CONFIG is the single source of truth: month navigation and
+   individual dates outside the selected semester window are inaccessible. */
+function getSemCalendarBounds(){
+  const semester=Number(activeSemesterNumber)||Number(getInvictusSemesterPreference())||1;
+  const cfg=getSemesterConfig(semester);
+  if(cfg && cfg.start && cfg.end){
+    return {semester,start:new Date(cfg.start),end:new Date(cfg.end)};
+  }
+  return {
+    semester:1,
+    start:new Date(2026,7,8,0,0,0,0),
+    end:new Date(2027,0,31,23,59,59,999)
+  };
+}
+
 function changeSemCalMonth(delta){
+  const bounds=getSemCalendarBounds();
   const next=new Date(semCalDate);
   next.setMonth(next.getMonth()+delta);
-  const min=new Date(2026,7,1),max=new Date(2029,6,1);
-  if(next<min||next>max)return;
+  const minMonth=new Date(bounds.start.getFullYear(),bounds.start.getMonth(),1);
+  const maxMonth=new Date(bounds.end.getFullYear(),bounds.end.getMonth(),1);
+  if(next<minMonth||next>maxMonth)return;
   semCalDate=next;
   renderSemCalendar();
 }
 function renderSemCalendar(){
   const grid=document.getElementById("semCalGrid");
+  const bounds=getSemCalendarBounds();
+  const minMonth=new Date(bounds.start.getFullYear(),bounds.start.getMonth(),1);
+  const maxMonth=new Date(bounds.end.getFullYear(),bounds.end.getMonth(),1);
+  if(semCalDate<minMonth)semCalDate=new Date(minMonth);
+  if(semCalDate>maxMonth)semCalDate=new Date(maxMonth);
+
   document.getElementById("semCalMonth").textContent=semCalDate.toLocaleDateString("en-IN",{month:"long",year:"numeric"});
   grid.innerHTML=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(x=>`<div class="sem-cal-weekday">${x}</div>`).join("");
   const first=new Date(semCalDate.getFullYear(),semCalDate.getMonth(),1),last=new Date(semCalDate.getFullYear(),semCalDate.getMonth()+1,0);
   for(let i=0;i<first.getDay();i++)grid.appendChild(document.createElement("div"));
+  const todayKey=iso(new Date());
   for(let n=1;n<=last.getDate();n++){
-    const d=new Date(semCalDate.getFullYear(),semCalDate.getMonth(),n),key=iso(d),btn=document.createElement("button");btn.className="sem-cal-day";btn.textContent=n;
-    if(key===iso(new Date()))btn.classList.add("today");
-    if(key===semSelectedDate)btn.classList.add("selected");
-    btn.onclick=()=>{
-      window.semCalendarPendingDate=key;
-      showSemDateConfirmation(key);
-    }; grid.appendChild(btn);
+    const d=new Date(semCalDate.getFullYear(),semCalDate.getMonth(),n),key=iso(d),btn=document.createElement("button");
+    btn.className="sem-cal-day";
+    btn.textContent=n;
+    const inSemester=d>=bounds.start && d<=bounds.end;
+    if(!inSemester){
+      btn.classList.add("muted");
+      btn.disabled=true;
+      btn.setAttribute("aria-disabled","true");
+      btn.tabIndex=-1;
+    }else{
+      if(key===todayKey)btn.classList.add("today");
+      if(key===semSelectedDate)btn.classList.add("selected");
+      btn.onclick=()=>{
+        window.semCalendarPendingDate=key;
+        showSemDateConfirmation(key);
+      };
+    }
+    grid.appendChild(btn);
   }
 }
 
@@ -16198,6 +17863,7 @@ function resetMainTabUI(pageId){
     scheduleMonthlyReportExpanded=false;
     scheduleSemesterLecturesStatusExpanded=false;
     scheduleSemesterReportExpanded=false;
+    lectureHistoryFilter={status:"all",month:"all"};
   }
 
   // Settings is rendered from scratch with its disclosure panels collapsed,
@@ -16221,6 +17887,9 @@ document.getElementById("attendanceNav").onclick=()=>{
   document.getElementById("semesterNav").classList.remove("active");
   document.getElementById("timetableNav").classList.remove("active");
   document.getElementById("settingsNav").classList.remove("active");
+  // V24.11: Attendance ignores the saved Default Semester and follows today's
+  // configured semester range instead.
+  activateDateDrivenAttendanceContext(new Date());
   renderAttendance();
 };
 document.getElementById("semesterNav").onclick=()=>{
@@ -16234,6 +17903,8 @@ document.getElementById("semesterNav").onclick=()=>{
   document.getElementById("attendanceNav").classList.remove("active");
   document.getElementById("timetableNav").classList.remove("active");
   document.getElementById("settingsNav").classList.remove("active");
+  // V24.11: Semester tab uses the user's saved Default Semester.
+  activateSemesterContext(getInvictusSemesterPreference());
   renderSemester();
 };
 document.getElementById("timetableNav").onclick=()=>{
@@ -16263,6 +17934,8 @@ document.getElementById("settingsNav").onclick=()=>{
   renderSettings();
 };
 
+// V24.11 — Initial Attendance screen is date-driven, not Default-Semester-driven.
+activateDateDrivenAttendanceContext(new Date());
 renderAttendance();
 
 v20InitNotifications();
@@ -16872,7 +18545,6 @@ window.invictusV11Storage = {
       ["Protected Holiday",()=>assert(isInvictusProtectedHoliday("2026-09-14"),"protected holiday missing")],
       ["Late watermark",()=>assert(shouldShowLateSubmissionWatermark({"2026-09-14":true},"2026-09-14")&&!shouldShowLateSubmissionWatermark({},"2026-09-14"),"watermark rule failed")],
       ["Blank/Holiday excluded",()=>{const s=calculateAttendanceStats({a:"present",b:"blank",c:"holiday",d:"absent"});assert(s.attended===1&&s.absent===1&&s.total===2,"attendance denominator failed")}],
-      ["Semester progressive unlock",()=>assert(!isSemesterUnlockedAt("15/09/2026",d(2026,9,14))&&isSemesterUnlockedAt("15/09/2026",d(2026,9,15)),"semester unlock failed")],
       ["History filters",()=>{const r={"2026-09-14":"present","2026-09-13":"absent","2026-08-28":"holiday","2026-08-27":"blank"};assert(filterAttendanceHistoryEntries(r,{status:"present",month:"all"}).length===1&&filterAttendanceHistoryEntries(r,{status:"all",month:"2026-08"}).length===2,"history filter failed")}],
       ["V22.23 marks validation",()=>{
         assert(surpriseTestValuesValid("5","10"),"valid marks rejected");
