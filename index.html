@@ -725,6 +725,32 @@
 <!-- V24.28.25: Attempted to reset Lecture History filters on close. -->
 <!-- V24.28.26: Reset events now synchronize the custom dropdown labels and selected-option states as well as native select values when Lecture History closes/reopens. -->
 <!-- V24.28.27: Added consistent, subtle transitions for common controls, cards, focus states, and existing modal/history motion. Honors reduced-motion preferences. Presentation-only; no app logic or stored data changed. -->
+<!-- V24.28.28: Present/Absent attendance submitted through Submit Your Attendance can be edited for three hours from the original submission timestamp; after expiry, Edit Attendance is blocked with the established message. The expiry is timestamp-based, survives refresh/reopen, does not restart after edits, and does not depend on calendar day. -->
+<!-- V24.28.29: Added a live three-hour countdown beside the Edit Attendance title for submitted Present/Absent records only. Countdown is based on the original saved submission timestamp, persists across reopen/refresh, and disappears at expiry; Holiday/Blank remain unrestricted and never show the timer. -->
+<!-- V24.28.30: Changing day-level attendance from Absent to Present within the permitted edit window clears the automatically propagated Absent marks for scheduled lectures, returning them to Not Tracked without resetting the original 3-hour timer. -->
+<!-- V24.28.31: Scoped the zero-margin heading rule to the attendance modal header so other modal headings retain their previous 15px bottom margin; corrected the document title to V24.28.31. No attendance logic or data behavior changed. -->
+<!-- V24.28.32: Added 19/10/2026 (Maha-Pooja) and 20/10/2026 (Dusshera) to the existing centralized protected automatic-holiday registry, using the established startup/import/reset protection logic. No other functionality changed. -->
+<!-- V25.1_Test-1: Semester 1 Lecture Breakdown subject/lab/other entries open a consistent per-item distribution dialog with a 100% pie chart, category counts/percentages, numerator, and total lectures reached. Visual presentation only; Semester 2–6, attendance calculations, records, storage, and existing behavior remain unchanged. -->
+<!-- V25.1_Test-2: Refined the isolated Semester 1 subject distribution dialog to match the hand-drawn reference: centered subject title, larger pie chart, total lecture count beneath the chart, simple category percentage lines, and color-coded count boxes at the bottom. Removed the numerator card and prior rounded legend rows. Visual presentation only; calculations, records, storage, and Semesters 2–6 remain unchanged. -->
+<!-- V25.1_Test-3: Refined the isolated Semester 1 distribution dialog to match the final reference image: colored legend dots, category order aligned with the seven count boxes, color-matched count-box borders, and a centered 4+3 count-box layout. Visual presentation only; calculations, records, storage, and Semesters 2–6 remain unchanged. -->
+<!-- V25.1_Test-4: Reordered the isolated Semester 1 distribution legend, pie slices, and count boxes to Attended, Adjustment, Class Tests, Surprise Test, Absent, Teacher Absent, and No Classes. Retained the centered 4+3 count-box layout and existing category counts/percentage calculations. Semesters 2–6 remain unchanged. -->
+<!-- V25.1_Test-5: Corrected the isolated Semester 1 Teacher Absent category color to the app-wide orange reference (#f28c20), consistently updating its pie slice, legend dot, and count-box text/border through the shared category color. No calculations, data, storage, or other semester behavior changed. -->
+<!-- V25.1_Test-6: Simplified the isolated Semester 1 Lecture Breakdown header to match the approved UX reference: hide the redundant Subjects heading and Attended status filter, leaving the Subjects/Lab/Others category dropdown above the cards. Visual-only; all calculations, interactions on remaining controls, data, storage, and Semesters 2–6 remain unchanged. -->
+<!-- V25.1_Test-7: Refined the isolated Semester 1 subject distribution dialog to match the approved reference composition: added a bordered “Subject Status” panel with seven count-and-label tiles in the established 4+3 layout. The dialog uses a compact responsive layout with no internal scrolling or content overflow. Counts and category colors remain derived from existing subject data; no calculations, stored data, or Semesters 2–6 behavior changed. -->
+<!-- V25.1_Test-8: Refined only the isolated Semester 1 distribution legend to match the reference: each category label remains left-aligned while its calculated percentage is aligned to the far right on the same row. Preserves the established category order/colors, Subject Status panel, counts, calculations, and all other semester behavior. -->
+<!-- V25.1_Test-8_Final: Removed the unwanted hyphen separators between category labels and percentages in the isolated Semester 1 subject distribution legend. Category labels stay left-aligned and percentages stay right-aligned. No calculation, data, storage, or Semesters 2–6 behavior changed. -->
+<!-- V25.2: Extended the completed V25.1 Lecture Breakdown subject/lab/other-card dialogue UX to isolated Semesters 2–6. Each selected semester uses its own active isolated state and subject catalog for the same seven-category pie chart, right-aligned percentage legend, and Subject Status 4+3 count tiles. Applied the simplified subject-list header (category dropdown retained; status filter and redundant heading hidden) and clickable subject rows across Semesters 1–6. Presentation/entry-point only; attendance calculations, records, storage, and semester isolation remain unchanged. -->
+<!-- V25.3: Overall Attendance card follows the saved Set Semester selection for display only, while Submit/Edit Attendance remains date-driven. Attendance History adds a temporary Semester filter (Status | Month | Semester); the automatic date-driven semester, All Statuses, and All Months are restored on each open, and month options are bounded by the selected semester's centralized date range. No stored attendance records or storage schema changed. -->
+<!-- V25.4: Fixed Attendance History reopen synchronization. Each open resets temporary filters to the date-driven semester, All Statuses, and All Months, then re-renders both controls and records together after the dialog opens. No attendance records, storage schema, or unrelated behavior changed. -->
+<!-- V25.5: Fixed stale visible labels in Attendance History's custom dropdowns. After programmatically restoring the date-driven semester, All Statuses, and All Months, synchronize each custom trigger label and selected-option state with its native select so the displayed semester always matches the refreshed records. No attendance records, storage schema, or unrelated behavior changed. -->
+<!-- V25.6: Added Settings → App → Persistent Saving, ON by default. When enabled, the logged-in user's College Joining Date is retained across logout and Reset All App Data; when disabled, it is removed on logout/reset. The preference remains available across reset so the chosen behavior is preserved. Existing attendance/profile data contracts and unrelated functionality remain unchanged. -->
+<!-- V25.6.1: Corrected only the Persistent Saving switch alignment so it sits at the far right of its settings row, matching other setting toggles. No behavior or data handling changed. -->
+<!-- V25.6.2: Settings category cards smoothly scroll into view when expanded, matching Dashboard card auto-scroll behavior. -->
+<!-- V25.7: In the isolated Semester 1 Lecture Breakdown distribution dialog, hide fixed-category legend rows whose displayed percentage is 0.0% and collapse the legend to fit. Rows return automatically in their original seven-category order when their displayed percentage becomes nonzero. Semester 2–6 behavior, count tiles, calculations, attendance data, storage, and unrelated functionality remain unchanged. -->
+<!-- V25.8: UX-only refinement for all dialogue boxes opened from the isolated Lecture Breakdown: place the complete dialog content inside a single bordered Parent Card. Preserve dialog actions, zero-percent legend behavior, calculations, counts, data/storage, and all unrelated functionality. -->
+<!-- V25.9: Extended the V25.7 zero-percent legend collapse to isolated Semesters 2–6. All isolated Semesters 1–6 now hide fixed-category legend rows displaying 0.0%, collapse the legend to fit, and restore rows in the original category order when their displayed percentage becomes nonzero. The shared Parent Card dialog layout from V25.8 applies to every isolated semester through the common dialog renderer. Counts, calculations, attendance data, storage, semester isolation, and unrelated functionality remain unchanged. -->
+<!-- V25.10: Fixed Lecture History filter configuration isolation across Semesters 1–6. The Month filter now lists calendar months intersecting the selected semester's centralized configured date range, and the Subject filter uses only that semester's own subject catalog plus legacy subjects found in that same semester's history. Semesters 2–6 retain the existing Not Configured history message until configured. No attendance calculations, saved data, storage schema, or unrelated behavior changed. -->
+<!-- V25.11: Lecture Breakdown subject-distribution dialogs now lock the background page while open: freeze background scrolling, block interactions with the app behind the dialog, and restore the prior scroll position and interaction state when closed. Shared behavior applies to every independent subject dialog. Dialog content, calculations, attendance data, and storage contracts remain unchanged. -->
 
 
 
@@ -833,7 +859,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invictus V24.28.27</title>
+<title>Invictus V25.11</title>
 
 <style>
 /* [V22.02 CSS SYSTEM — feature-specific / semester / results layers] */
@@ -1302,6 +1328,10 @@
   html[data-theme="dark"] .attendance-update-success-modal h2,
   html[data-theme="dark"] .attendance-update-success-message{color:#eee}
   .modal h2{margin:0 0 15px;font-size:20px}
+  .attendance-modal-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 15px;min-width:0}
+  .attendance-modal-heading h2{margin:0}
+  #attendanceEditCountdown{flex:0 0 auto;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;color:#5b3cc4;white-space:nowrap}
+  #attendanceEditCountdown[hidden]{display:none}
   label{display:block;font-size:calc(13px * var(--invictus-font-scale));color:#666;margin:12px 0 6px}
   input[type=date]{
     width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:calc(16px * var(--invictus-font-scale));
@@ -1401,7 +1431,7 @@
    .history-toggle{padding:9px 13px;font-size:calc(13px * var(--invictus-font-scale));white-space:nowrap}
    .history-list{display:grid;gap:8px}
   /* V19.31 — Attendance History filter controls and accessibility polish. */
-  .attendance-history-filter-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
+  .attendance-history-filter-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
   /* V24.28.18: Three-column layout is scoped to Lecture History only. */
   .attendance-history-filter-bar[aria-label="Lecture History filters"]{grid-template-columns:repeat(3,minmax(0,1fr))}
   .attendance-history-filter-bar[aria-label="Lecture History filters"] .lecture-history-subject-filter-label{grid-column:auto;min-width:0}
@@ -2008,6 +2038,9 @@
   .sem-summary{display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
   .sem-summary.open{display:grid;gap:7px}
   .sem-summary-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 7px}
+  .sem-summary-head.sem-summary-head-subject-cards{justify-content:flex-start}
+  .sem-summary-head.sem-summary-head-subject-cards .sem-summary-title,
+  .sem-summary-head.sem-summary-head-subject-cards .sem-status-picker{display:none!important}
   .sem-summary-left{display:flex;align-items:center;gap:8px;min-width:0}
   .sem-summary-title{font-size:calc(17px * var(--invictus-font-scale));font-weight:800}
   .sem-category-picker{position:relative;flex-shrink:0}
@@ -2025,6 +2058,43 @@
   .sem-status-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
   .sem-status-dot.att{background:#2e7d32}.sem-status-dot.abs{background:#c62828}.sem-status-dot.ta{background:#b35a00}.sem-status-dot.nc{background:#777}.sem-status-dot.adj{background:#66bb6a}
   .sem-summary-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-radius:10px;background:#fafafa;border:1px solid #eee}
+  .sem-summary-row.sem-subject-dialog-trigger{width:100%;font:inherit;text-align:left;color:inherit;cursor:pointer;min-height:54px}
+  .sem-summary-row.sem-subject-dialog-trigger:hover{background:#f5f3ff;border-color:#d8cdfa}
+  .sem-subject-dialog-chevron{font-size:25px;line-height:1;color:#222;flex:0 0 auto}
+  .sem-subject-distribution-backdrop{position:fixed;inset:0;z-index:5700;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;pointer-events:none;touch-action:none;overscroll-behavior:contain}
+  .sem-subject-distribution-backdrop.open{display:flex;pointer-events:auto}
+  html.sem-subject-distribution-locked,body.sem-subject-distribution-locked{overflow:hidden !important;overscroll-behavior:none !important;touch-action:none !important}
+  .sem-subject-distribution-dialog{width:min(560px,100%);max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow:hidden;overscroll-behavior:contain;background:var(--white,#fff);color:var(--text,#222);border:1px solid var(--line,#e5e5e5);border-radius:22px;padding:10px 14px 12px;box-shadow:0 15px 50px rgba(0,0,0,.25);box-sizing:border-box;display:flex;flex-direction:column;min-height:0}
+  .sem-subject-distribution-parent-card{width:100%;min-height:0;flex:1 1 auto;display:flex;flex-direction:column;align-items:stretch;overflow:hidden;box-sizing:border-box;border:1px solid var(--line,#e5e5e5);border-radius:16px;padding:8px 10px 10px;background:var(--white,#fff)}
+  .sem-subject-distribution-head{display:flex;align-items:center;justify-content:center;position:relative;gap:12px;margin:0 0 4px;min-height:34px;flex:0 0 auto}
+  .sem-subject-distribution-head h2{margin:0;font-size:clamp(22px,3vh,27px);font-weight:850;text-align:center}
+  .sem-subject-distribution-close{position:absolute;right:0;top:0;width:32px;height:32px;border:0;border-radius:10px;background:#f2f2f2;color:#555;font-size:23px;line-height:1;cursor:pointer;flex:0 0 auto}
+  .sem-subject-distribution-subtitle{display:none}
+  .sem-subject-distribution-numerator{display:none}
+  .sem-subject-distribution-pie{width:min(72vw,310px,25vh);width:min(72vw,310px,25dvh);height:min(72vw,310px,25vh);height:min(72vw,310px,25dvh);max-width:310px;max-height:310px;min-width:0;min-height:0;flex:0 1 auto;aspect-ratio:1;border-radius:50%;margin:0 auto 5px;background:#e5e5e5;box-shadow:0 1px 3px #0002}
+  .sem-subject-distribution-total{text-align:center;font-weight:700;color:var(--text,#222);font-size:clamp(13px,1.8vh,15px);line-height:1.15;margin:0 0 7px;flex:0 0 auto}
+  .sem-subject-distribution-legend{display:grid;gap:clamp(2px,.4vh,4px);margin:0 0 6px;padding:0 2px;min-height:0;flex:0 1 auto}
+  .sem-subject-distribution-item{display:grid;grid-template-columns:10px minmax(0,1fr) auto;align-items:center;column-gap:7px;padding:0;border:0;border-radius:0;background:transparent;font-size:clamp(12px,1.65vh,16px);line-height:1.12;min-width:0;width:100%;box-sizing:border-box}
+  .sem-subject-distribution-label{display:inline;min-width:0;overflow-wrap:anywhere}
+  .sem-subject-distribution-dot{display:inline-block;width:10px;height:10px;flex:0 0 10px;border-radius:50%}
+  .sem-subject-distribution-value{font-weight:750;white-space:nowrap;text-align:right;justify-self:end;margin-left:auto}
+  .sem-subject-distribution-status{border:1px solid var(--line,#e5e5e5);border-radius:14px;padding:8px;margin-top:4px;min-height:0;flex:0 1 auto}
+  .sem-subject-distribution-status-title{font-size:clamp(13px,1.8vh,16px);font-weight:800;color:var(--muted,#666);margin:0 0 5px}
+  .sem-subject-distribution-counts{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;justify-items:stretch;min-height:0}
+  .sem-subject-distribution-count{grid-column:span 3;width:100%;min-height:clamp(40px,5.8vh,50px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid var(--line,#e5e5e5);border-radius:10px;background:#fafafa;box-sizing:border-box;padding:3px 2px;text-align:center}
+  .sem-subject-distribution-count:nth-child(5){grid-column:2 / span 3}
+  .sem-subject-distribution-count:nth-child(6){grid-column:5 / span 3}
+  .sem-subject-distribution-count:nth-child(7){grid-column:8 / span 3}
+  .sem-subject-distribution-count-number{font-size:clamp(18px,3vh,24px);font-weight:850;line-height:1.0}
+  .sem-subject-distribution-count-label{font-size:clamp(8px,1.35vh,11px);font-weight:700;line-height:1.05;color:var(--muted,#666);overflow-wrap:anywhere}
+  html[data-theme="dark"] .sem-subject-distribution-dialog{background:#1f1f1f;color:#f5f5f5;border-color:#444}
+  html[data-theme="dark"] .sem-subject-distribution-parent-card{background:#1f1f1f;border-color:#444}
+  html[data-theme="dark"] .sem-subject-distribution-item{background:transparent}
+  html[data-theme="dark"] .sem-subject-distribution-close{background:#333;color:#eee}
+  html[data-theme="dark"] .sem-subject-distribution-status{border-color:#444}
+  html[data-theme="dark"] .sem-subject-distribution-count{background:#262626;border-color:#444}
+  @media(max-width:420px){.sem-subject-distribution-dialog{padding:8px 10px}.sem-subject-distribution-parent-card{padding:6px 7px 8px}.sem-subject-distribution-head h2{font-size:clamp(21px,3vh,25px)}.sem-subject-distribution-pie{width:min(72vw,280px,25vh);width:min(72vw,280px,25dvh);height:min(72vw,280px,25vh);height:min(72vw,280px,25dvh)}.sem-subject-distribution-item{font-size:clamp(12px,1.65vh,15px)}.sem-subject-distribution-count{min-height:clamp(38px,5.5vh,46px)}.sem-subject-distribution-count-number{font-size:clamp(17px,3vh,21px)}.sem-subject-distribution-count-label{font-size:clamp(8px,1.35vh,10px)}}
+  @media(max-height:600px){.sem-subject-distribution-backdrop{padding:4px}.sem-subject-distribution-dialog{max-height:calc(100vh - 8px);max-height:calc(100dvh - 8px);padding:5px 9px 7px}.sem-subject-distribution-parent-card{padding:4px 6px 6px}.sem-subject-distribution-head{min-height:28px;margin-bottom:2px}.sem-subject-distribution-close{width:27px;height:27px;font-size:20px}.sem-subject-distribution-pie{width:min(72vw,240px,22vh);width:min(72vw,240px,22dvh);height:min(72vw,240px,22vh);height:min(72vw,240px,22dvh);margin-bottom:3px}.sem-subject-distribution-total{margin-bottom:4px}.sem-subject-distribution-legend{gap:1px;margin-bottom:3px}.sem-subject-distribution-item{font-size:11px;line-height:1.05}.sem-subject-distribution-status{padding:5px;margin-top:2px}.sem-subject-distribution-status-title{font-size:12px;margin-bottom:3px}.sem-subject-distribution-counts{gap:3px}.sem-subject-distribution-count{min-height:34px;padding:2px 1px}.sem-subject-distribution-count-number{font-size:16px}.sem-subject-distribution-count-label{font-size:8px}}
   .sem-summary-name{font-weight:700;min-width:0}
   .sem-count-single{font-size:calc(18px * var(--invictus-font-scale));font-weight:900;line-height:1}
   .sem-count-single.att{color:#2e7d32}.sem-count-single.abs{color:#c62828}.sem-count-single.ta{color:#b35a00}.sem-count-single.nc{color:#666}.sem-count-single.adj{color:#66bb6a}
@@ -3400,6 +3470,9 @@ html[data-theme="dark"] .subject-percentage-modal{
     border-radius:10px;background:#f0ebff;font-size:calc(17px * var(--invictus-font-scale));flex-shrink:0
   }
   .settings-item-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+  /* V25.6.1: Keep Persistent Saving switch aligned to the far right of its settings row. */
+  .persistent-saving-item .settings-item-text{flex:1 1 auto;min-width:0}
+  .persistent-saving-item #persistentSavingToggle{margin-left:auto}
   .settings-item-title{font-weight:700}
   .settings-item-hint{font-size:calc(12px * var(--invictus-font-scale));color:#777;font-weight:400}
   .settings-danger .settings-icon{background:#fff0f0}
@@ -5410,7 +5483,10 @@ function getHardcodedSpecialDay(dateKey){
 
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
-    <h2 id="modalTitle">Submit Attendance</h2>
+    <div class="attendance-modal-heading">
+      <h2 id="modalTitle">Submit Attendance</h2>
+      <span id="attendanceEditCountdown" aria-live="off" hidden></span>
+    </div>
     <label for="dateInput">Select date</label>
     <div class="attendance-date-picker">
       <input id="dateInput" type="date">
@@ -5761,7 +5837,7 @@ function getHardcodedSpecialDay(dateKey){
       <section class="user-guide-section">
         <h3>📅 2. College Joining Date</h3>
         <p>Your <strong>College Joining Date</strong> defines the earliest date for which INVICTUS lets you record your personal attendance.</p>
-        <p>Set it through <strong>Attendance → Submit Your Attendance</strong> when requested. If you reset all app data, the joining date is cleared and must be entered again.</p>
+        <p>Set it through <strong>Attendance → Submit Your Attendance</strong> when requested. <strong>Settings → App → Persistent Saving</strong> controls whether the date is retained after logout or Reset All App Data; it is ON by default.</p>
       </section>
 
       <section class="user-guide-section">
@@ -5883,7 +5959,7 @@ function getHardcodedSpecialDay(dateKey){
         <h3>⚙️ 15. Settings</h3>
         <p>Settings contains the app's account, app, notification, data, display, security, appearance, help, and information controls.</p>
         <div class="user-guide-action"><strong>Account</strong><span>Profile, account details, Set Semester, and Log out.</span></div>
-        <div class="user-guide-action"><strong>App</strong><span>Available app refresh/update controls.</span></div>
+        <div class="user-guide-action"><strong>App</strong><span>Refresh/update controls and Persistent Saving for your College Joining Date.</span></div>
         <div class="user-guide-action"><strong>Notifications</strong><span>Turn available attendance and lecture reminders on or off.</span></div>
         <div class="user-guide-action"><strong>Data</strong><span>Export, import, or reset app data.</span></div>
         <div class="user-guide-action"><strong>Size</strong><span>Adjust Font Size and Display Size.</span></div>
@@ -5904,7 +5980,7 @@ function getHardcodedSpecialDay(dateKey){
         <h3>💾 17. Backup &amp; Reset</h3>
         <p><strong>Export Data</strong> creates a backup of your INVICTUS records. <strong>Import Data</strong> restores data from a compatible INVICTUS backup.</p>
         <p>Your saved <strong>Set Semester</strong> preference is included in the app's backup/reset handling.</p>
-        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> permanently clears your saved application records and College Joining Date, and resets saved app preferences. Use it only when you intentionally want to start again.</div>
+        <div class="user-guide-warning">⚠️ <strong>Reset All App Data</strong> clears your saved application records and resets most app preferences. Your College Joining Date is retained when <strong>Settings → App → Persistent Saving</strong> is ON and cleared when it is OFF. Use reset only when you intentionally want to start again.</div>
       </section>
 
       <section class="user-guide-section">
@@ -6864,6 +6940,21 @@ photoInput.addEventListener("change", async e=>{
 
 // [V22.08 ATTENDANCE ENGINE — attendance calculation API]
 function getAttendanceStats(){if(INVICTUS_STATE.cache.attendanceStats)return {...INVICTUS_STATE.cache.attendanceStats};const stats=calculateAttendanceStats(getAttendanceTabSourceState().records);INVICTUS_STATE.cache.attendanceStats={...stats};return {...stats};}
+// V25.3: read-only stats for the selected semester, bounded by centralized config.
+function getSelectedSemesterAttendanceStats(){
+  // Display-only selection follows Settings → Set Semester. Do not use
+  // activeSemesterNumber here: attendance operations remain date-driven.
+  const semester=Number(getInvictusSemesterPreference())||1;
+  const cfg=getSemesterConfig(semester);
+  const source=invictusAttendanceStateFor(semester);
+  if(!cfg)return calculateAttendanceStats({});
+  const records={};
+  Object.entries(source.records||{}).forEach(([date,status])=>{
+    const d=new Date(String(date)+"T00:00:00");
+    if(!Number.isNaN(d.getTime())&&d>=cfg.start&&d<=cfg.end)records[date]=status;
+  });
+  return calculateAttendanceStats(records);
+}
 function totalAttendance(){return getAttendanceStats().attended;}
 function attendancePlannerText(stats){return calculateAttendancePlannerText(stats,.75);}
 
@@ -7436,8 +7527,8 @@ function closeSettingsReset(){
 
 async function resetAllAppData(){
   try{
+    removeCollegeJoiningDateIfPersistenceDisabled(getLoggedInStudentIdSafe());
     [...DATA_BACKUP_KEYS, "bcaName", "bcaEmail", "bcaPhoto", "attendanceHistoryHidden", "bcaPatch6TodayCleanup", V20_1_NOTIFICATION_HISTORY_KEY, V20_1_NOTIFICATION_SETTINGS_KEY, V24_2_SEMESTER_PREFERENCE_KEY].forEach(key=>localStorage.removeItem(key));
-    localStorage.removeItem(INVICTUS_COLLEGE_JOINING_DATE_KEY_PREFIX + getLoggedInStudentIdSafe());
     localStorage.removeItem(APPEARANCE_KEY);
     localStorage.removeItem(INVICTUS_FONT_SIZE_KEY);
     localStorage.removeItem(INVICTUS_DISPLAY_SIZE_KEY);
@@ -10498,6 +10589,13 @@ function renderSettings(){
                 <span class="settings-item-title">Update</span>
               </span>
             </button>
+            <div class="settings-item settings-public persistent-saving-item" role="group" aria-label="Persistent Saving">
+              <span class="settings-icon">💾</span>
+              <span class="settings-item-text">
+                <span class="settings-item-title">Persistent Saving</span>
+              </span>
+              <button type="button" class="notification-setting-switch" id="persistentSavingToggle" role="switch" aria-checked="true" aria-label="Persistent Saving"></button>
+            </div>
           </div>
         </div>
       </div>
@@ -10680,6 +10778,7 @@ function renderSettings(){
   document.getElementById("resetAllDataBtn")?.addEventListener("click", openSettingsReset);
   document.getElementById("settingsAboutBtn")?.addEventListener("click", openSettingsAbout);
   updateAppearanceButtons();
+  syncPersistentSavingSettingUI();
   bindInvictusSizeDisclosures();
   bindInvictusSizeControls();
   bindSettingsCategoryDisclosures();
@@ -10729,6 +10828,13 @@ function bindSettingsCategoryDisclosures(){
           otherCategory.classList.remove("is-open");
         }
       });
+      // V25.6.2: Match Dashboard cards by smoothly bringing an opened
+      // Settings category and its options into the visible screen area.
+      if(willOpen){
+        requestAnimationFrame(()=>{
+          categoryEl.scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"});
+        });
+      }
     });
   });
 }
@@ -10743,14 +10849,14 @@ function renderAttendance(){
       <div class="attendance-main">
         <div class="attendance-main-copy">
           <div class="label">Overall Attendance</div>
-          <div class="number">${getAttendanceStats().percentage===null ? "—" : getAttendanceStats().percentage.toFixed(1)+"%"}</div>
+          <div class="number">${getSelectedSemesterAttendanceStats().percentage===null ? "—" : getSelectedSemesterAttendanceStats().percentage.toFixed(1)+"%"}</div>
           <div class="attendance-main-sub"></div>
         </div>
       </div>
       <div class="attendance-stats">
-        <div class="attendance-stat"><div class="attendance-stat-value">${getAttendanceStats().attended}</div><div class="attendance-stat-label">Present</div></div>
-        <div class="attendance-stat"><div class="attendance-stat-value">${getAttendanceStats().absent}</div><div class="attendance-stat-label">Absent</div></div>
-        <div class="attendance-stat"><div class="attendance-stat-value">${getAttendanceStats().total}</div><div class="attendance-stat-label">Total</div></div>
+        <div class="attendance-stat"><div class="attendance-stat-value">${getSelectedSemesterAttendanceStats().attended}</div><div class="attendance-stat-label">Present</div></div>
+        <div class="attendance-stat"><div class="attendance-stat-value">${getSelectedSemesterAttendanceStats().absent}</div><div class="attendance-stat-label">Absent</div></div>
+        <div class="attendance-stat"><div class="attendance-stat-value">${getSelectedSemesterAttendanceStats().total}</div><div class="attendance-stat-label">Total</div></div>
       </div>
     </div>
 
@@ -10841,6 +10947,38 @@ function updateTotalHolidayCount(){
 }
 
 const INVICTUS_COLLEGE_JOINING_DATE_KEY_PREFIX = "invictus_college_joining_date_";
+const INVICTUS_PERSISTENT_JOINING_DATE_SETTING_KEY = "invictus_persistent_college_joining_date";
+
+function isPersistentCollegeJoiningDateEnabled(){
+  try{
+    // Backward-compatible default: users upgrading to V25.6 start with this ON.
+    return localStorage.getItem(INVICTUS_PERSISTENT_JOINING_DATE_SETTING_KEY) !== "false";
+  }catch(e){
+    return true;
+  }
+}
+
+function syncPersistentSavingSettingUI(){
+  const toggle=document.getElementById("persistentSavingToggle");
+  if(toggle) toggle.setAttribute("aria-checked",String(isPersistentCollegeJoiningDateEnabled()));
+}
+
+function togglePersistentSavingSetting(){
+  const next=!isPersistentCollegeJoiningDateEnabled();
+  try{
+    localStorage.setItem(INVICTUS_PERSISTENT_JOINING_DATE_SETTING_KEY,String(next));
+  }catch(e){}
+  syncPersistentSavingSettingUI();
+}
+
+function removeCollegeJoiningDateIfPersistenceDisabled(studentId){
+  if(isPersistentCollegeJoiningDateEnabled()) return;
+  const id=String(studentId || "default");
+  try{
+    localStorage.removeItem(INVICTUS_COLLEGE_JOINING_DATE_KEY_PREFIX + id);
+  }catch(e){}
+}
+
 let pendingCollegeJoiningDateAction = null;
 let lectureAttendancePendingContext = null;
 
@@ -11440,6 +11578,23 @@ function markScheduledLecturesAbsentForDay(dateKey){
   });
 }
 
+/* V24.28.30 — When day-level attendance changes from Absent to Present,
+   remove only the automatically propagated Absent marks for scheduled lectures.
+   With no lecture record left, those lectures return to Not Tracked; manually
+   tracked non-Absent statuses remain untouched. */
+function clearScheduledAbsentLecturesForDay(dateKey){
+  if(!dateKey || typeof semClassesForDate!=="function" || !semState) return;
+  semState.lectures=semState.lectures || {};
+  const classes=semClassesForDate(dateKey) || [];
+  classes.forEach(c=>{
+    const subjectId=c?.[2];
+    if(!subjectId || !semesterSubjects.some(s=>s.id===subjectId)) return;
+    const recordKey=semRecordKey(dateKey,subjectId,c[0]);
+    const lecture=semState.lectures[recordKey];
+    if(lecture?.status==="abs") delete semState.lectures[recordKey];
+  });
+}
+
 function routeAttendanceSubmissionAfterJoiningDate(){
   const targetSemester=getSemesterForDate(new Date()) || activeSemesterNumber || 1;
   if(activeSemesterNumber!==targetSemester) activateSemesterContext(targetSemester);
@@ -11499,8 +11654,8 @@ function unlockAttendanceHistoryBackground(){
   window.scrollTo(0,attendanceHistoryModalScrollY);
 }
 
-function attendanceHistoryRowsHtml(dates=filterAttendanceHistoryEntries(getAttendanceTabSourceState().records,INVICTUS_STATE.ui.attendanceHistory)){
-  const displayState=getAttendanceTabSourceState();
+function attendanceHistoryRowsHtml(dates,displayState=getAttendanceTabSourceState()){
+  dates=dates||filterAttendanceHistoryEntries(displayState.records,INVICTUS_STATE.ui.attendanceHistory);
   if(!dates.length)return '<div class="attendance-history-filter-empty">No attendance records match the selected filters.</div>';
   return dates.map(d=>{
     const s=displayState.records[d];
@@ -11542,6 +11697,11 @@ function ensureAttendanceHistoryModal(){
             <option value="all">All months</option>
           </select>
         </label>
+        <label for="attendanceHistorySemesterFilter">Semester
+          <select id="attendanceHistorySemesterFilter" aria-label="Filter Attendance History by semester">
+            <option value="1">Semester 1</option><option value="2">Semester 2</option><option value="3">Semester 3</option><option value="4">Semester 4</option><option value="5">Semester 5</option><option value="6">Semester 6</option>
+          </select>
+        </label>
       </div>
       <div class="attendance-history-modal-list" id="attendanceHistoryModalList" tabindex="0" aria-live="polite"></div>
     </div>`;
@@ -11549,41 +11709,97 @@ function ensureAttendanceHistoryModal(){
   document.getElementById("attendanceHistoryModalClose").onclick=closeAttendanceHistoryModal;
   const statusFilter=document.getElementById("attendanceHistoryStatusFilter");
   const monthFilter=document.getElementById("attendanceHistoryMonthFilter");
+  const semesterFilter=document.getElementById("attendanceHistorySemesterFilter");
   statusFilter?.addEventListener("change",()=>{INVICTUS_STATE.ui.attendanceHistory.status=statusFilter.value||"all";renderAttendanceHistoryModal();});
   monthFilter?.addEventListener("change",()=>{INVICTUS_STATE.ui.attendanceHistory.month=monthFilter.value||"all";renderAttendanceHistoryModal();});
+  semesterFilter?.addEventListener("change",()=>{INVICTUS_STATE.ui.attendanceHistory.semester=Number(semesterFilter.value)||1;INVICTUS_STATE.ui.attendanceHistory.month="all";renderAttendanceHistoryModal();});
   back.onclick=e=>{ if(e.target===back) closeAttendanceHistoryModal(); };
+}
+
+function getAttendanceHistoryMonthsForSemester(semester){
+  const cfg=getSemesterConfig(semester);
+  if(!cfg)return [];
+  const months=[];
+  const cursor=new Date(cfg.start.getFullYear(),cfg.start.getMonth(),1);
+  const end=new Date(cfg.end.getFullYear(),cfg.end.getMonth(),1);
+  while(cursor<=end){
+    months.push(`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}`);
+    cursor.setMonth(cursor.getMonth()+1);
+  }
+  return months;
+}
+function syncAttendanceHistoryCustomSelect(select){
+  if(!select)return;
+  const wrap=select.closest(".history-custom-select");
+  if(!wrap)return;
+  const selected=select.options[select.selectedIndex];
+  const label=wrap.querySelector(".history-custom-select-trigger-label");
+  if(label)label.textContent=selected?selected.textContent:"";
+  wrap.querySelectorAll('[role="option"]').forEach(option=>{
+    option.setAttribute("aria-selected",String(option.dataset.value===select.value));
+  });
 }
 
 function renderAttendanceHistoryModal(){
   const list=document.getElementById("attendanceHistoryModalList");
   const statusFilter=document.getElementById("attendanceHistoryStatusFilter");
   const monthFilter=document.getElementById("attendanceHistoryMonthFilter");
-  if(!list||!statusFilter||!monthFilter)return;
-  const displayState=invictusAttendanceStateFor(activeSemesterNumber);
-  if(activeSemesterNumber!==1){
-    list.innerHTML='<div class="attendance-history-filter-empty"><strong>Not Configured</strong><br>Attendance History for Semester '+activeSemesterNumber+' will be available when this semester is officially configured.</div>';
-    statusFilter.disabled=true;monthFilter.disabled=true;return;
-  }
-  statusFilter.disabled=false;monthFilter.disabled=false;
-  statusFilter.value=INVICTUS_STATE.ui.attendanceHistory.status||"all";
-  const months=getAttendanceHistoryMonths(displayState.records);
-  const currentMonth=INVICTUS_STATE.ui.attendanceHistory.month||"all";
+  const semesterFilter=document.getElementById("attendanceHistorySemesterFilter");
+  if(!list||!statusFilter||!monthFilter||!semesterFilter)return;
+  const ui=INVICTUS_STATE.ui.attendanceHistory;
+  const semester=Number(ui.semester)||getSemesterForDate(new Date())||1;
+  const displayState=invictusAttendanceStateFor(semester);
+  statusFilter.disabled=false;monthFilter.disabled=false;semesterFilter.disabled=false;
+  statusFilter.value=ui.status||"all";
+  semesterFilter.value=String(semester);
+  const months=getAttendanceHistoryMonthsForSemester(semester);
   monthFilter.innerHTML='<option value="all">All months</option>'+months.map(m=>{const label=new Date(m+"-01T00:00:00").toLocaleDateString("en-IN",{month:"long",year:"numeric"});return `<option value="${m}">${label}</option>`;}).join("");
+  const currentMonth=ui.month||"all";
   monthFilter.value=months.includes(currentMonth)?currentMonth:"all";
-  INVICTUS_STATE.ui.attendanceHistory.month=monthFilter.value;
-  list.innerHTML=attendanceHistoryRowsHtml(filterAttendanceHistoryEntries(displayState.records,INVICTUS_STATE.ui.attendanceHistory));
+  ui.month=monthFilter.value;
+  // The custom History dropdown trigger does not automatically follow direct
+  // native-select value assignments. Keep visible labels and option states
+  // synchronized whenever this renderer restores or changes filter values.
+  [statusFilter,monthFilter,semesterFilter].forEach(syncAttendanceHistoryCustomSelect);
+  const cfg=getSemesterConfig(semester);
+  const semesterRecords={};
+  Object.entries(displayState.records||{}).forEach(([date,status])=>{
+    const d=new Date(String(date)+"T00:00:00");
+    if(cfg&&!Number.isNaN(d.getTime())&&d>=cfg.start&&d<=cfg.end)semesterRecords[date]=status;
+  });
+  const filteredDates=filterAttendanceHistoryEntries(semesterRecords,ui);
+  list.innerHTML=attendanceHistoryRowsHtml(filteredDates,{...displayState,records:semesterRecords});
   list.scrollTop=0;
 }
+function resetAttendanceHistoryFiltersToDefaults(){
+  // History filters are temporary: every opening starts from the current
+  // date-driven semester, independent of the Settings → Set Semester choice.
+  INVICTUS_STATE.ui.attendanceHistory={
+    status:"all",
+    month:"all",
+    semester:getSemesterForDate(new Date())||1
+  };
+}
+
 function openAttendanceHistoryModal(){
   ensureAttendanceHistoryModal();
   const back=document.getElementById("attendanceHistoryBackdrop");
   const statusFilter=document.getElementById("attendanceHistoryStatusFilter");
-  if(!back||!statusFilter)return;
+  const monthFilter=document.getElementById("attendanceHistoryMonthFilter");
+  const semesterFilter=document.getElementById("attendanceHistorySemesterFilter");
+  if(!back||!statusFilter||!monthFilter||!semesterFilter)return;
+
+  resetAttendanceHistoryFiltersToDefaults();
+  // Render before and after opening so both the native controls and the list
+  // are synchronized to the same freshly reset filter state on every reopen.
   renderAttendanceHistoryModal();
   lockAttendanceHistoryBackground();
   back.classList.add("open");
   back.setAttribute("aria-hidden","false");
-  requestAnimationFrame(()=>statusFilter.focus({preventScroll:true}));
+  requestAnimationFrame(()=>{
+    renderAttendanceHistoryModal();
+    statusFilter.focus({preventScroll:true});
+  });
 }
 
 function closeAttendanceHistoryModal(){
@@ -11591,6 +11807,7 @@ function closeAttendanceHistoryModal(){
   const list=document.getElementById("attendanceHistoryModalList");
   if(list)list.scrollTop=0;
   if(back){back.classList.remove("open");back.setAttribute("aria-hidden","true");}
+  resetAttendanceHistoryFiltersToDefaults();
   unlockAttendanceHistoryBackground();
   document.getElementById("historyToggle")?.focus({preventScroll:true});
 }
@@ -11859,57 +12076,81 @@ function ensureLectureHistoryModal(){
   back.addEventListener("click",event=>{if(event.target===back)closeLectureHistoryModal();});
 }
 
+function getLectureHistoryConfiguredMonths(semester){
+  const config=getSemesterConfig(semester);
+  if(!config?.start || !config?.end || config.start>config.end)return [];
+  const months=[];
+  const cursor=new Date(config.start.getFullYear(),config.start.getMonth(),1);
+  const last=new Date(config.end.getFullYear(),config.end.getMonth(),1);
+  // Semester windows are normally six months; the guard also protects custom
+  // configurations from accidentally creating an unbounded list.
+  while(cursor<=last && months.length<1200){
+    months.push(`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}`);
+    cursor.setMonth(cursor.getMonth()+1);
+  }
+  return months;
+}
+
 function renderLectureHistoryModal(){
   const statusFilter=document.getElementById("lectureHistoryStatusFilter");
   const monthFilter=document.getElementById("lectureHistoryMonthFilter");
   const subjectFilter=document.getElementById("lectureHistorySubjectFilter");
+  const list=document.getElementById("lectureHistoryModalList");
   if(!statusFilter||!monthFilter||!subjectFilter)return;
-  if(activeSemesterNumber!==1){
-    statusFilter.disabled=true;monthFilter.disabled=true;subjectFilter.disabled=true;
-    document.getElementById("lectureHistoryModalList").innerHTML='<div class="attendance-history-filter-empty"><strong>Not Configured</strong><br>Lecture History for Semester '+activeSemesterNumber+' will be available when this semester is officially configured.</div>';
-    return;
-  }
-  statusFilter.disabled=false;monthFilter.disabled=false;subjectFilter.disabled=false;
-  const entries=getLectureHistoryEntries();
+
+  const selectedSemester=Number(activeSemesterNumber)||1;
+  const entries=selectedSemester===1 ? getLectureHistoryEntries() : [];
+  statusFilter.disabled=false;
+  monthFilter.disabled=false;
+  subjectFilter.disabled=false;
   statusFilter.value=lectureHistoryFilter.status||"all";
-  const months=[...new Set(entries.map(entry=>entry.date.slice(0,7)))].sort().reverse();
+
+  // Month options always come from the centrally configured date range for
+  // the selected semester, not from Semester 1's currently saved history.
+  const months=getLectureHistoryConfiguredMonths(selectedSemester);
   monthFilter.innerHTML='<option value="all">All months</option>'+months.map(month=>{
-    const label=new Date(month+"-01T00:00:00").toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+    const [year,monthNumber]=month.split("-").map(Number);
+    const label=new Date(year,monthNumber-1,1).toLocaleDateString("en-IN",{month:"long",year:"numeric"});
     return `<option value="${month}">${escapeHtml(label)}</option>`;
   }).join("");
   if(lectureHistoryFilter.month!=="all"&&!months.includes(lectureHistoryFilter.month))lectureHistoryFilter.month="all";
   monthFilter.value=lectureHistoryFilter.month||"all";
 
-  // Build the selector from every configured semester subject ID, then include
-  // legacy IDs found in saved history even if their catalog is no longer present.
+  // Only this semester's own configured catalog is eligible for the Subject
+  // filter. Legacy names from history may be retained, but only for records
+  // belonging to this same selected semester; never import another semester's
+  // catalog into the current selector.
   const subjectOptions=new Map();
-  for(let semester=1;semester<=6;semester++){
-    invictusSemesterSubjectsFor(semester).forEach(subject=>{
-      const id=String(subject.id||"");
-      const name=String(subject.name||"").trim();
-      if(!id||!name)return;
-      subjectOptions.set(`${semester}|${id}`,{semester,id,name});
-    });
-  }
+  invictusSemesterSubjectsFor(selectedSemester).forEach(subject=>{
+    const id=String(subject.id||"");
+    const name=String(subject.name||"").trim();
+    if(!id||!name)return;
+    subjectOptions.set(`${selectedSemester}|${id}`,{semester:selectedSemester,id,name});
+  });
   entries.forEach(entry=>{
+    if(Number(entry.semester)!==selectedSemester)return;
     const id=String(entry.subject||"");
     if(!id)return;
-    const key=`${entry.semester}|${id}`;
-    if(!subjectOptions.has(key))subjectOptions.set(key,{semester:Number(entry.semester)||1,id,name:String(entry.displaySubject||id).trim()||id});
+    const key=`${selectedSemester}|${id}`;
+    if(!subjectOptions.has(key))subjectOptions.set(key,{semester:selectedSemester,id,name:String(entry.displaySubject||id).trim()||id});
   });
-  const options=[...subjectOptions.values()].sort((a,b)=>a.name.localeCompare(b.name)||a.semester-b.semester||a.id.localeCompare(b.id));
-  const nameCounts=new Map();
-  options.forEach(option=>nameCounts.set(option.name,(nameCounts.get(option.name)||0)+1));
+  const options=[...subjectOptions.values()].sort((a,b)=>a.name.localeCompare(b.name)||a.id.localeCompare(b.id));
   subjectFilter.innerHTML='<option value="all">All subjects</option>'+options.map(option=>{
     const value=`${option.semester}|${option.id}`;
-    const label=(nameCounts.get(option.name)>1)?`${option.name} (Semester ${option.semester})`:option.name;
-    return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+    return `<option value="${escapeHtml(value)}">${escapeHtml(option.name)}</option>`;
   }).join("");
   if(lectureHistoryFilter.subject!=="all"&&!subjectOptions.has(lectureHistoryFilter.subject))lectureHistoryFilter.subject="all";
   subjectFilter.value=lectureHistoryFilter.subject||"all";
+
+  // The existing availability rule remains: Semesters 2–6 show Not Configured
+  // history until their history environment is officially enabled. Their
+  // filter controls still reflect their own centralized month range/catalog.
+  if(selectedSemester!==1){
+    if(list)list.innerHTML='<div class="attendance-history-filter-empty"><strong>Not Configured</strong><br>Lecture History for Semester '+selectedSemester+' will be available when this semester is officially configured.</div>';
+    return;
+  }
   renderLectureHistoryRows(entries);
 }
-
 function lockLectureHistoryBackground(){
   lectureHistoryModalScrollY=window.scrollY||window.pageYOffset||0;
   document.documentElement.classList.add("attendance-history-locked");
@@ -12555,6 +12796,36 @@ if(attendanceCalendar){
   });
 }
 
+let attendanceEditCountdownInterval=null;
+function stopAttendanceEditCountdown(){
+  if(attendanceEditCountdownInterval!==null){clearInterval(attendanceEditCountdownInterval);attendanceEditCountdownInterval=null;}
+  const timer=document.getElementById("attendanceEditCountdown");
+  if(timer){timer.hidden=true;timer.textContent="";}
+}
+function updateAttendanceEditCountdown(){
+  const timer=document.getElementById("attendanceEditCountdown");
+  if(!timer)return;
+  const date=document.getElementById("dateInput")?.value;
+  const status=state.records?.[date];
+  const submittedAtMs=Date.parse(state.submittedAt?.[date]||"");
+  if(mode!=="edit" || !date || !["present","absent"].includes(status) || !Number.isFinite(submittedAtMs)){
+    timer.hidden=true;timer.textContent="";return;
+  }
+  const remainingMs=(submittedAtMs+3*60*60*1000)-Date.now();
+  if(remainingMs<=0){timer.hidden=true;timer.textContent="";return;}
+  const totalSeconds=Math.ceil(remainingMs/1000);
+  const hours=String(Math.floor(totalSeconds/3600)).padStart(2,"0");
+  const minutes=String(Math.floor((totalSeconds%3600)/60)).padStart(2,"0");
+  const seconds=String(totalSeconds%60).padStart(2,"0");
+  timer.textContent=`${hours}:${minutes}:${seconds}`;
+  timer.hidden=false;
+}
+function startAttendanceEditCountdown(){
+  stopAttendanceEditCountdown();
+  updateAttendanceEditCountdown();
+  attendanceEditCountdownInterval=setInterval(updateAttendanceEditCountdown,250);
+}
+
 function openModal(which){
   if((which==="submit" || which==="edit") && !requireCollegeJoiningDate(which)) return;
   if(which==="submit" && !crossSemesterAttendanceResolverActive){
@@ -12582,6 +12853,7 @@ function openModal(which){
   const today=iso(new Date());
   const isSubmit=which==="submit";
   document.getElementById("modalTitle").textContent=isSubmit?"Submit Attendance":"Edit Attendance";
+  stopAttendanceEditCountdown();
   dateInput.value=today;
   dateInput.min=isSubmit ? today : (getCollegeJoiningDate() || "2026-08-08");
   dateInput.max=iso(ATTENDANCE_END);
@@ -12603,10 +12875,11 @@ function openModal(which){
   if(examCountInput){examCountInput.value="";examCountInput.disabled=false;}
   document.getElementById("examCountWrap")?.classList.remove("open");
   document.getElementById("modalBackdrop").classList.add("open");
+  startAttendanceEditCountdown();
   // Keep the custom date dialog closed until the user taps Select date.
 
 }
-function closeModal(){ document.getElementById("modalBackdrop").classList.remove("open"); closeAttendanceDatePicker(); }
+function closeModal(){ stopAttendanceEditCountdown(); document.getElementById("modalBackdrop").classList.remove("open"); closeAttendanceDatePicker(); }
 document.getElementById("cancelBtn").onclick=closeModal;
 document.getElementById("presentBtn").onclick=()=>{
   if(mode==="submit" && document.getElementById("dateInput").value>iso(new Date())){
@@ -12646,6 +12919,7 @@ document.getElementById("blankBtn").onclick=()=>{ selectAttendanceChoice("blank"
 };
 bindAttendanceReasonOptions();
 document.getElementById("dateInput").addEventListener("change",()=>{
+  updateAttendanceEditCountdown();
   const modalMessage=document.getElementById("modalMessage");
   if(modalMessage) modalMessage.textContent="";
   const date=document.getElementById("dateInput").value;
@@ -12653,6 +12927,7 @@ document.getElementById("dateInput").addEventListener("change",()=>{
   if(mode!=="edit") return;
   if(!date || date<"2026-08-08") return;
   const st=state.records[date];
+  updateAttendanceEditCountdown();
   if(!st){
     selectedStatus=null;
     ["presentBtn","absentBtn","holidayBtn","blankBtn"].forEach(id=>document.getElementById(id).classList.remove("selected"));
@@ -12702,6 +12977,7 @@ document.getElementById("attendanceUpdateSuccessBackdrop")?.addEventListener("cl
 document.getElementById("submitBtn").onclick=()=>{
   const date=document.getElementById("dateInput").value;
   const msg=document.getElementById("modalMessage");
+  const previousAttendanceStatus=state.records[date];
   const previousWasExamDay=state.records[date]==="present" && state.presentComments?.[date]==="Exam Day";
   const presentComment=(document.getElementById("presentComment").value||"").trim();
   const holidayComment=(document.getElementById("holidayComment").value||"").trim();
@@ -12727,9 +13003,13 @@ document.getElementById("submitBtn").onclick=()=>{
     msg.textContent="This date has no existing attendance record.";
     return;
   }
-  if(mode==="edit" && lateSubmissionEditingDate!==date && state.records[date]==="present" && state.submittedAt?.[date] && !state.edits?.[date] && !state.lateSubmissions?.[date]){
-    msg.textContent="Present Attendance submitted cannot be altered.";
-    return;
+  if(mode==="edit" && lateSubmissionEditingDate!==date && ["present","absent"].includes(state.records[date])){
+    const submittedAtMs=Date.parse(state.submittedAt?.[date]||"");
+    const editWindowMs=3*60*60*1000;
+    if(Number.isFinite(submittedAtMs) && Date.now()-submittedAtMs>=editWindowMs){
+      msg.textContent="Present attendance submitted cannot be altered.";
+      return;
+    }
   }
   if(selectedStatus==="holiday" && !holidayComment){
   msg.textContent="Please add a comment/reason for the Holiday.";
@@ -12864,6 +13144,7 @@ document.getElementById("submitBtn").onclick=()=>{
   }
 
   if(selectedStatus==="absent") markScheduledLecturesAbsentForDay(date);
+  else if(selectedStatus==="present" && previousAttendanceStatus==="absent") clearScheduledAbsentLecturesForDay(date);
 
   const nextIsExamDay=selectedStatus==="present" && selectedAttendanceReason==="exam";
   if(nextIsExamDay){
@@ -12879,7 +13160,7 @@ document.getElementById("submitBtn").onclick=()=>{
   // Persist it and invalidate the shared lecture-status cache so every
   // consumer (Lecture Wise Percentage, Lecture Breakdown, Dashboard graphs)
   // recalculates immediately from the same source of truth.
-  if(selectedStatus==="absent") saveSem();
+  if(selectedStatus==="absent" || (selectedStatus==="present" && previousAttendanceStatus==="absent")) saveSem();
   closeModal(); renderAttendance(); v20RunNotificationChecks();
   if(showPresentSubmitConfirmation){
     setTimeout(()=>showAttendanceUpdateSuccess(date),0);
@@ -13138,7 +13419,7 @@ Object.keys(semState.scheduleExceptions).forEach(dateKey=>{
 /* ============================================================
    V19.31 — CENTRAL STATE / PURE CALCULATIONS / DERIVED CACHE
    ============================================================ */
-const INVICTUS_STATE={attendance:state,semester:semState,ui:{attendanceHistory:{status:"all",month:"all"}},cache:{attendanceStats:null,attendanceHistoryDates:null,totalHolidays:null,monthlyLectureStatus:new Map()}};
+const INVICTUS_STATE={attendance:state,semester:semState,ui:{attendanceHistory:{status:"all",month:"all",semester:(getSemesterForDate(new Date())||1)}},cache:{attendanceStats:null,attendanceHistoryDates:null,totalHolidays:null,monthlyLectureStatus:new Map()}};
 window.INVICTUS_STATE=INVICTUS_STATE;
 // [V22.08 ATTENDANCE ENGINE — derived analytics/cache boundary]
 function invalidateAttendanceDerivedState(){INVICTUS_STATE.cache.attendanceStats=null;INVICTUS_STATE.cache.attendanceHistoryDates=null;INVICTUS_STATE.cache.totalHolidays=null;}
@@ -13157,7 +13438,7 @@ function calculateAttendanceStats(records){const values=Object.values(getAnalyti
 function calculateAttendancePlannerText(stats,target=.75){if(!stats||!stats.total)return "No Present/Absent records yet. Your attendance percentage will appear after the first attendance record.";if(stats.percentage>=target*100){const safeMisses=Math.floor(stats.attended/target-stats.total);if(safeMisses<=0)return "You are at or above 75%. Attend the next lecture to build a bigger safety margin.";return `You can miss <strong>${safeMisses} more lecture${safeMisses===1?"":"s"}</strong> and still remain at or above 75%.`;}const needed=Math.ceil((target*stats.total-stats.attended)/(1-target));return `Attend the next <strong>${Math.max(1,needed)} consecutive lecture${needed===1?"":"s"}</strong> to reach 75%.`; }
 function getAttendanceHistoryDates(records){if(INVICTUS_STATE.cache.attendanceHistoryDates)return INVICTUS_STATE.cache.attendanceHistoryDates.slice();const dates=Object.keys(records||{}).sort().reverse();INVICTUS_STATE.cache.attendanceHistoryDates=dates;return dates.slice();}
 function getAttendanceHistoryMonths(records){return [...new Set(getAttendanceHistoryDates(records).map(d=>d.slice(0,7)))];}
-function filterAttendanceHistoryEntries(records,filter={}){const status=filter.status||"all",month=filter.month||"all";return getAttendanceHistoryDates(records).filter(d=>(status==="all"||records?.[d]===status)&&(month==="all"||d.startsWith(month)));}
+function filterAttendanceHistoryEntries(records,filter={}){const status=filter.status||"all",month=filter.month||"all";return Object.keys(records||{}).sort().reverse().filter(d=>(status==="all"||records?.[d]===status)&&(month==="all"||d.startsWith(month)));}
 function parseClockMinutes(value){const m=String(value||"").trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);if(!m)return null;let h=Number(m[1]);const min=Number(m[2]);if(h===12)h=0;if(m[3].toUpperCase()==="PM")h+=12;return h*60+min;}
 function isLectureTimeReachedAt(dateKey,startTime,now){const todayKey=iso(now);if(dateKey<todayKey)return true;if(dateKey>todayKey)return false;const minutes=parseClockMinutes(startTime);return minutes===null?false:now.getHours()*60+now.getMinutes()>=minutes;}
 function isLectureEndTimePassedAt(dateKey,endTime,now){const todayKey=iso(now);if(dateKey<todayKey)return true;if(dateKey>todayKey)return false;const minutes=parseClockMinutes(endTime);return minutes===null?false:now.getHours()*60+now.getMinutes()>=minutes;}
@@ -13202,7 +13483,9 @@ const INVICTUS_PROTECTED_HOLIDAYS = Object.freeze({
   "2026-09-11":"18th-\"BRICS\"",
   "2026-09-14":"Ganesh-Chaturthi",
   "2026-09-23":"Shaheed-Diwas",
-  "2026-10-02":"Gandhi-Jayanti"
+  "2026-10-02":"Gandhi-Jayanti",
+  "2026-10-19":"Maha-Pooja",
+  "2026-10-20":"Dusshera"
 });
 
 const INVICTUS_PROTECTED_TEACHER_ABSENT = Object.freeze([
@@ -15748,7 +16031,11 @@ function renderSemester(){
 
   const renderSemSummary=()=>{
     const items=categoryItems();
-    semSummaryRows.innerHTML=items.map(s=>`
+    document.querySelector("#semSummary .sem-summary-head")?.classList.toggle("sem-summary-head-subject-cards",Number(activeSemesterNumber)===1);
+    semSummaryRows.innerHTML=items.map(s=>Number(activeSemesterNumber)===1?`
+      <button type="button" class="sem-summary-row sem-subject-dialog-trigger" data-sem-subject-id="${escapeHtml(s.id)}" aria-label="Open ${escapeHtml(s.name)} lecture breakdown">
+        <span class="sem-summary-name">${escapeHtml(s.name)}</span><span class="sem-subject-dialog-chevron" aria-hidden="true">›</span>
+      </button>`:`
       <div class="sem-summary-row">
         <span class="sem-summary-name">${escapeHtml(s.name)}</span>
         <span class="sem-count-single ${selectedStatus}">${counts[s.id][selectedStatus]}</span>
@@ -15771,6 +16058,10 @@ function renderSemester(){
     semCategoryButton.setAttribute("aria-expanded","false");
   };
   renderSemSummary();
+  semSummaryRows.addEventListener("click",event=>{
+    const trigger=event.target.closest("[data-sem-subject-id]");
+    if(trigger)openSemesterSubjectDistribution(trigger.dataset.semSubjectId);
+  });
   bindSurpriseTestCard();
 
   semStatusButton.onclick=(e)=>{
@@ -15878,7 +16169,7 @@ function renderIsolatedSemesterEnvironment(){
                   </div>
                 </div>
                 <div class="sem-summary open" id="semSummary">
-                  <div class="sem-summary-head"><div class="sem-summary-left"><span class="sem-summary-title" id="semCategoryTitle">Subjects</span>
+                  <div class="sem-summary-head sem-summary-head-subject-cards"><div class="sem-summary-left"><span class="sem-summary-title" id="semCategoryTitle">Subjects</span>
                     <div class="sem-category-picker" id="semCategoryPicker"><button type="button" class="sem-category-button" id="semCategoryButton" aria-haspopup="true" aria-expanded="false"><span id="semCategoryLabel">Subjects</span><span class="sem-status-chevron">▾</span></button>
                       <div class="sem-status-menu sem-category-menu" id="semCategoryMenu"><button type="button" class="sem-status-option active" data-category="subjects">Subjects</button><button type="button" class="sem-status-option" data-category="lab">Lab</button><button type="button" class="sem-status-option" data-category="others">Others</button></div>
                     </div></div>
@@ -15911,7 +16202,7 @@ function renderIsolatedSemesterEnvironment(){
   const statusLabels={att:"Attended",abs:"Absent",ta:"Teacher Absent",nc:"No Classes",adj:"Adjustment Period"};
   const renderSemSummary=()=>{
     const items=semesterSubjects.filter(s=>selectedCategory==="subjects"?s.type==="subject":selectedCategory==="lab"?s.type==="lab":s.type==="other").sort((a,b)=>a.name.localeCompare(b.name));
-    semSummaryRows.innerHTML=items.map(s=>`<div class="sem-summary-row"><span class="sem-summary-name">${escapeHtml(s.name)}</span><span class="sem-count-single ${selectedStatus}">${counts[s.id]?.[selectedStatus]||0}</span></div>`).join("") || '<div class="sem-summary-row"><span class="sem-summary-name" style="opacity:.6">No subjects configured for this semester yet.</span><span class="sem-count-single nc">0</span></div>';
+    semSummaryRows.innerHTML=items.map(s=>`<button type="button" class="sem-summary-row sem-subject-dialog-trigger" data-sem-subject-id="${escapeHtml(s.id)}" aria-label="Open ${escapeHtml(s.name)} lecture breakdown"><span class="sem-summary-name">${escapeHtml(s.name)}</span><span class="sem-subject-dialog-chevron" aria-hidden="true">›</span></button>`).join("") || '<div class="sem-summary-row"><span class="sem-summary-name" style="opacity:.6">No subjects configured for this semester yet.</span></div>';
     semStatusLabel.textContent=statusLabels[selectedStatus]; semStatusButton.querySelector(".sem-status-dot").className="sem-status-dot "+selectedStatus;
     semStatusMenu.querySelectorAll(".sem-status-option").forEach(o=>o.classList.toggle("active",o.dataset.status===selectedStatus));
     const label=selectedCategory==="subjects"?"Subjects":selectedCategory==="lab"?"Lab":"Others"; semCategoryLabel.textContent=label; semCategoryTitle.textContent=label;
@@ -15919,6 +16210,10 @@ function renderIsolatedSemesterEnvironment(){
     semStatusMenu.classList.remove("open"); semCategoryMenu.classList.remove("open"); semStatusButton.setAttribute("aria-expanded","false"); semCategoryButton.setAttribute("aria-expanded","false");
   };
   renderSemSummary();
+  semSummaryRows.addEventListener("click",event=>{
+    const trigger=event.target.closest("[data-sem-subject-id]");
+    if(trigger)openSemesterSubjectDistribution(trigger.dataset.semSubjectId);
+  });
   bindSurpriseTestCard();
   semStatusButton.onclick=e=>{e.stopPropagation();semCategoryMenu.classList.remove("open");semCategoryButton.setAttribute("aria-expanded","false");const open=semStatusMenu.classList.toggle("open");semStatusButton.setAttribute("aria-expanded",String(open));};
   semStatusMenu.querySelectorAll(".sem-status-option").forEach(o=>o.onclick=e=>{e.stopPropagation();selectedStatus=o.dataset.status;renderSemSummary();});
@@ -16013,6 +16308,137 @@ function scheduleSubjectPercentageTimingRefresh(){
       scheduleSubjectPercentageTimingRefresh();
     },Math.max(50,nextBoundary-Date.now()+50));
   }
+}
+
+let semSubjectDistributionBackgroundLockState=null;
+
+function lockSemesterSubjectDistributionBackground(){
+  // The distribution dialog is appended directly to <body>, outside .app.
+  // Freeze the page and make the app inert so taps, focus, and scroll gestures
+  // cannot reach the content behind any subject's dialog.
+  if(semSubjectDistributionBackgroundLockState)return;
+  const app=document.querySelector(".app");
+  const body=document.body;
+  const html=document.documentElement;
+  semSubjectDistributionBackgroundLockState={
+    scrollY:window.scrollY||window.pageYOffset||0,
+    app,
+    appHadInert:!!(app&&app.hasAttribute("inert")),
+    appPointerEvents:app?app.style.pointerEvents:"",
+    bodyPosition:body.style.position,
+    bodyTop:body.style.top,
+    bodyLeft:body.style.left,
+    bodyRight:body.style.right,
+    bodyWidth:body.style.width,
+    htmlHadLockClass:html.classList.contains("sem-subject-distribution-locked"),
+    bodyHadLockClass:body.classList.contains("sem-subject-distribution-locked")
+  };
+  html.classList.add("sem-subject-distribution-locked");
+  body.classList.add("sem-subject-distribution-locked");
+  body.style.position="fixed";
+  body.style.top=`-${semSubjectDistributionBackgroundLockState.scrollY}px`;
+  body.style.left="0";
+  body.style.right="0";
+  body.style.width="100%";
+  if(app){
+    app.setAttribute("inert","");
+    // Pointer-events is retained as a fallback for older Android WebViews.
+    app.style.pointerEvents="none";
+  }
+}
+
+function unlockSemesterSubjectDistributionBackground(){
+  const lock=semSubjectDistributionBackgroundLockState;
+  if(!lock)return;
+  const body=document.body;
+  const html=document.documentElement;
+  if(lock.app){
+    if(!lock.appHadInert)lock.app.removeAttribute("inert");
+    else lock.app.setAttribute("inert","");
+    lock.app.style.pointerEvents=lock.appPointerEvents;
+  }
+  if(!lock.htmlHadLockClass)html.classList.remove("sem-subject-distribution-locked");
+  if(!lock.bodyHadLockClass)body.classList.remove("sem-subject-distribution-locked");
+  body.style.position=lock.bodyPosition;
+  body.style.top=lock.bodyTop;
+  body.style.left=lock.bodyLeft;
+  body.style.right=lock.bodyRight;
+  body.style.width=lock.bodyWidth;
+  semSubjectDistributionBackgroundLockState=null;
+  window.scrollTo(0,lock.scrollY);
+}
+
+function closeSemesterSubjectDistribution(){
+  const backdrop=document.getElementById("semSubjectDistributionBackdrop");
+  if(!backdrop||!backdrop.classList.contains("open"))return;
+  backdrop.classList.remove("open");
+  unlockSemesterSubjectDistributionBackground();
+}
+
+function openSemesterSubjectDistribution(subjectId){
+  // V25.2: shared presentation-only dialog. Data is resolved from the currently active isolated semester context.
+  const subject=semesterSubjects.find(item=>String(item.id)===String(subjectId));
+  if(!subject)return;
+  const counts=semSubjectCounts();
+  const c=counts[subject.id]||{att:0,abs:0,ta:0,nc:0,adj:0,pending:0,automaticAbsent:0};
+  const assessmentBySubject={};
+  Object.keys(state.records||{}).forEach(dateKey=>{
+    getDailyTimetableLectureStatuses(dateKey).forEach(row=>{
+      if(row.status!=="att")return;
+      const recordKey=semRecordKey(dateKey,row.subject,row.time);
+      const assessmentClass=assessmentAttendanceClass(recordKey);
+      if(assessmentClass!=="att-class-test"&&assessmentClass!=="att-surprise-test")return;
+      const id=String(row.subject);
+      assessmentBySubject[id]=assessmentBySubject[id]||{classTest:0,surpriseTest:0};
+      if(assessmentClass==="att-class-test")assessmentBySubject[id].classTest++;
+      else assessmentBySubject[id].surpriseTest++;
+    });
+  });
+  const assessment=assessmentBySubject[String(subject.id)]||{classTest:0,surpriseTest:0};
+  const classTest=Math.min(Math.max(0,c.att||0),assessment.classTest);
+  const surpriseTest=Math.min(Math.max(0,(c.att||0)-classTest),assessment.surpriseTest);
+  const categories=[
+    {label:"Attended",count:Math.max(0,(c.att||0)-classTest-surpriseTest),color:"#2e7d32"},
+    {label:"Adjustment",count:Math.max(0,c.adj||0),color:"#66bb6a"},
+    {label:"Class Tests",count:classTest,color:"#ef9a9a"},
+    {label:"Surprise Test",count:surpriseTest,color:"#8b0000"},
+    {label:"Absent",count:Math.max(0,c.abs||0),color:"#c62828"},
+    {label:"Teacher Absent",count:Math.max(0,c.ta||0),color:"#f28c20"},
+    {label:"No Classes",count:Math.max(0,c.nc||0),color:"#808080"}
+  ];
+  const total=categories.reduce((sum,item)=>sum+item.count,0)+Math.max(0,c.pending||0);
+  const numerator=categories.slice(0,4).reduce((sum,item)=>sum+item.count,0)+Math.min(Math.max(0,c.abs||0),Math.max(0,c.automaticAbsent||0));
+  let cursor=0;
+  const slices=[];
+  categories.forEach(item=>{
+    const pct=total?item.count/total*100:0;
+    item.pct=pct;
+    if(item.count>0){slices.push(`${item.color} ${cursor}% ${cursor+pct}%`);cursor+=pct;}
+  });
+  if((c.pending||0)>0){const pct=c.pending/total*100;slices.push(`#607d8b ${cursor}% ${cursor+pct}%`);}
+  const pie=slices.length?`conic-gradient(${slices.join(",")})`:"#e5e5e5";
+  let backdrop=document.getElementById("semSubjectDistributionBackdrop");
+  if(!backdrop){
+    backdrop=document.createElement("div");backdrop.id="semSubjectDistributionBackdrop";backdrop.className="sem-subject-distribution-backdrop";
+    backdrop.innerHTML=`<section class="sem-subject-distribution-dialog" role="dialog" aria-modal="true" aria-labelledby="semSubjectDistributionTitle"><div class="sem-subject-distribution-parent-card"><div class="sem-subject-distribution-head"><h2 id="semSubjectDistributionTitle"></h2><button type="button" class="sem-subject-distribution-close" aria-label="Close">×</button></div><div class="sem-subject-distribution-pie" id="semSubjectDistributionPie" role="img" aria-label="Lecture status distribution chart"></div><div class="sem-subject-distribution-total" id="semSubjectDistributionTotal"></div><div class="sem-subject-distribution-legend" id="semSubjectDistributionLegend"></div><section class="sem-subject-distribution-status" aria-labelledby="semSubjectDistributionStatusTitle"><h3 class="sem-subject-distribution-status-title" id="semSubjectDistributionStatusTitle">Subject Status</h3><div class="sem-subject-distribution-counts" id="semSubjectDistributionCounts" aria-label="Category counts"></div></section></div></section>`;
+    document.body.appendChild(backdrop);
+    backdrop.querySelector(".sem-subject-distribution-close").addEventListener("click",closeSemesterSubjectDistribution);
+    backdrop.addEventListener("click",event=>{if(event.target===backdrop)closeSemesterSubjectDistribution();});
+    backdrop.querySelector(".sem-subject-distribution-dialog").addEventListener("click",event=>event.stopPropagation());
+    document.addEventListener("keydown",event=>{if(event.key==="Escape")closeSemesterSubjectDistribution();});
+  }
+  backdrop.querySelector("#semSubjectDistributionTitle").textContent=subject.name;
+  backdrop.querySelector("#semSubjectDistributionPie").style.background=pie;
+  backdrop.querySelector("#semSubjectDistributionPie").setAttribute("aria-label",categories.map(item=>`${item.label} ${item.pct.toFixed(1)}%`).join(", "));
+  backdrop.querySelector("#semSubjectDistributionTotal").textContent=`Total Lectures ${total}`;
+  const visualOrder=["Attended","Adjustment","Class Tests","Surprise Test","Absent","Teacher Absent","No Classes"];
+  const orderedCategories=visualOrder.map(label=>categories.find(item=>item.label===label)).filter(Boolean);
+  // V25.9: Collapse zero-percent fixed-category rows for isolated Semesters 1–6; preserve the separate temporary In Progress row behavior.
+  const visibleLegendCategories=orderedCategories.filter(item=>item.pct.toFixed(1)!=="0.0");
+  backdrop.querySelector("#semSubjectDistributionLegend").innerHTML=visibleLegendCategories.map(item=>`<div class="sem-subject-distribution-item"><span class="sem-subject-distribution-dot" style="background:${item.color}" aria-hidden="true"></span><span class="sem-subject-distribution-label">${item.label}</span><span class="sem-subject-distribution-value">${item.pct.toFixed(1)}%</span></div>`).join("")+((c.pending||0)>0?`<div class="sem-subject-distribution-item"><span class="sem-subject-distribution-dot" style="background:#607d8b" aria-hidden="true"></span><span class="sem-subject-distribution-label">In Progress</span><span class="sem-subject-distribution-value">${(c.pending/total*100).toFixed(1)}%</span></div>`:"");
+  backdrop.querySelector("#semSubjectDistributionCounts").innerHTML=orderedCategories.map(item=>`<div class="sem-subject-distribution-count" title="${item.label}: ${item.count}" aria-label="${item.label}: ${item.count}"><span class="sem-subject-distribution-count-number" style="color:${item.color}">${item.count}</span><span class="sem-subject-distribution-count-label">${item.label}</span></div>`).join("");
+  if(!backdrop.classList.contains("open"))lockSemesterSubjectDistributionBackground();
+  backdrop.classList.add("open");
 }
 
 function openSubjectPercentage(){
@@ -18067,6 +18493,11 @@ function renderSemCalendar(){
       return;
     }
 
+    if(id === "persistentSavingToggle"){
+      togglePersistentSavingSetting();
+      return;
+    }
+
     if(id === "notificationAttendanceToggle") {
       v20ToggleNotificationSetting("attendance");
       return;
@@ -18541,7 +18972,8 @@ window.invictusV11Storage = {
     window.openLogoutConfirmation = openLogoutConfirmation;
 
     function logoutInvictus(){
-      // Log out ONLY removes the persistent-login flag.
+      // The join-date preference governs only whether this user's date survives logout.
+      removeCollegeJoiningDateIfPersistenceDisabled(getLoggedInStudentIdSafe());
       // Attendance, Semester 1, profile, settings and backup data remain untouched.
       try{
         localStorage.removeItem(LOGIN_KEY);
@@ -19115,7 +19547,7 @@ setTimeout(()=>restorePersistentForcedUserGuide(false),0);
 <script>
 /* V24.28.19 — History filter custom menus with a 400px content-aware cap. */
 (function(){
-  const ids=['attendanceHistoryStatusFilter','attendanceHistoryMonthFilter','lectureHistorySubjectFilter','lectureHistoryStatusFilter','lectureHistoryMonthFilter'];
+  const ids=['attendanceHistoryStatusFilter','attendanceHistoryMonthFilter','attendanceHistorySemesterFilter','lectureHistorySubjectFilter','lectureHistoryStatusFilter','lectureHistoryMonthFilter'];
   function upgrade(select){
     if(!select||select.dataset.customHistorySelect==='1')return;
     select.dataset.customHistorySelect='1';
@@ -19143,5 +19575,5 @@ setTimeout(()=>restorePersistentForcedUserGuide(false),0);
 </script>
 
 </body>
-</html>
 
+</html>
