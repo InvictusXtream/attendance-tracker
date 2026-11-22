@@ -67,4 +67,3 @@ INVICTUS is a student-focused academic companion designed to streamline daily co
 - **Developer:** Ritik Yadav  
 - **Design:** Crafted under AI Assistance  
 - **Copyright:** © 2026 INVICTUS — Attendance Tracker
--
