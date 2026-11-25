@@ -1,6 +1,6 @@
 # INVICTUS — Smart Attendance & Academic Tracker
 
-**Version:** `V27.2.19`  
+**Version:** `V27.3.13`  
 **Target Cohort:** BCA Sec-B  
 
 INVICTUS is a student-focused academic companion designed to streamline daily college attendance, dynamic lecture tracking, timetable exceptions, and assessment results across a 6-semester architecture.
